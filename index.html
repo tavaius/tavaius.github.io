@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Assessment Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app">
+        <aside class="sidebar" role="navigation" aria-label="Primary">
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="notepad" aria-pressed="true" aria-controls="page-notepad">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">My Notes</span>
+                </button>
+                <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">My Shift</span>
+                </button>
+                <button class="tab-btn" data-tab="tasks" aria-controls="page-tasks">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">Call Notes</span>
+                </button>
+                <button class="tab-btn" data-tab="info" aria-controls="page-info">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">Info</span>
+                </button>
+            </nav>
+        </aside>
+
+        <header>
+            <div class="header-left">
+                <img class="logo" alt="SECAmb Crest" src="https://ssar.org.uk/wp-content/uploads/2024/02/SECAmb-Crest-CMYK-24.png" />
+                <div class="title">South East Coast Ambulance Service - Assessment Assistant<small>Internal software designed to assist call handlers process calls quicker & easier.</small></div>
+            </div>
+            <div class="header-right">
+                <img class="nhs" alt="NHS Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/National_Health_Service_%28England%29_logo.svg/1024px-National_Health_Service_%28England%29_logo.svg.png" />
+            </div>
+        </header>
+
+        <main>
+            <section id="page-notepad" class="page active">
+                <div class="editor-wrap">
+                    <div id="editor" contenteditable="true" spellcheck="true">
+                    </div>
+                    <div class="statusbar">
+                        <div id="status">Insert your call notes here.</div>
+                        <div class="rightline">
+                            <div id="count">0 words</div>
+                            <button id="link-clear" class="link-clear" title="Clear note">Clear</button>
+                            <button id="link-extra" class="link-extra" title="Clear note">Extra</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="links-panel hidden">
+                    <table class="links-table">
+                        <tr>
+                            <td colspan="7" class="header-cell">To approve Datix and Safeguarding requests, contact the supervisor line on <b>81007</b></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://wfm.secamb.nhs.uk/" target="_blank" class="link-btn">WFM</a></td>
+                            <td><a href="https://servicedesk.secamb.nhs.uk/MSMselfservice/AutoGen.aspx?page=242" target="_blank" class="link-btn">DAS</a></td>
+                            <td><a href="https://secamb.gateway.prod-uk.datixcloudiq.co.uk/capture/?form_id=5&module=INC" target="_blank" class="link-btn">DATIX</a></td>
+                            <td><a href="https://secamb.gateway.prod-uk.datixcloudiq.co.uk/capture/?form_id=2&module=SFG" target="_blank" class="link-btn">SG</a></td>
+                            <td><a href="https://secamb.sharepoint.com/:b:/s/KMS111/ESRYxk6ClipNksnOv2MbL80BRPbsO7EAzVEeDb3X43sc7A?e=oBdhia" target="_blank" class="link-btn">KMS</a></td>
+                            <td><a href="https://respond.secamb.nhs.uk/wallboard/frmCallStats.aspx?list=5%2C7&sizeh=25px&sizec=80px&flash=false&hideg=true&date=false" target="_blank" class="link-btn">WB</a></td>
+                            <td><a href="https://respond.secamb.nhs.uk/wallboard/frmAgentMap.aspx?grp=11&dark=true&layout=36" target="_blank" class="link-btn">AM</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="flu-panel hidden">
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                Cold &amp; Flu Symptoms
+                                <span id="flu-toggle" class="arrow">[show]</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="symptoms">
+                                    <ul class="symptoms-col left">
+                                        <li>Runny nose</li>
+                                        <li>Blocked nose</li>
+                                        <li>Sore throat</li>
+                                        <li>Sneezing</li>
+                                        <li>Cough</li>
+                                        <li>Fever</li>
+                                    </ul>
+                                    <ul class="symptoms-col right">
+                                        <li>Earache</li>
+                                        <li>Headache</li>
+                                        <li>Tiredness</li>
+                                        <li>Sweating</li>
+                                        <li>Exhaustion</li>
+                                        <li>Aching Pain</li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="c3-panel hidden">
+                    <table class="c3-table">
+                        <tr>
+                            <td class="c3-header">
+                                <span class="c3-title">C3 Ambulance Disposition</span>
+                                <span id="c3-toggle" class="arrow">[show]</span>
+                            </td>
+                        </tr>
+                        <tr id="c3-body" class="c3-body flu-hidden">
+                            <td>
+                                Based on the answers you’ve given me, we do recommend an ambulance to attend,
+                                however this will be a lower urgency ambulance and as such a clinician
+                                from our team may call you back first. If we are unable to do this, the case will be
+                                referred to the 999 Team for their review – are you okay with us setting this up for you?
+                                <b>(CONFIRM ADDRESS &amp; NUMBER, READ BELOW IF REQUIRED)</b>
+                                <i>
+                                    <br><br>
+                                    So what will happen is a member of our clinical team, so a Healthcare Professional,
+                                    will call you back as soon as possible to investigate this, and if they feel it is necessary,
+                                    they will arrange for this lower urgency ambulance to attend.
+                                </i>
+                            </td>
+                        </tr>
+                        <tr id="c3-body2" class="c3-body flu-hidden">
+                            <td>
+                                <table class="c3-inner">
+                                    <tr>
+                                        <td>Could I just confirm that the scene safe for a crew to attend, <b>should they attend?</b></td>
+                                        <td>So if you can, ask for someone to meet and direct the vehicle, <b>again, should they attend</b>, and shut any dogs away if there are any on scene.</td>
+                                        <td>If you do need to contact somebody do so now, then try and keep the line free as we may need to call you back. Finally, <b>(999 WORSENING)</b></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="info-panel hidden" style="margin-top:12px;">
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                Worsening Care Advice
+                                <span id="wca-toggle" class="arrow">[show]</span>
+                            </td>
+                        </tr>
+                        <tr id="wca-body" class="flu-body flu-hidden">
+                            <td>
+                                <i>As always, if there are any new symptoms, or if your conditions gets worse, changes or you have any other concerns, you're always welcome to call us back on 111 anytime.</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Clinician Callbacks (Op508v2) -->
+                <div class="info-panel hidden" style="margin-top:12px;">
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                Clinician Callbacks
+                                <span id="ccb-toggle" class="arrow">[show]</span>
+                            </td>
+                        </tr>
+                        <tr id="ccb-body" class="flu-body flu-hidden">
+                            <td>
+                                <i>We are currently experiencing a very high demand so there may be a small delay in calling you back, but of course as soon as one is next available they will call you back.</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Amber DoS Options -->
+                <div class="info-panel hidden" style="margin-top:12px;">
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                Amber DoS Options
+                                <span id="ados-toggle" class="arrow">[show]</span>
+                            </td>
+                        </tr>
+                        <tr id="ados-body" class="flu-body flu-hidden">
+                            <td>
+                                <i>The recommended service that can help today is <b>(SERVICE)</b>, however I do see it is currently experiencing higher levels of demand than normal, so there is likely to be a delay with that, did you want me to see if there is any other service available for you today, or did you want me to stick with that one?</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            <section id="page-shift" class="page">
+                <div id="shift-panel" class="val-panel show" aria-hidden="false">
+                    <div class="header-left" style="font-size:1.05rem;">Start and Finish</div>
+                    <div class="subtext" style="margin-bottom:10px;">
+                        Enter the start and finishing time of your shift.<br>
+                        For example, A 3 to 11 would be 1500–2300.
+                    </div>
+                    <!-- Start/Finish row -->
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                        <div>
+                            <span class="label">Start</span>
+                            <input id="shift-start" class="desc-input" type="text" maxlength="4" style="text-align:center;" aria-label="Shift start time" />
+                        </div>
+
+                        <span aria-hidden="true" style="font-weight:800; line-height:1; margin-top:18px;">—</span>
+
+                        <div>
+                            <span class="label">Finish</span>
+                            <input id="shift-end" class="desc-input" type="text" maxlength="4" style="text-align:center;" aria-label="Shift finish time" />
+                        </div>
+                        <!-- Lock stretches across the rest of the row -->
+                        <div style="flex:1; display:flex;">
+                            <button id="shift-lock" class="confirm-btn" type="button" style="margin-top:21px; width:100%;">Lock</button>
+                        </div>
+                    </div>
+                    <div id="shift-breaks" style="margin-top:10px; display:none;" class="breaks-row">
+                        <div style="flex:1;">
+                            <span class="label">Break 1</span>
+                            <input id="break-1" class="desc-input" type="text" maxlength="4" style="text-align:center; width:100%;" aria-label="Break 1 time" />
+                        </div>
+                        <div style="flex:1;">
+                            <span class="label">Break 2</span>
+                            <input id="break-2" class="desc-input" type="text" maxlength="4" style="text-align:center; width:100%;" aria-label="Break 2 time" />
+                        </div>
+                        <div style="flex:1;">
+                            <span class="label">Break 3</span>
+                            <input id="break-3" class="desc-input" type="text" maxlength="4" style="text-align:center; width:100%;" aria-label="Break 3 time" />
+                        </div>
+                        <div style="flex:1;">
+                            <span class="label">Lunch</span>
+                            <input id="break-lunch" class="desc-input" type="text" maxlength="4" style="text-align:center; width:100%;" aria-label="Lunch time" />
+                        </div>
+                        <div style="display:flex; align-items:flex-end; margin-left:auto; min-width:96px;">
+                            <button id="shift-lock-2" class="confirm-btn" type="button" disabled style="width:100%;">Lock</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="page-tasks" class="page">
+                <div class="cad-wrap">
+                    <div class="cad-grid">
+                        <button id="val-trigger" class="val-trigger">
+                            C3/C4 Validation
+                            <small><br><i>(inserted into Cleric)</i></small>
+                        </button>
+
+                        <button id="ops-trigger" class="cad-btn p2">
+                            OPS/CIL Summary
+                            <small><br><i>(inserted into Cleric)</i></small>
+                        </button>
+
+                        <button id="pof-trigger" class="cad-btn p3">
+                            Physical Orange Flag
+                            <small><br><i>(inserted into Cleric)</i></small>
+                        </button>
+
+                        <button id="lab-trigger" class="cad-btn p4">
+                            Urgent Lab Results
+                            <small><br><i>(inserted into pathways)</i></small>
+                        </button>
+
+                        <button id="rp-trigger" class="cad-btn p5">
+                            Repeat Prescriptions
+                            <small><br><i>(inserted into pathways)</i></small>
+                        </button>
+
+                        <button id="ll-trigger" class="cad-btn p6">
+                            LanguageLine
+                            <small><br><i>(inserted into pathways)</i></small>
+                        </button>
+                    </div>
+
+                    <div id="lab-panel" class="val-panel" aria-hidden="true">
+                        <div class="val-grid">
+                            <div>
+                                <span class="label">Hospital Laboratory</span>
+                                <input id="lab-hospital" class="desc-input" type="text" aria-label="Hospital Laboratory" />
+                            </div>
+
+                            <div>
+                                <span class="label">Phone Number</span>
+                                <input id="lab-phone" class="desc-input" type="text" aria-label="Lab Phone Number" />
+                            </div>
+
+                            <div>
+                                <span class="label">Bleep Number</span>
+                                <input id="lab-bleep" class="desc-input" type="text" aria-label="Lab Bleep Number" />
+                            </div>
+
+                            <div>
+                                <span class="label">Extension Number</span>
+                                <input id="lab-ext" class="desc-input" type="text" aria-label="Lab Extension Number" />
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <hr style="margin:12px 0; border:none; border-top:1px solid var(--border,#444);" />
+
+                        <!-- Result + Value inputs, Add + Generate inline -->
+                        <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:10px;">
+                            <div style="flex:1;">
+                                <span class="label">Result</span>
+                                <input id="lab-result" class="desc-input" type="text" aria-label="Lab Result Name" />
+                            </div>
+                            <div style="flex:1;">
+                                <span class="label">Value</span>
+                                <input id="lab-value" class="desc-input" type="text" aria-label="Lab Result Value" />
+                            </div>
+                            <button id="lab-add" class="confirm-btn" type="button" disabled>Add</button>
+                            <button id="lab-generate" class="confirm-btn" type="button" disabled>Generate</button>
+                        </div>
+
+                        <!-- Results table -->
+                        <div style="overflow:auto; max-height:180px; border:1px solid var(--border, #333); border-radius:8px;">
+                            <table id="lab-table" style="width:100%; border-collapse:collapse;">
+                                <thead>
+                                    <tr style="position:sticky; top:0; background:var(--bg,#111);">
+                                        <td style="text-align:left; padding:8px; font-weight:normal;"><b>Result</b></td>
+                                        <td style="text-align:left; padding:8px; font-weight:normal;"><b>Value</b></td>
+                                        <td style="width:80px; text-align:right; padding:8px; font-weight:normal;"><b>Remove</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="lab-tbody">
+                                    <!-- rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Log area -->
+                        <div class="ops-log-wrap">
+                            <textarea id="lab-log" class="ops-log" readonly rows="4" aria-label="Lab Results Log"></textarea>
+                            <button id="lab-copy" class="ops-copy" type="button" title="Copy all"></button>
+                        </div>
+                    </div>
+
+                    <!-- LanguageLine Panel -->
+                    <div id="ll-panel" class="val-panel" aria-hidden="true">
+                        <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:10px;">
+                            <div style="flex:1;">
+                                <span class="label">Interpreter ID</span>
+                                <input id="ll-id" class="desc-input" type="text" aria-label="Interpreter ID" />
+                            </div>
+                            <div style="flex:1;">
+                                <span class="label">Language</span>
+                                <input id="ll-lang" class="desc-input" type="text" aria-label="Language" />
+                            </div>
+                            <button id="ll-generate" class="confirm-btn" type="button" disabled>Generate</button>
+                        </div>
+
+                        <!-- Log area -->
+                        <div class="ops-log-wrap">
+                            <textarea id="ll-log" class="ops-log" readonly rows="4" aria-label="LanguageLine Log"></textarea>
+                            <button id="ll-copy" class="ops-copy" type="button" title="Copy all"></button>
+                        </div>
+                    </div>
+                    <!-- Repeat Prescriptions Panel -->
+                    <div id="rp-panel" class="val-panel" aria-hidden="true">
+                        <!-- Input row -->
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                            <input id="rp-input" class="desc-input" type="text" placeholder=""
+                                   aria-label="Repeat Prescription Input" list="rp-meds" />
+                            <button id="rp-add" class="confirm-btn" type="button" disabled>Add</button>
+                            <button id="rp-generate" class="confirm-btn" type="button" disabled>Generate</button>
+
+                            <!-- Suggestions -->
+                            <datalist id="rp-meds">
+                                <option value="Propranolol"></option>
+                                <option value="Atorvastatin"></option>
+                                <option value="Simvastatin"></option>
+                                <option value="Lisinopril"></option>
+                                <option value="Ramipril"></option>
+                                <option value="Amlodipine"></option>
+                                <option value="Bisoprolol"></option>
+                                <option value="Metformin"></option>
+                                <option value="Levothyroxine"></option>
+                                <option value="Omeprazole"></option>
+                                <option value="Esomeprazole"></option>
+                                <option value="Citalopram"></option>
+                                <option value="Losartan"></option>
+                                <option value="Warfarin"></option>
+                                <option value="Rivaroxaban"></option>
+                                <option value="Fluoxetine"></option>
+                                <option value="Escitalopram"></option>
+                                <option value="Aspirin"></option>
+                                <option value="Insulin (NovoRapid)"></option>
+                                <option value="Insulin (Lantus)"></option>
+                                <option value="Insulin (Levemir)"></option>
+                                <option value="Insulin (Humulin)"></option>
+                                <option value="Hydrochlorothiazide"></option>
+                                <option value="Glimepiride"></option>
+                                <option value="Gliclazide"></option>
+                                <option value="Famotidine"></option>
+                                <option value="Furosemide"></option>
+                                <option value="Lansoprazole"></option>
+                                <option value="Gabapentin"></option>
+                                <option value="Sertraline"></option>
+                                <option value="Prednisolone"></option>
+                                <option value="Clopidogrel"></option>
+                                <option value="Metoprolol"></option>
+                                <option value="Spironolactone"></option>
+                                <option value="Salbutamol"></option>
+                                <option value="Naproxen"></option>
+                                <option value="Ibuprofen"></option>
+                                <option value="Codeine phosphate"></option>
+                                <option value="Tramadol"></option>
+                                <option value="Pregabalin"></option>
+                                <option value="Mirtazapine"></option>
+                                <option value="Venlafaxine"></option>
+                                <option value="Duloxetine"></option>
+                                <option value="Amitriptyline"></option>
+                            </datalist>
+                        </div>
+
+                        <!-- Medications table/list -->
+                        <div style="overflow:auto; max-height:180px; border:1px solid var(--border, #333); border-radius:8px;">
+                            <table id="rp-table" style="width:100%; border-collapse:collapse;">
+                                <thead>
+                                    <tr style="position:sticky; top:0; background:var(--bg,#111);">
+                                        <td style="text-align:left; padding:8px; font-weight:normal;"><b>Medication</b></td>
+                                        <td style="width:80px; text-align:right; padding:8px; font-weight:normal;"><b>Remove</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="rp-tbody">
+                                    <!-- rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Log area -->
+                        <div class="ops-log-wrap" style="margin-top:12px;">
+                            <textarea id="rp-log" class="ops-log" readonly rows="4" aria-label="Repeat Prescriptions Log"></textarea>
+                            <button id="rp-copy" class="ops-copy" type="button" title="Copy all"></button>
+                        </div>
+                    </div>
+
+                    <!-- C3/C4 Validation Panel -->
+                    <div id="val-panel" class="val-panel" aria-hidden="true">
+                        <div class="val-grid">
+                            <div>
+                                <span class="label">Ambulance Category</span>
+                                <div class="pill-group" role="group" aria-label="Ambulance Category">
+                                    <button id="cat3" class="pill" type="button" aria-pressed="false">3</button>
+                                    <button id="cat4" class="pill" type="button" aria-pressed="false">4</button>
+                                </div>
+                                <div class="subtext">Select either a C3/C4 Ambulance</div>
+                            </div>
+
+                            <div>
+                                <span class="label">Clinician Initials</span>
+                                <input id="clin-init" class="initials" type="text" maxlength="3" placeholder="XXX" aria-label="Clinician Initials" />
+                                <div class="hint">Leave blank to indicate no response from Clinical Headset</div>
+                            </div>
+                        </div>
+
+                        <div class="desc-wrap">
+                            <input id="desc-input" class="desc-input" type="text" placeholder="" aria-label="Call Description" />
+                            <button id="confirm-btn" class="confirm-btn" disabled>Confirm</button>
+                        </div>
+
+                        <div class="subtext">Include a brief description of the nature of the call</div>
+                    </div>
+
+                    <!-- OPS/CIL Panel -->
+                    <div id="ops-panel" class="val-panel" aria-hidden="true">
+                        <div class="val-grid">
+                            <div>
+                                <span class="label">Advice Category</span>
+                                <div class="pill-group" role="group" aria-label="OPS/CIL Type">
+                                    <button id="ops-op" class="pill" type="button" aria-pressed="false">Operational</button>
+                                    <button id="ops-cl" class="pill" type="button" aria-pressed="false">Clinical</button>
+                                </div>
+                                <div class="subtext">Select either Operational or Clinical support</div>
+                            </div>
+
+                            <div>
+                                <span class="label">Initials</span>
+                                <input id="ops-init" class="initials" type="text" maxlength="3" placeholder="XXX" aria-label="OPS/CIL Initials" />
+                                <div class="hint">Provide the initials of the advisor you spoke with</div>
+                            </div>
+                        </div>
+
+                        <div class="desc-wrap">
+                            <input id="ops-desc" class="desc-input" type="text" placeholder="" aria-label="OPS/CIL Advice" />
+                            <button id="ops-confirm" class="confirm-btn" type="button" disabled>Confirm</button>
+                        </div>
+
+                        <div class="subtext">Include a brief description of the advice given</div>
+
+                        <div class="ops-log-wrap">
+                            <textarea id="ops-log" class="ops-log" readonly rows="4" aria-label="OPS/CIL Summary Log"></textarea>
+                            <button id="ops-copy" class="ops-copy" type="button" title="Copy all"></button>
+                        </div>
+                    </div>
+
+                    <!-- Physical Orange Flag Panel (empty shell for now) -->
+                    <div id="pof-panel" class="val-panel" aria-hidden="true">
+                        <!-- Top row: Raise + time (left) | Initials + Generate (right) -->
+                        <div style="display:flex; align-items:center; gap:12px; justify-content:space-between;">
+
+                            <!-- Left side: Raise + time -->
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button id="pof-raise" class="confirm-btn" type="button" style="background:#007bff;">
+                                    Raise
+                                </button>
+                                <input id="pof-time" class="initials" type="text" readonly aria-label="Physical Orange Flag Time" />
+                            </div>
+
+                            <!-- Right side: Initials + Generate -->
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <label for="pof-init">Initials:</label>
+                                <input id="pof-init" class="initials" type="text" maxlength="3" placeholder="XXX" aria-label="Physical Orange Flag Initials" />
+                                <button id="pof-generate" class="confirm-btn" type="button" disabled>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Log area (same structure as OPS/CIL) -->
+                        <div class="ops-log-wrap" style="margin-top:12px;">
+                            <textarea id="pof-log" class="ops-log" readonly rows="4" aria-label="Physical Orange Flag Log"></textarea>
+                            <button id="pof-copy" class="ops-copy" type="button" title="Copy all"></button>
+                        </div>
+                    </div>
+
+                    <!-- Success Toast (used on copy) -->
+                    <div id="cad-success" class="cad-success hidden" role="status" aria-live="polite">
+                        ✅ <strong>Success:</strong> Line copied - you can now paste this into your case notes.
+                    </div>
+                </div><br />
+                <!-- Quick Scripts -->
+                <div class="scripts-row">
+                    <button id="chip-chase-111" class="script-chip script-chip-chase script-chip-special" type="button">
+                        CHASING 111, NO NEW/WORSENING
+                    </button>
+                    <button class="script-chip script-chip-chase" type="button"
+                            data-copy="NO NEW OR WORSENING SYMPTOMS. WCAG.
+CALLING TO CHASE AMBULANCE - ADVISED TO CALL 999.">
+                        CHASING 999, NO NEW/WORSENING
+                    </button>
+                </div>
+                <div class="scripts-row">
+                    <button id="chip-datix" class="script-chip script-chip-chase script-chip-special" type="button">
+                        DATIX RAISED
+                    </button>
+
+                    <button id="chip-safeguarding" class="script-chip script-chip-chase script-chip-special" type="button">
+                        SAFEGUARDING RAISED
+                    </button>
+                </div>
+
+                <div id="quick-scripts" class="scripts-grid">
+                    <button class="script-chip" type="button"
+                            data-copy="GP PRACTICE COULD NOT BE CONFIRMED.">
+                        GP PRACTICE COULD NOT BE CONFIRMED.
+                    </button>
+                    <button class="script-chip" type="button"
+                            data-copy="SPINE SEARCH UNABLE TO BE COMPLETED
+REPEATED PHONETICALLY, NO SUCCESS.
+CALLER DID NOT KNOW NHS NUMBER.">
+                        SPINE SEARCH UNABLE TO BE COMPLETED<br>
+                        REPEATED PHONETICALLY, NO SUCCESS.<br>
+                        CALLER DID NOT KNOW NHS NUMBER.
+                    </button>
+                    <button class="script-chip script-chip-purple" type="button"
+                            data-copy="REMOTE OBSERVER - NOT WITH PATIENT.
+CALLER/PATIENT TO CALL BACK LATER.">
+                        REMOTE OBSERVER - NOT WITH PATIENT.<br>
+                        CALLER/PATIENT TO CALL BACK LATER.
+                    </button>
+                    <button id="chip-call-ended-disc" class="script-chip script-chip-magenta script-chip-special" type="button">
+                        CALL ENDED, CALLER DISCONNECTED.<br>
+                        CALLED BACK PATIENT (3x), NO RESPONSE.
+                    </button>
+
+                    <button id="chip-call-ended-silent" class="script-chip script-chip-magenta script-chip-special" type="button">
+                        CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
+                        CALLED BACK PATIENT (3x), NO RESPONSE.
+                    </button>
+                </div>
+            </section>
+            <script src="app.js"></script>
+</body>
+</html>
