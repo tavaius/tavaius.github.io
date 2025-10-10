@@ -635,7 +635,7 @@ document.addEventListener('keydown', e => {
 const valTrigger = document.getElementById('val-trigger');
 const valPanel = document.getElementById('val-panel');
 
-const allPanels = document.querySelectorAll('.val-panel');
+const allPanels = document.querySelectorAll('#page-tasks .val-panel');
 function openExclusive(panel) {
     allPanels.forEach(p => {
         if (p !== panel) {
@@ -984,4 +984,5 @@ if (pofTrigger && pofPanel) {
 
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
+
 updateOpsConfirmState();
