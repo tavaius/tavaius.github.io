@@ -930,7 +930,7 @@ opsConfirm?.addEventListener('click', (e) => {
     const initials = opsInit?.value.trim() ?? '';
     const who = (type === 'OPERATIONAL') ? 'OPS' : 'CLINICAL';
     const initialsTag = initials ? ` (${initials})` : '';
-    const entry = `ADVISED BY ${who}${initialsTag}: ${advice}`;
+    const entry = `ADVISED BY ${who}${initialsTag}: ${advice}`.toUpperCase();
 
     if (opsLog) {
         // ensure entries stack with a newline after each
@@ -967,11 +967,6 @@ opsCopy?.addEventListener('click', () => {
     }
 });
 
-opsTrigger?.addEventListener('click', () => {
-    console.log('OPS/CIL trigger clicked');
-    // ...rest of code
-});
-
 /* ---------- Physical Orange Flag panel ---------- */
 const pofTrigger = document.getElementById('pof-trigger');
 const pofPanel = document.getElementById('pof-panel');
@@ -991,3 +986,4 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
