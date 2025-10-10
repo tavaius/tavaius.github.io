@@ -408,6 +408,10 @@ main {
     padding: 12px;
 }
 
+.shift-panel.show {
+        display: block;
+    }
+
 .subtext {
     font-size: 11px;
     color: var(--muted);
@@ -809,4 +813,5 @@ input[list]::-webkit-calendar-picker-indicator {
     .ops-copy:hover {
         filter: brightness(0.97);
     }
+
 
