@@ -1,4 +1,4 @@
-﻿/* ---------- Collapsible helpers ---------- */
+/* ---------- Collapsible helpers ---------- */
 function wireCollapse(toggleId, bodyId) {
     const t = document.getElementById(toggleId);
     const b = document.getElementById(bodyId);
@@ -635,7 +635,7 @@ document.addEventListener('keydown', e => {
 const valTrigger = document.getElementById('val-trigger');
 const valPanel = document.getElementById('val-panel');
 
-const allPanels = document.querySelectorAll('#page-tasks .val-panel');
+const allPanels = document.querySelectorAll('.val-panel');
 function openExclusive(panel) {
     allPanels.forEach(p => {
         if (p !== panel) {
@@ -850,7 +850,8 @@ shiftLock2?.addEventListener('click', async () => {
     if (brL) scheduleBreak(brL, 'Lunch');
 });
 
-if (shiftPanel) {               // shiftPanel = document.getElementById('shift-panel')
+const shiftPanel = document.getElementById('shift-panel');
+if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
@@ -966,6 +967,11 @@ opsCopy?.addEventListener('click', () => {
     }
 });
 
+opsTrigger?.addEventListener('click', () => {
+    console.log('OPS/CIL trigger clicked');
+    // ...rest of code
+});
+
 /* ---------- Physical Orange Flag panel ---------- */
 const pofTrigger = document.getElementById('pof-trigger');
 const pofPanel = document.getElementById('pof-panel');
@@ -984,5 +990,4 @@ if (pofTrigger && pofPanel) {
 
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
-
 updateOpsConfirmState();
