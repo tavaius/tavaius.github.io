@@ -915,8 +915,8 @@ function getOpsType() {
 }
 function updateOpsConfirmState() {
     const type = getOpsType();
-    const hasAdvice = (opsDesc?.value.trim().length ?? 0) > 0;
-    if (opsConfirm) opsConfirm.disabled = !(type && hasAdvice);
+    const hasInitials = (opsInit?.value.trim().length ?? 0) > 0;
+if (opsConfirm) opsConfirm.disabled = !(type && hasInitials);
 }
 opsDesc?.addEventListener('input', updateOpsConfirmState);
 
@@ -997,5 +997,6 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
