@@ -870,15 +870,15 @@ function showSuccessBar() {
 
 /* ---------- OPS/CIL panel ---------- */
 const opsTrigger = document.getElementById('ops-trigger');
-const opsPanel = document.getElementById('ops-panel');
+const opsPanel   = document.getElementById('ops-panel');
 
-const opsOp = document.getElementById('ops-op');
-const opsCl = document.getElementById('ops-cl');
-const opsInit = document.getElementById('ops-init');
-const opsDesc = document.getElementById('ops-desc');
+const opsOp      = document.getElementById('ops-op');
+const opsCl      = document.getElementById('ops-cl');
+const opsInit    = document.getElementById('ops-init');
+const opsDesc    = document.getElementById('ops-desc');
 const opsConfirm = document.getElementById('ops-confirm');
-const opsLog = document.getElementById('ops-log');
-const opsCopy = document.getElementById('ops-copy');
+const opsLog     = document.getElementById('ops-log');
+const opsCopy    = document.getElementById('ops-copy');
 
 /* Show/hide OPS/CIL */
 if (opsTrigger && opsPanel) {
@@ -902,9 +902,10 @@ function setOpsType(btn) {
 opsOp?.addEventListener('click', () => setOpsType(opsOp));
 opsCl?.addEventListener('click', () => setOpsType(opsCl));
 
-/* OPS/CIL initials enforcement */
+/* OPS/CIL initials enforcement + state update */
 opsInit?.addEventListener('input', () => {
     opsInit.value = opsInit.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+    updateOpsConfirmState();
 });
 
 /* Enable OPS/CIL confirm only when ready */
@@ -915,32 +916,37 @@ function getOpsType() {
 }
 
 function updateOpsConfirmState() {
-    const type = getOpsType();                          // NFA or ACTION
-    const hasInitials = (opsInit?.value.trim().length > 0);
-    opsConfirm.disabled = !(type && hasInitials);
+    const type = getOpsType();
+    const hasInitials = (opsInit?.value.trim().length ?? 0) > 0;
+    if (opsConfirm) opsConfirm.disabled = !(type && hasInitials);
 }
 
 opsInit?.addEventListener('input', updateOpsConfirmState);
 
+updateOpsConfirmState();
+
 // OPS/CIL Confirm (append only, add trailing newline; no popup, no copy)
+/* OPS/CIL Confirm */
 opsConfirm?.addEventListener('click', (e) => {
     e.preventDefault();
-    const type = getOpsType(); // "OPERATIONAL" or "CLINICAL"
+    const type = getOpsType();      // "NOACTION" or "ACTIONREQUIRED"
     const advice = opsDesc?.value.trim() ?? '';
     if (!type) return;
 
-    const initials = opsInit?.value.trim() || 'XXX'; // fallback if empty
-    const who = (type === 'NOACTION') ? 'NOACTION' : 'ACTIONREQUIRED';
+    const initials = opsInit?.value.trim() || 'XXX';
 
     let entry;
     if (type === 'NOACTION') {
-        // No further action selected
-        entry = `IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})\nADVISED NO FURTHER ACTION REQUIRED.`;
+        entry =
+`IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})
+ADVISED NO FURTHER ACTION REQUIRED.`;
     } else {
-        // Action required
-        entry = `IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})\nADVISED: ${advice.toUpperCase()}`;
+        entry =
+`IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})
+ADVISED: ${advice}`;
     }
 
+    // Append to log
     if (opsLog) {
         const needsLeadingNewline = opsLog.value && !opsLog.value.endsWith('\n');
         opsLog.value = opsLog.value
@@ -949,15 +955,17 @@ opsConfirm?.addEventListener('click', (e) => {
         opsLog.scrollTop = opsLog.scrollHeight;
     }
 
-    // optional: copy to clipboard + success
+    // Copy current entry
     if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(entry).then(showSuccessBar).catch(() => { fallbackCopy(entry); showSuccessBar(); });
+        navigator.clipboard.writeText(entry)
+            .then(showSuccessBar)
+            .catch(() => { fallbackCopy(entry); showSuccessBar(); });
     } else {
         fallbackCopy(entry);
         showSuccessBar();
     }
 
-    // reset
+    // Reset
     [opsOp, opsCl].forEach(b => b.setAttribute('aria-pressed', 'false'));
     opsInit.value = '';
     opsDesc.value = '';
@@ -969,7 +977,7 @@ opsCopy?.addEventListener('click', () => {
     if (!text.trim()) return;
 
     const done = () => {
-        showSuccessBar(); // show the green popup only on copy
+        showSuccessBar();
         if (opsLog) opsLog.value = '';
     };
 
@@ -999,6 +1007,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
