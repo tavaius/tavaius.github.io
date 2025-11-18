@@ -909,16 +909,18 @@ opsInit?.addEventListener('input', () => {
 
 /* Enable OPS/CIL confirm only when ready */
 function getOpsType() {
-    if (opsOp?.getAttribute('aria-pressed') === 'true') return 'OPERATIONAL';
-    if (opsCl?.getAttribute('aria-pressed') === 'true') return 'CLINICAL';
+    if (opsOp?.getAttribute('aria-pressed') === 'true') return 'NOACTION';
+    if (opsCl?.getAttribute('aria-pressed') === 'true') return 'ACTIONREQUIRED';
     return null;
 }
+
 function updateOpsConfirmState() {
-    const type = getOpsType();
-    const hasInitials = (opsInit?.value.trim().length ?? 0) > 0;
-if (opsConfirm) opsConfirm.disabled = !(type && hasInitials);
+    const type = getOpsType();                          // NFA or ACTION
+    const hasInitials = (opsInit?.value.trim().length > 0);
+    opsConfirm.disabled = !(type && hasInitials);
 }
-opsDesc?.addEventListener('input', updateOpsConfirmState);
+
+opsInit?.addEventListener('input', updateOpsConfirmState);
 
 // OPS/CIL Confirm (append only, add trailing newline; no popup, no copy)
 opsConfirm?.addEventListener('click', (e) => {
@@ -997,6 +999,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
