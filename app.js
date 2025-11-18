@@ -954,17 +954,7 @@ ADVISED: ${advice}`;
             : `${entry}\n`;
         opsLog.scrollTop = opsLog.scrollHeight;
     }
-
-    // Copy current entry
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(entry)
-            .then(showSuccessBar)
-            .catch(() => { fallbackCopy(entry); showSuccessBar(); });
-    } else {
-        fallbackCopy(entry);
-        showSuccessBar();
-    }
-
+    
     // Reset
     [opsOp, opsCl].forEach(b => b.setAttribute('aria-pressed', 'false'));
     opsInit.value = '';
@@ -1007,6 +997,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
