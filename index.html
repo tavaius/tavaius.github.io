@@ -16,13 +16,13 @@
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">My Notes</span>
                 </button>
-                <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
-                    <span class="dot" aria-hidden="true"></span>
-                    <span class="label">My Shift</span>
-                </button>
                 <button class="tab-btn" data-tab="tasks" aria-controls="page-tasks">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">Call Notes</span>
+                </button>
+                <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">My Shift</span>
                 </button>
                 <button class="tab-btn" data-tab="info" aria-controls="page-info">
                     <span class="dot" aria-hidden="true"></span>
@@ -246,7 +246,7 @@
                         </button>
 
                         <button id="ops-trigger" class="cad-btn p2">
-                            OPS/CIL Summary
+                            IBIS/SPN Checks
                             <small><br><i>(inserted into Cleric)</i></small>
                         </button>
 
@@ -467,18 +467,18 @@
                     <div id="ops-panel" class="val-panel" aria-hidden="true">
                         <div class="val-grid">
                             <div>
-                                <span class="label">Advice Category</span>
+                                <span class="label">Following Checks</span>
                                 <div class="pill-group" role="group" aria-label="OPS/CIL Type">
-                                    <button id="ops-op" class="pill" type="button" aria-pressed="false">Operational</button>
-                                    <button id="ops-cl" class="pill" type="button" aria-pressed="false">Clinical</button>
+                                    <button id="ops-op" class="pill" type="button" aria-pressed="false">No Further Action</button>
+                                    <button id="ops-cl" class="pill" type="button" aria-pressed="false">Action Required</button>
                                 </div>
-                                <div class="subtext">Select either Operational or Clinical support</div>
+                                <div class="subtext">Select whether the clinician advised any action or not.</div>
                             </div>
 
                             <div>
                                 <span class="label">Initials</span>
                                 <input id="ops-init" class="initials" type="text" maxlength="3" placeholder="XXX" aria-label="OPS/CIL Initials" />
-                                <div class="hint">Provide the initials of the advisor you spoke with</div>
+                                <div class="hint">Provide the initials of the clinician you spoke with</div>
                             </div>
                         </div>
 
@@ -487,7 +487,7 @@
                             <button id="ops-confirm" class="confirm-btn" type="button" disabled>Confirm</button>
                         </div>
 
-                        <div class="subtext">Include a brief description of the advice given</div>
+                        <div class="subtext">Include a brief description of the advice given, if any.-</div>
 
                         <div class="ops-log-wrap">
                             <textarea id="ops-log" class="ops-log" readonly rows="4" aria-label="OPS/CIL Summary Log"></textarea>
