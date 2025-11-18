@@ -923,17 +923,23 @@ opsDesc?.addEventListener('input', updateOpsConfirmState);
 // OPS/CIL Confirm (append only, add trailing newline; no popup, no copy)
 opsConfirm?.addEventListener('click', (e) => {
     e.preventDefault();
-    const type = getOpsType();
-    const advice = opsDesc?.value.trim();
-    if (!type || !advice) return;
+    const type = getOpsType(); // "OPERATIONAL" or "CLINICAL"
+    const advice = opsDesc?.value.trim() ?? '';
+    if (!type) return;
 
-    const initials = opsInit?.value.trim() ?? '';
+    const initials = opsInit?.value.trim() || 'XXX'; // fallback if empty
     const who = (type === 'OPERATIONAL') ? 'OPS' : 'CLINICAL';
-    const initialsTag = initials ? ` (${initials})` : '';
-    const entry = `ADVISED BY ${who}${initialsTag}: ${advice}`.toUpperCase();
+
+    let entry;
+    if (type === 'OPERATIONAL') {
+        // No further action selected
+        entry = `IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})\nADVISED NO FURTHER ACTION REQUIRED.`;
+    } else {
+        // Action required
+        entry = `IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})\nADVISED: ${advice.toUpperCase()}`;
+    }
 
     if (opsLog) {
-        // ensure entries stack with a newline after each
         const needsLeadingNewline = opsLog.value && !opsLog.value.endsWith('\n');
         opsLog.value = opsLog.value
             ? `${opsLog.value}${needsLeadingNewline ? '\n' : ''}${entry}\n`
@@ -941,15 +947,20 @@ opsConfirm?.addEventListener('click', (e) => {
         opsLog.scrollTop = opsLog.scrollHeight;
     }
 
-    // Do NOT copy or show success here
+    // optional: copy to clipboard + success
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(entry).then(showSuccessBar).catch(() => { fallbackCopy(entry); showSuccessBar(); });
+    } else {
+        fallbackCopy(entry);
+        showSuccessBar();
+    }
 
-    // Reset inputs
-    [opsOp, opsCl].forEach(b => b?.setAttribute('aria-pressed', 'false'));
-    if (opsInit) opsInit.value = '';
-    if (opsDesc) opsDesc.value = '';
+    // reset
+    [opsOp, opsCl].forEach(b => b.setAttribute('aria-pressed', 'false'));
+    opsInit.value = '';
+    opsDesc.value = '';
     updateOpsConfirmState();
 });
-
 
 opsCopy?.addEventListener('click', () => {
     const text = opsLog?.value ?? '';
@@ -986,4 +997,5 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
