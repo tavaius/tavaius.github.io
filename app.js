@@ -930,10 +930,10 @@ opsConfirm?.addEventListener('click', (e) => {
     if (!type) return;
 
     const initials = opsInit?.value.trim() || 'XXX'; // fallback if empty
-    const who = (type === 'OPERATIONAL') ? 'OPS' : 'CLINICAL';
+    const who = (type === 'NOACTION') ? 'NOACTION' : 'ACTIONREQUIRED';
 
     let entry;
-    if (type === 'OPERATIONAL') {
+    if (type === 'NOACTION') {
         // No further action selected
         entry = `IBIS/SPN CHECKED BY CLINICAL HEADSET (${initials})\nADVISED NO FURTHER ACTION REQUIRED.`;
     } else {
@@ -999,6 +999,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
