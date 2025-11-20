@@ -737,6 +737,20 @@ const shiftBreaks = document.getElementById('shift-breaks');
 const shiftInfoToggle = document.getElementById('shift-info-toggle');
 const shiftInfoBox = document.getElementById('shift-info-box');
 
+function shiftForward(text) {
+    return (text || '').replace(/[a-zA-Z]/g, (ch) => {
+        const code = ch.charCodeAt(0);
+        const base = code >= 97 ? 97 : 65;
+        const offset = (code - base + 1) % 26;
+        return String.fromCharCode(base + offset);
+    });
+}
+
+function insertShiftedText(text) {
+    const shifted = shiftForward(text);
+    document.execCommand('insertText', false, shifted);
+}
+
 shiftLock?.addEventListener('click', () => {
     const startVal = shiftStart?.value.trim() || '';
     const endVal = shiftEnd?.value.trim() || '';
@@ -857,6 +871,23 @@ if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
+
+shiftInfoBox?.addEventListener('beforeinput', (event) => {
+    const { inputType, data } = event;
+    if (!inputType.startsWith('insert')) return;
+    if (typeof data === 'string' && data.length > 0) {
+        event.preventDefault();
+        insertShiftedText(data);
+    }
+});
+
+shiftInfoBox?.addEventListener('paste', (event) => {
+    const text = event.clipboardData?.getData('text');
+    if (text?.length) {
+        event.preventDefault();
+        insertShiftedText(text);
+    }
+});
 
 shiftInfoToggle?.addEventListener('click', () => {
     if (!shiftInfoBox) return;
