@@ -734,6 +734,8 @@ const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
 const shiftLock = document.getElementById('shift-lock');
 const shiftBreaks = document.getElementById('shift-breaks');
+const shiftInfoToggle = document.getElementById('shift-info-toggle');
+const shiftInfoBox = document.getElementById('shift-info-box');
 
 shiftLock?.addEventListener('click', () => {
     const startVal = shiftStart?.value.trim() || '';
@@ -855,6 +857,15 @@ if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
+
+shiftInfoToggle?.addEventListener('click', () => {
+    if (!shiftInfoBox) return;
+    const isHidden = shiftInfoBox.classList.toggle('hidden');
+    shiftInfoToggle.setAttribute('aria-expanded', String(!isHidden));
+    if (!isHidden) {
+        shiftInfoBox.focus();
+    }
+});
 
 /* ---------- Success bar ---------- */
 load();
