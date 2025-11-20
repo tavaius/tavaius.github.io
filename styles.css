@@ -663,10 +663,14 @@ input[list]::-webkit-calendar-picker-indicator {
     padding: 12px;
 }
 
+.shift-info-row {
+    margin-top: 12px;
+}
+
 .shift-info-btn {
     width: 100%;
     display: block;
-    margin: 12px 0 0;
+    margin: 0;
     background: #fff;
     border: 1px solid var(--border);
 }
