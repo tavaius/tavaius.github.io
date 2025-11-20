@@ -748,7 +748,23 @@ function shiftForward(text) {
 
 function insertShiftedText(text) {
     const shifted = shiftForward(text);
-    document.execCommand('insertText', false, shifted);
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const node = document.createTextNode(shifted);
+    range.insertNode(node);
+
+    // place caret after inserted text
+    range.setStartAfter(node);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
 }
 
 shiftLock?.addEventListener('click', () => {
