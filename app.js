@@ -155,6 +155,9 @@ llCopy?.addEventListener('click', () => {
 });
 
 /* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
 const csdNotes = document.getElementById('csd-notes');
 const csdCopy = document.getElementById('csd-copy');
 
