@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -155,6 +145,28 @@ llCopy?.addEventListener('click', () => {
         if (llId) llId.value = '';
         if (llLang) llLang.value = '';
         updateLlGenerateState();
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+});
+
+/* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
+const csdNotes = document.getElementById('csd-notes');
+const csdCopy = document.getElementById('csd-copy');
+
+csdCopy?.addEventListener('click', () => {
+    const text = csdNotes?.value ?? '';
+    if (!text.trim()) return;
+
+    const done = () => {
+        showSuccessBar();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -734,6 +746,38 @@ const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
 const shiftLock = document.getElementById('shift-lock');
 const shiftBreaks = document.getElementById('shift-breaks');
+const shiftInfoToggle = document.getElementById('shift-info-toggle');
+const shiftInfoBox = document.getElementById('shift-info-box');
+
+function shiftForward(text) {
+    return (text || '').replace(/[a-zA-Z]/g, (ch) => {
+        const code = ch.charCodeAt(0);
+        const base = code >= 97 ? 97 : 65;
+        const offset = (code - base + 1) % 26;
+        return String.fromCharCode(base + offset);
+    });
+}
+
+function insertShiftedText(text) {
+    const shifted = shiftForward(text);
+    const selection = window.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+
+    const node = document.createTextNode(shifted);
+    range.insertNode(node);
+
+    // place caret after inserted text
+    range.setStartAfter(node);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
 
 shiftLock?.addEventListener('click', () => {
     const startVal = shiftStart?.value.trim() || '';
@@ -855,6 +899,32 @@ if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
+
+shiftInfoBox?.addEventListener('beforeinput', (event) => {
+    const { inputType, data } = event;
+    if (!inputType.startsWith('insert')) return;
+    if (typeof data === 'string' && data.length > 0) {
+        event.preventDefault();
+        insertShiftedText(data);
+    }
+});
+
+shiftInfoBox?.addEventListener('paste', (event) => {
+    const text = event.clipboardData?.getData('text');
+    if (text?.length) {
+        event.preventDefault();
+        insertShiftedText(text);
+    }
+});
+
+shiftInfoToggle?.addEventListener('click', () => {
+    if (!shiftInfoBox) return;
+    const isHidden = shiftInfoBox.classList.toggle('hidden');
+    shiftInfoToggle.setAttribute('aria-expanded', String(!isHidden));
+    if (!isHidden) {
+        shiftInfoBox.focus();
+    }
+});
 
 /* ---------- Success bar ---------- */
 load();
