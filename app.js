@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -155,6 +145,28 @@ llCopy?.addEventListener('click', () => {
         if (llId) llId.value = '';
         if (llLang) llLang.value = '';
         updateLlGenerateState();
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+});
+
+/* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
+const csdNotes = document.getElementById('csd-notes');
+const csdCopy = document.getElementById('csd-copy');
+
+csdCopy?.addEventListener('click', () => {
+    const text = csdNotes?.value ?? '';
+    if (!text.trim()) return;
+
+    const done = () => {
+        showSuccessBar();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -734,6 +746,8 @@ const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
 const shiftLock = document.getElementById('shift-lock');
 const shiftBreaks = document.getElementById('shift-breaks');
+const csdExtensionInput = document.getElementById('csd-extension');
+const csdExtensionSet = document.getElementById('csd-extension-set');
 
 shiftLock?.addEventListener('click', () => {
     const startVal = shiftStart?.value.trim() || '';
@@ -855,6 +869,24 @@ if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
+
+function updateCsdExtensionState() {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
+    const val = csdExtensionInput.value.trim();
+    csdExtensionSet.disabled = !/^\d{1,5}$/.test(val);
+}
+
+csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
+
+csdExtensionSet?.addEventListener('click', () => {
+    if (!csdExtensionInput) return;
+    const val = csdExtensionInput.value.trim();
+    if (!/^\d{1,5}$/.test(val)) return;
+    showSuccessBar();
+});
+
+updateCsdExtensionState();
 
 /* ---------- Success bar ---------- */
 load();

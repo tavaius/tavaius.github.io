@@ -291,6 +291,17 @@ main {
     overflow: hidden;
 }
 
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
 .cad-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -661,6 +672,30 @@ input[list]::-webkit-calendar-picker-indicator {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 12px;
+}
+
+.shift-extension {
+    margin-top: 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+}
+
+.shift-extension-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.shift-extension-row .desc-input {
+    flex: 1;
+    text-align: center;
+}
+
+#csd-extension-set {
+    min-width: 88px;
 }
 
 .shift-panel .label {
