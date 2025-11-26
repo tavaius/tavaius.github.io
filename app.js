@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -155,6 +145,39 @@ llCopy?.addEventListener('click', () => {
         if (llId) llId.value = '';
         if (llLang) llLang.value = '';
         updateLlGenerateState();
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+});
+
+/* ---------- CSD Notes ---------- */
+const csdTrigger = document.getElementById('csd-trigger');
+const csdPanel = document.getElementById('csd-panel');
+const csdNotes = document.getElementById('csd-notes');
+const csdCopy = document.getElementById('csd-copy');
+
+if (csdTrigger && csdPanel) {
+    csdTrigger.addEventListener('click', () => {
+        const isOpen = csdPanel.classList.contains('show');
+        if (isOpen) {
+            csdPanel.classList.remove('show');
+            csdPanel.setAttribute('aria-hidden', 'true');
+        } else {
+            openExclusive(csdPanel);
+        }
+    });
+}
+
+csdCopy?.addEventListener('click', () => {
+    const text = csdNotes?.value ?? '';
+    if (!text.trim()) return;
+
+    const done = () => {
+        showSuccessBar();
     };
 
     if (navigator.clipboard?.writeText) {

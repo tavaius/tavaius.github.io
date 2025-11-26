@@ -273,6 +273,11 @@
                             LanguageLine
                             <small><br><i>(inserted into pathways)</i></small>
                         </button>
+
+                        <button id="csd-trigger" class="cad-btn p6">
+                            CSD Notes
+                            <small><br><i>(call notes category)</i></small>
+                        </button>
                     </div>
 
                     <div id="lab-panel" class="val-panel" aria-hidden="true">
@@ -357,6 +362,15 @@
                             <textarea id="ll-log" class="ops-log" readonly rows="4" aria-label="LanguageLine Log"></textarea>
                             <button id="ll-copy" class="ops-copy" type="button" title="Copy all"></button>
                         </div>
+                    </div>
+
+                    <!-- CSD Notes Panel -->
+                    <div id="csd-panel" class="val-panel" aria-hidden="true">
+                        <div class="ops-log-wrap">
+                            <textarea id="csd-notes" class="ops-log" rows="5" aria-label="CSD Notes"></textarea>
+                            <button id="csd-copy" class="ops-copy" type="button" title="Copy CSD Notes"></button>
+                        </div>
+                        <div class="subtext">Capture and copy CSD-specific notes here.</div>
                     </div>
                     <!-- Repeat Prescriptions Panel -->
                     <div id="rp-panel" class="val-panel" aria-hidden="true">
