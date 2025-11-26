@@ -313,6 +313,17 @@ main {
     letter-spacing: .2px;
 }
 
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
 .cad-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -685,35 +696,28 @@ input[list]::-webkit-calendar-picker-indicator {
     padding: 12px;
 }
 
-.shift-info-row {
+.shift-extension {
     margin-top: 12px;
-}
-
-.shift-info-btn {
-    width: 100%;
-    display: block;
-    margin: 0;
     background: #fff;
     border: 1px solid var(--border);
-}
-
-.shift-info-btn:hover {
-    background: #f5f5f5;
-    border-color: var(--border);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-.shift-info-box {
-    width: 100%;
-    margin-top: 8px;
+    border-radius: var(--radius);
     padding: 12px;
-    background: #000;
-    color: #fff;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    min-height: 140px;
-    line-height: 1.4;
-    overflow: auto;
+}
+
+.shift-extension-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.shift-extension-row .desc-input {
+    flex: 1;
+    text-align: center;
+}
+
+#csd-extension-set {
+    min-width: 88px;
 }
 
 .shift-panel .label {

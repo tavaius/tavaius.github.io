@@ -746,38 +746,8 @@ const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
 const shiftLock = document.getElementById('shift-lock');
 const shiftBreaks = document.getElementById('shift-breaks');
-const shiftInfoToggle = document.getElementById('shift-info-toggle');
-const shiftInfoBox = document.getElementById('shift-info-box');
-
-function shiftForward(text) {
-    return (text || '').replace(/[a-zA-Z]/g, (ch) => {
-        const code = ch.charCodeAt(0);
-        const base = code >= 97 ? 97 : 65;
-        const offset = (code - base + 1) % 26;
-        return String.fromCharCode(base + offset);
-    });
-}
-
-function insertShiftedText(text) {
-    const shifted = shiftForward(text);
-    const selection = window.getSelection();
-
-    if (!selection || selection.rangeCount === 0) {
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-    range.deleteContents();
-
-    const node = document.createTextNode(shifted);
-    range.insertNode(node);
-
-    // place caret after inserted text
-    range.setStartAfter(node);
-    range.collapse(true);
-    selection.removeAllRanges();
-    selection.addRange(range);
-}
+const csdExtensionInput = document.getElementById('csd-extension');
+const csdExtensionSet = document.getElementById('csd-extension-set');
 
 shiftLock?.addEventListener('click', () => {
     const startVal = shiftStart?.value.trim() || '';
@@ -900,31 +870,23 @@ if (shiftPanel) {
     updateBreakLockState();
 }
 
-shiftInfoBox?.addEventListener('beforeinput', (event) => {
-    const { inputType, data } = event;
-    if (!inputType.startsWith('insert')) return;
-    if (typeof data === 'string' && data.length > 0) {
-        event.preventDefault();
-        insertShiftedText(data);
-    }
+function updateCsdExtensionState() {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
+    const val = csdExtensionInput.value.trim();
+    csdExtensionSet.disabled = !/^\d{1,5}$/.test(val);
+}
+
+csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
+
+csdExtensionSet?.addEventListener('click', () => {
+    if (!csdExtensionInput) return;
+    const val = csdExtensionInput.value.trim();
+    if (!/^\d{1,5}$/.test(val)) return;
+    showSuccessBar();
 });
 
-shiftInfoBox?.addEventListener('paste', (event) => {
-    const text = event.clipboardData?.getData('text');
-    if (text?.length) {
-        event.preventDefault();
-        insertShiftedText(text);
-    }
-});
-
-shiftInfoToggle?.addEventListener('click', () => {
-    if (!shiftInfoBox) return;
-    const isHidden = shiftInfoBox.classList.toggle('hidden');
-    shiftInfoToggle.setAttribute('aria-expanded', String(!isHidden));
-    if (!isHidden) {
-        shiftInfoBox.focus();
-    }
-});
+updateCsdExtensionState();
 
 /* ---------- Success bar ---------- */
 load();
