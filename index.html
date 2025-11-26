@@ -20,6 +20,10 @@
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">Call Notes</span>
                 </button>
+                <button class="tab-btn" data-tab="csd" aria-controls="page-csd">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">CSD Notes</span>
+                </button>
                 <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">My Shift</span>
@@ -364,14 +368,6 @@
                         </div>
                     </div>
 
-                    <!-- CSD Notes Panel -->
-                    <div id="csd-panel" class="val-panel" aria-hidden="true">
-                        <div class="ops-log-wrap">
-                            <textarea id="csd-notes" class="ops-log" rows="5" aria-label="CSD Notes"></textarea>
-                            <button id="csd-copy" class="ops-copy" type="button" title="Copy CSD Notes"></button>
-                        </div>
-                        <div class="subtext">Capture and copy CSD-specific notes here.</div>
-                    </div>
                     <!-- Repeat Prescriptions Panel -->
                     <div id="rp-panel" class="val-panel" aria-hidden="true">
                         <!-- Input row -->
@@ -597,6 +593,19 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
+                </div>
+            </section>
+
+            <section id="page-csd" class="page">
+                <div class="cad-wrap">
+                    <div class="panel-heading">
+                        <div class="panel-title">CSD Notes</div>
+                        <div class="subtext">Capture and copy CSD-specific notes without leaving this page.</div>
+                    </div>
+                    <div class="ops-log-wrap" style="margin-top:14px;">
+                        <textarea id="csd-notes" class="ops-log" rows="8" aria-label="CSD Notes"></textarea>
+                        <button id="csd-copy" class="ops-copy" type="button" title="Copy CSD Notes"></button>
+                    </div>
                 </div>
             </section>
             <script src="app.js"></script>

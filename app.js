@@ -155,22 +155,8 @@ llCopy?.addEventListener('click', () => {
 });
 
 /* ---------- CSD Notes ---------- */
-const csdTrigger = document.getElementById('csd-trigger');
-const csdPanel = document.getElementById('csd-panel');
 const csdNotes = document.getElementById('csd-notes');
 const csdCopy = document.getElementById('csd-copy');
-
-if (csdTrigger && csdPanel) {
-    csdTrigger.addEventListener('click', () => {
-        const isOpen = csdPanel.classList.contains('show');
-        if (isOpen) {
-            csdPanel.classList.remove('show');
-            csdPanel.setAttribute('aria-hidden', 'true');
-        } else {
-            openExclusive(csdPanel);
-        }
-    });
-}
 
 csdCopy?.addEventListener('click', () => {
     const text = csdNotes?.value ?? '';
