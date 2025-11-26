@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -163,6 +153,50 @@ llCopy?.addEventListener('click', () => {
         fallbackCopy(text); done();
     }
 });
+
+/* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
+const csdNotes = document.getElementById('csd-notes');
+const csdCopy = document.getElementById('csd-copy');
+const csdExtensionInput = document.getElementById('csd-extension');
+const csdExtensionSet = document.getElementById('csd-extension-set');
+
+csdCopy?.addEventListener('click', () => {
+    const text = csdNotes?.value ?? '';
+    if (!text.trim()) return;
+
+    const done = () => {
+        showSuccessBar();
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+});
+
+function updateCsdExtensionState() {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
+    const val = csdExtensionInput.value.trim();
+    csdExtensionSet.disabled = csdExtensionInput.readOnly || val.length !== 5;
+}
+
+csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
+
+csdExtensionSet?.addEventListener('click', () => {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    const val = csdExtensionInput.value.trim();
+    if (val.length !== 5) return;
+    csdExtensionInput.readOnly = true;
+    csdExtensionSet.disabled = true;
+    showSuccessBar();
+});
+
+updateCsdExtensionState();
 
 /* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
 document.querySelectorAll('.script-chip:not(.script-chip-special)').forEach(chip => {
