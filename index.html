@@ -20,6 +20,10 @@
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">Call Notes</span>
                 </button>
+                <button class="tab-btn" data-tab="csd" aria-controls="page-csd">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">CSD Notes</span>
+                </button>
                 <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">My Shift</span>
@@ -236,6 +240,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="csd-extension">
+                    <div class="header-left" style="font-size:1.05rem;">CSD Extension</div>
+                    <div class="subtext">The extension you've been assigned.</div>
+                    <div class="csd-extension-row">
+                        <input id="csd-extension" class="desc-input" type="text" inputmode="numeric" aria-label="CSD Extension" maxlength="5" />
+                        <button id="csd-extension-set" class="confirm-btn" type="button" disabled>Set</button>
+                    </div>
+                </div>
             </section>
             <section id="page-tasks" class="page">
                 <div class="cad-wrap">
@@ -354,6 +366,7 @@
                             <button id="ll-copy" class="ops-copy" type="button" title="Copy all"></button>
                         </div>
                     </div>
+
                     <!-- Repeat Prescriptions Panel -->
                     <div id="rp-panel" class="val-panel" aria-hidden="true">
                         <!-- Input row -->
@@ -579,6 +592,35 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
+                </div>
+            </section>
+
+            <section id="page-csd" class="page">
+                <div class="cad-wrap">
+                    <div class="panel-heading">
+                        <div class="panel-title">CSD Notes</div>
+                        <div class="subtext">Use quick templates to copy CSD-specific notes without leaving this page.</div>
+                    </div>
+                    <div class="csd-templates" style="margin-top:14px;">
+                        <button class="script-chip script-chip-csd" type="button" data-copy="TEMPLATE 1">
+                            Template 1
+                        </button>
+                        <button class="script-chip script-chip-csd" type="button" data-copy="TEMPLATE 2">
+                            Template 2
+                        </button>
+                        <button class="script-chip script-chip-csd" type="button" data-copy="TEMPLATE 3">
+                            Template 3
+                        </button>
+                        <button class="script-chip script-chip-csd script-chip-csd-red" type="button" data-copy="TEMPLATE 4">
+                            Template 4
+                        </button>
+                        <button class="script-chip script-chip-csd" type="button" data-copy="TEMPLATE 5">
+                            Template 5
+                        </button>
+                        <button class="script-chip script-chip-csd script-chip-csd-red" type="button" data-copy="TEMPLATE 6">
+                            Template 6
+                        </button>
+                    </div>
                 </div>
             </section>
             <script src="app.js"></script>
