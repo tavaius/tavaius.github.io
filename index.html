@@ -606,6 +606,14 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         <div class="panel-title">CSD Notes</div>
                         <div class="subtext">Capture and copy CSD-specific notes without leaving this page.</div>
                     </div>
+                    <div class="csd-extension">
+                        <div class="header-left" style="font-size:1.05rem;">CSD Extension</div>
+                        <div class="subtext">The extension you've been assigned.</div>
+                        <div class="csd-extension-row">
+                            <input id="csd-extension" class="desc-input" type="text" inputmode="numeric" aria-label="CSD Extension" maxlength="5" />
+                            <button id="csd-extension-set" class="confirm-btn" type="button" disabled>Set</button>
+                        </div>
+                    </div>
                     <div class="ops-log-wrap" style="margin-top:14px;">
                         <textarea id="csd-notes" class="ops-log" rows="8" aria-label="CSD Notes"></textarea>
                         <button id="csd-copy" class="ops-copy" type="button" title="Copy CSD Notes"></button>
