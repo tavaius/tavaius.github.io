@@ -177,6 +177,10 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -297,6 +301,17 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -825,6 +840,11 @@ input[list]::-webkit-calendar-picker-indicator {
     .script-chip-purple.flash {
         animation: flash-purple .6s ease;
     }
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
 
 @keyframes flash-purple {
     0% {

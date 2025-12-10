@@ -158,8 +158,6 @@ llCopy?.addEventListener('click', () => {
 /* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
 document.getElementById('csd-trigger')?.remove();
 
-const csdNotes = document.getElementById('csd-notes');
-const csdCopy = document.getElementById('csd-copy');
 const csdExtensionInput = document.getElementById('csd-extension');
 const csdExtensionSet = document.getElementById('csd-extension-set');
 const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
@@ -170,21 +168,6 @@ function setCsdTabLocked(locked) {
     csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
     csdTabBtn.classList.toggle('locked', locked);
 }
-
-csdCopy?.addEventListener('click', () => {
-    const text = csdNotes?.value ?? '';
-    if (!text.trim()) return;
-
-    const done = () => {
-        showSuccessBar();
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
-});
 
 function updateCsdExtensionState() {
     if (!csdExtensionInput || !csdExtensionSet) return;
