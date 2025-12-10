@@ -189,6 +189,10 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -309,6 +313,17 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -826,15 +841,8 @@ input[list]::-webkit-calendar-picker-indicator {
     margin-top: 12px;
 }
 
-.csd-templates {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-}
-
 .script-chip {
     padding: 10px 12px;
-    opacity: 0.5;
     border-radius: 12px;
     cursor: pointer;
     line-height: 1.25;
@@ -883,6 +891,16 @@ input[list]::-webkit-calendar-picker-indicator {
     .script-chip-purple.flash {
         animation: flash-purple .6s ease;
     }
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd-red {
+    background: #ffd7d7; /* pastel red */
+    color: #000;
+}
 
 .script-chip-csd {
     background: #cbe8ff; /* sky blue tone */
