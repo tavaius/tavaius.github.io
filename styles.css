@@ -173,6 +173,34 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -293,6 +321,116 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -791,6 +929,41 @@ input[list]::-webkit-calendar-picker-indicator {
 
 .script-chip-csd-red {
     background: #ffd1d1 !important; /* pastel red override */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd-red {
+    background: #ffd1d1 !important; /* pastel red override */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd-red {
+    background: #ffd7d7; /* pastel red */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
     color: #000;
 }
 
