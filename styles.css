@@ -205,6 +205,10 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -325,6 +329,17 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -860,6 +875,43 @@ input[list]::-webkit-calendar-picker-indicator {
     color: var(--muted);
     margin-bottom: 6px;
     display: block;
+.shift-panel {
+    display: block;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+}
+
+.csd-extension {
+    margin-top: 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+}
+
+.csd-extension-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.csd-extension-row .desc-input {
+    flex: 1;
+    text-align: center;
+}
+
+#csd-extension-set {
+    min-width: 88px;
+}
+
+.shift-panel .label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
 }
 
 .breaks-row {
@@ -893,12 +945,91 @@ input[list]::-webkit-calendar-picker-indicator {
     line-height: 1.25;
     background: #D0E0E3; /* light cyan 3 */
     border: 1px solid var(--border,#444);
+.scripts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* was 8px, reduce to shrink vertical spacing */
+    margin-top: 12px;
+}
+
+.csd-templates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.script-chip {
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    line-height: 1.25;
+    background: #D0E0E3; /* light cyan 3 */
+    border: 1px solid var(--border,#444);
     color: #000; /* black text for contrast */
     width: 100%; /* expand full width */
     text-align: center; /* center the text */
     transition: transform .08s ease, background-color .2s ease, box-shadow .2s ease;
 }
 
+.scripts-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px; /* reduce vertical gap */
+}
+
+.script-chip-chase {
+    background: #FFF2CC; /* golden yellow for distinction */
+    color: #000;
+    flex: 2; /* equal width side by side */
+    text-align: center;
+}
+
+.script-chip-purple {
+    background: #D9D2E9; /* light purple 3 */
+    color: #000;
+}
+
+.script-chip-csd {
+    background: #cbe8ff; /* sky blue tone */
+    color: #000;
+}
+
+.script-chip-csd-red {
+    background: #ffd1d1 !important; /* pastel red override */
+    color: #000;
+}
+
+.script-chip-magenta {
+    background: #EAD1DC; /* light magenta 3 */
+    color: #000;
+}
+
+.script-chip:hover {
+    transform: translateY(-1px);
+}
+
+.script-chip.copy-flash,
+.script-chip-csd.copy-flash,
+.script-chip-csd-red.copy-flash {
+    animation: chip-copy-flash .6s ease;
+}
+
+@keyframes chip-copy-flash {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, .12), 0 6px 10px rgba(0, 0, 0, .08);
+        transform: translateY(-1px);
+    }
+
+    60% {
+        box-shadow: 0 0 0 6px rgba(0, 123, 255, .2), 0 2px 6px rgba(0, 0, 0, .06);
+    }
+
+    100% {
+        box-shadow: none;
+        transform: none;
+    }
+}
 .scripts-row {
     display: flex;
     gap: 8px;

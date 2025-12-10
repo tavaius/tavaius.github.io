@@ -192,21 +192,71 @@ csdExtensionSet?.addEventListener('click', () => {
 
 updateCsdExtensionState();
 
+/* ---------- Copy flash helper ---------- */
+function runCopyFlash(chip) {
+    chip.classList.remove('copy-flash');
+    void chip.offsetWidth;
+    chip.classList.add('copy-flash');
+}
+
 /* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
 document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-chip-csd)').forEach(chip => {
     chip.addEventListener('click', () => {
         const text = chip.getAttribute('data-copy') || chip.innerText;
-        const after = () => {
-            chip.classList.remove('flash');
-            void chip.offsetWidth;
-            chip.classList.add('flash');
-        };
+        const after = () => runCopyFlash(chip);
         if (navigator.clipboard?.writeText) {
             navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
         } else {
             fallbackCopy(text); after();
         }
     });
+});
+
+/* ---------- CSD Templates: copy with extension insertion ---------- */
+function getCsdTemplateText(templateId) {
+    const ext = csdExtensionInput?.value.trim();
+    if (!ext || ext.length !== 5) {
+        alert('Please enter your CSD Extension first.');
+        csdExtensionInput?.focus();
+        return null;
+    }
+
+    const base = `CSD ${ext} -> `;
+
+    switch (templateId) {
+        case '1':
+            return `${base}`;
+        case '2':
+            return `${base}LINKED TO CASE: `;
+        case '3':
+            return `${base}CB1, NO CONTACT:  VOICEMAIL LEFT. `;
+        case '4':
+            return `${base}CB1, NO CONTACT:  COULD NOT LEAVE VOICEMAIL. `;
+        case '5':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL LEFT. CASE TO CLOSED.`;
+        case '6':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL COULD NOT BE LEFT. CASE TO BE CLOSED. `;
+        default:
+            return null;
+    }
+}
+
+function copyCsdTemplate(chip, templateId) {
+    const text = getCsdTemplateText(templateId);
+    if (!text) return;
+
+    const after = () => runCopyFlash(chip);
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
+    } else {
+        fallbackCopy(text); after();
+    }
+}
+
+document.querySelectorAll('.script-chip-csd').forEach(chip => {
+    const templateId = chip.dataset.template;
+    chip.addEventListener('click', () => copyCsdTemplate(chip, templateId));
 });
 
 /* ---------- CSD Templates: copy with extension insertion ---------- */
@@ -269,11 +319,7 @@ chipChase111?.addEventListener('click', () => {
     const text = `NO NEW OR WORSENING SYMPTOMS. WCAG.
 PT CALLING TO CHASE CALLBACK, DAS RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipChase111.classList.remove('flash');
-        void chipChase111.offsetWidth;
-        chipChase111.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipChase111);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -291,11 +337,7 @@ chipCallDisc?.addEventListener('click', () => {
     const text = `CALL ENDED, CALLER DISCONNECTED.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => {
-        chipCallDisc.classList.remove('flash');
-        void chipCallDisc.offsetWidth;
-        chipCallDisc.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipCallDisc);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -313,11 +355,7 @@ chipCallSilent?.addEventListener('click', () => {
     const text = `CALL ENDED, LINE SILENT/UNRESPONSIVE.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => {
-        chipCallSilent.classList.remove('flash');
-        void chipCallSilent.offsetWidth;
-        chipCallSilent.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipCallSilent);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -335,11 +373,7 @@ chipDatix?.addEventListener('click', () => {
 
     const text = `DATIX RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipDatix.classList.remove('flash');
-        void chipDatix.offsetWidth;
-        chipDatix.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipDatix);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -356,11 +390,7 @@ chipSafeguarding?.addEventListener('click', () => {
 
     const text = `SAFEGUARDING RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipSafeguarding.classList.remove('flash');
-        void chipSafeguarding.offsetWidth;
-        chipSafeguarding.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipSafeguarding);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
