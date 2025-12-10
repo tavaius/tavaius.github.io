@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -163,6 +153,61 @@ llCopy?.addEventListener('click', () => {
         fallbackCopy(text); done();
     }
 });
+
+/* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
+const csdNotes = document.getElementById('csd-notes');
+const csdCopy = document.getElementById('csd-copy');
+const csdExtensionInput = document.getElementById('csd-extension');
+const csdExtensionSet = document.getElementById('csd-extension-set');
+const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
+
+function setCsdTabLocked(locked) {
+    if (!csdTabBtn) return;
+    csdTabBtn.dataset.locked = locked ? 'true' : 'false';
+    csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    csdTabBtn.classList.toggle('locked', locked);
+}
+
+csdCopy?.addEventListener('click', () => {
+    const text = csdNotes?.value ?? '';
+    if (!text.trim()) return;
+
+    const done = () => {
+        showSuccessBar();
+    };
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+});
+
+function updateCsdExtensionState() {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
+    const val = csdExtensionInput.value.trim();
+    const isSaved = csdExtensionInput.readOnly && val.length === 5;
+    csdExtensionSet.disabled = csdExtensionInput.readOnly || val.length !== 5;
+    setCsdTabLocked(!isSaved);
+}
+
+csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
+
+csdExtensionSet?.addEventListener('click', () => {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    const val = csdExtensionInput.value.trim();
+    if (val.length !== 5) return;
+    csdExtensionInput.readOnly = true;
+    csdExtensionSet.disabled = true;
+    showSuccessBar();
+    setCsdTabLocked(false);
+});
+
+updateCsdExtensionState();
 
 /* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
 document.querySelectorAll('.script-chip:not(.script-chip-special)').forEach(chip => {
@@ -587,16 +632,26 @@ updatePofGenerateState();
 /* ---------- Tabs ---------- */
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.page');
-tabs.forEach(btn => btn.addEventListener('click', () => {
+function setActiveTab(tabName) {
     tabs.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+        b.classList.toggle('active', b.dataset.tab === tabName);
+        b.setAttribute('aria-pressed', b.dataset.tab === tabName ? 'true' : 'false');
     });
     pages.forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
-    const id = 'page-' + btn.dataset.tab;
-    document.getElementById(id)?.classList.add('active');
+    document.getElementById(`page-${tabName}`)?.classList.add('active');
+}
+
+tabs.forEach(btn => btn.addEventListener('click', () => {
+    const isCsdTab = btn.dataset.tab === 'csd';
+    const csdLocked = csdTabBtn?.dataset.locked === 'true';
+
+    if (isCsdTab && csdLocked) {
+        alert('Please enter your CSD Extension first.');
+        csdExtensionInput?.focus();
+        return;
+    }
+
+    setActiveTab(btn.dataset.tab);
 }));
 
 /* ---------- Notepad autosave ---------- */
