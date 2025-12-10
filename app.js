@@ -162,6 +162,14 @@ const csdNotes = document.getElementById('csd-notes');
 const csdCopy = document.getElementById('csd-copy');
 const csdExtensionInput = document.getElementById('csd-extension');
 const csdExtensionSet = document.getElementById('csd-extension-set');
+const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
+
+function setCsdTabLocked(locked) {
+    if (!csdTabBtn) return;
+    csdTabBtn.dataset.locked = locked ? 'true' : 'false';
+    csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    csdTabBtn.classList.toggle('locked', locked);
+}
 
 csdCopy?.addEventListener('click', () => {
     const text = csdNotes?.value ?? '';
@@ -182,7 +190,9 @@ function updateCsdExtensionState() {
     if (!csdExtensionInput || !csdExtensionSet) return;
     csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
     const val = csdExtensionInput.value.trim();
+    const isSaved = csdExtensionInput.readOnly && val.length === 5;
     csdExtensionSet.disabled = csdExtensionInput.readOnly || val.length !== 5;
+    setCsdTabLocked(!isSaved);
 }
 
 csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
@@ -194,6 +204,7 @@ csdExtensionSet?.addEventListener('click', () => {
     csdExtensionInput.readOnly = true;
     csdExtensionSet.disabled = true;
     showSuccessBar();
+    setCsdTabLocked(false);
 });
 
 updateCsdExtensionState();
@@ -621,16 +632,27 @@ updatePofGenerateState();
 /* ---------- Tabs ---------- */
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.page');
-tabs.forEach(btn => btn.addEventListener('click', () => {
+function setActiveTab(tabName) {
     tabs.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+        b.classList.toggle('active', b.dataset.tab === tabName);
+        b.setAttribute('aria-pressed', b.dataset.tab === tabName ? 'true' : 'false');
     });
     pages.forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
-    const id = 'page-' + btn.dataset.tab;
-    document.getElementById(id)?.classList.add('active');
+    document.getElementById(`page-${tabName}`)?.classList.add('active');
+}
+
+tabs.forEach(btn => btn.addEventListener('click', () => {
+    const isCsdTab = btn.dataset.tab === 'csd';
+    const csdLocked = csdTabBtn?.dataset.locked === 'true';
+
+    if (isCsdTab && csdLocked) {
+        alert('Please enter your CSD Extension first.');
+        setActiveTab('csd');
+        csdExtensionInput?.focus();
+        return;
+    }
+
+    setActiveTab(btn.dataset.tab);
 }));
 
 /* ---------- Notepad autosave ---------- */

@@ -169,6 +169,10 @@ nav.tabs {
     transition: background .15s ease, border-color .15s ease;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
