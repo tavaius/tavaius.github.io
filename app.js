@@ -647,7 +647,6 @@ tabs.forEach(btn => btn.addEventListener('click', () => {
 
     if (isCsdTab && csdLocked) {
         alert('Please enter your CSD Extension first.');
-        setActiveTab('csd');
         csdExtensionInput?.focus();
         return;
     }
