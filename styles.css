@@ -213,6 +213,10 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -333,6 +337,17 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -971,7 +986,8 @@ input[list]::-webkit-calendar-picker-indicator {
     animation: chip-copy-flash .6s ease;
 }
 
-.script-chip-csd-red.copy-flash {
+.script-chip-csd-red.copy-flash,
+.script-chip-csd-red.copy-flash-red {
     animation: chip-copy-flash-red .6s ease;
 }
 
