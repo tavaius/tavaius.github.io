@@ -194,8 +194,19 @@ updateCsdExtensionState();
 function runCopyFlash(chip) {
     chip.classList.remove('copy-flash', 'copy-flash-red');
     void chip.offsetWidth;
-    const useRedFlash = chip.classList.contains('script-chip-csd-red');
-    chip.classList.add(useRedFlash ? 'copy-flash-red' : 'copy-flash');
+
+    const flashClass = chip.classList.contains('script-chip-csd-red')
+        ? 'copy-flash-red'
+        : 'copy-flash';
+
+    chip.classList.add(flashClass);
+
+    const handler = () => {
+        chip.classList.remove(flashClass);
+        chip.removeEventListener('animationend', handler);
+    };
+
+    chip.addEventListener('animationend', handler);
 }
 
 /* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
@@ -1064,6 +1075,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
