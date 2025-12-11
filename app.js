@@ -52,16 +52,6 @@ labCopy?.addEventListener('click', () => {
 
     const done = () => {
         showSuccessBar();
-        if (labLog) labLog.value = '';
-        if (labTbody) labTbody.innerHTML = '';   // clear results table
-        if (labHospital) labHospital.value = '';
-        if (labPhone) labPhone.value = '';
-        if (labBleep) labBleep.value = '';
-        if (labExt) labExt.value = '';
-        if (labResult) labResult.value = '';
-        if (labValue) labValue.value = '';
-        updateLabAddState();
-        updateLabGenerateState();
     };
 
     if (navigator.clipboard?.writeText) {
@@ -164,21 +154,110 @@ llCopy?.addEventListener('click', () => {
     }
 });
 
+/* ---------- CSD Notes ---------- */
+/* Remove any legacy CSD button from the Call Notes grid now that it lives on its own tab */
+document.getElementById('csd-trigger')?.remove();
+
+const csdExtensionInput = document.getElementById('csd-extension');
+const csdExtensionSet = document.getElementById('csd-extension-set');
+const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
+
+function setCsdTabLocked(locked) {
+    if (!csdTabBtn) return;
+    csdTabBtn.dataset.locked = locked ? 'true' : 'false';
+    csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    csdTabBtn.classList.toggle('locked', locked);
+}
+
+function updateCsdExtensionState() {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
+    const val = csdExtensionInput.value.trim();
+    const isSaved = csdExtensionInput.readOnly && val.length === 5;
+    csdExtensionSet.disabled = csdExtensionInput.readOnly || val.length !== 5;
+    setCsdTabLocked(!isSaved);
+}
+
+csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
+
+csdExtensionSet?.addEventListener('click', () => {
+    if (!csdExtensionInput || !csdExtensionSet) return;
+    const val = csdExtensionInput.value.trim();
+    if (val.length !== 5) return;
+    csdExtensionInput.readOnly = true;
+    csdExtensionSet.disabled = true;
+    showSuccessBar();
+    setCsdTabLocked(false);
+});
+
+updateCsdExtensionState();
+
+/* ---------- Copy flash helper ---------- */
+function runCopyFlash(chip) {
+    chip.classList.remove('copy-flash', 'copy-flash-red');
+    void chip.offsetWidth;
+    const useRedFlash = chip.classList.contains('script-chip-csd-red');
+    chip.classList.add(useRedFlash ? 'copy-flash-red' : 'copy-flash');
+}
+
 /* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
-document.querySelectorAll('.script-chip:not(.script-chip-special)').forEach(chip => {
+document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-chip-csd)').forEach(chip => {
     chip.addEventListener('click', () => {
         const text = chip.getAttribute('data-copy') || chip.innerText;
-        const after = () => {
-            chip.classList.remove('flash');
-            void chip.offsetWidth;
-            chip.classList.add('flash');
-        };
+        const after = () => runCopyFlash(chip);
         if (navigator.clipboard?.writeText) {
             navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
         } else {
             fallbackCopy(text); after();
         }
     });
+});
+
+/* ---------- CSD Templates: copy with extension insertion ---------- */
+function getCsdTemplateText(templateId) {
+    const ext = csdExtensionInput?.value.trim();
+    if (!ext || ext.length !== 5) {
+        alert('Please enter your CSD Extension first.');
+        csdExtensionInput?.focus();
+        return null;
+    }
+
+    const base = `CSD ${ext} -> `;
+
+    switch (templateId) {
+        case '1':
+            return `${base}`;
+        case '2':
+            return `${base}LINKED TO CASE: `;
+        case '3':
+            return `${base}CB1, NO CONTACT:  VOICEMAIL LEFT. `;
+        case '4':
+            return `${base}CB1, NO CONTACT:  COULD NOT LEAVE VOICEMAIL. `;
+        case '5':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL LEFT. CASE TO CLOSED.`;
+        case '6':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL COULD NOT BE LEFT. CASE TO BE CLOSED. `;
+        default:
+            return null;
+    }
+}
+
+function copyCsdTemplate(chip, templateId) {
+    const text = getCsdTemplateText(templateId);
+    if (!text) return;
+
+    const after = () => runCopyFlash(chip);
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
+    } else {
+        fallbackCopy(text); after();
+    }
+}
+
+document.querySelectorAll('.script-chip-csd').forEach(chip => {
+    const templateId = chip.dataset.template;
+    chip.addEventListener('click', () => copyCsdTemplate(chip, templateId));
 });
 
 /* ---------- Special: CHASING 111 asks for DAS ref, then copies ---------- */
@@ -190,11 +269,7 @@ chipChase111?.addEventListener('click', () => {
     const text = `NO NEW OR WORSENING SYMPTOMS. WCAG.
 PT CALLING TO CHASE CALLBACK, DAS RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipChase111.classList.remove('flash');
-        void chipChase111.offsetWidth;
-        chipChase111.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipChase111);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -212,11 +287,7 @@ chipCallDisc?.addEventListener('click', () => {
     const text = `CALL ENDED, CALLER DISCONNECTED.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => {
-        chipCallDisc.classList.remove('flash');
-        void chipCallDisc.offsetWidth;
-        chipCallDisc.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipCallDisc);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -234,11 +305,7 @@ chipCallSilent?.addEventListener('click', () => {
     const text = `CALL ENDED, LINE SILENT/UNRESPONSIVE.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => {
-        chipCallSilent.classList.remove('flash');
-        void chipCallSilent.offsetWidth;
-        chipCallSilent.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipCallSilent);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -256,11 +323,7 @@ chipDatix?.addEventListener('click', () => {
 
     const text = `DATIX RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipDatix.classList.remove('flash');
-        void chipDatix.offsetWidth;
-        chipDatix.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipDatix);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -277,11 +340,7 @@ chipSafeguarding?.addEventListener('click', () => {
 
     const text = `SAFEGUARDING RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => {
-        chipSafeguarding.classList.remove('flash');
-        void chipSafeguarding.offsetWidth;
-        chipSafeguarding.classList.add('flash');
-    };
+    const after = () => runCopyFlash(chipSafeguarding);
 
     if (navigator.clipboard?.writeText) {
         navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
@@ -587,16 +646,26 @@ updatePofGenerateState();
 /* ---------- Tabs ---------- */
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.page');
-tabs.forEach(btn => btn.addEventListener('click', () => {
+function setActiveTab(tabName) {
     tabs.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+        b.classList.toggle('active', b.dataset.tab === tabName);
+        b.setAttribute('aria-pressed', b.dataset.tab === tabName ? 'true' : 'false');
     });
     pages.forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
-    const id = 'page-' + btn.dataset.tab;
-    document.getElementById(id)?.classList.add('active');
+    document.getElementById(`page-${tabName}`)?.classList.add('active');
+}
+
+tabs.forEach(btn => btn.addEventListener('click', () => {
+    const isCsdTab = btn.dataset.tab === 'csd';
+    const csdLocked = csdTabBtn?.dataset.locked === 'true';
+
+    if (isCsdTab && csdLocked) {
+        alert('Please enter your CSD Extension first.');
+        csdExtensionInput?.focus();
+        return;
+    }
+
+    setActiveTab(btn.dataset.tab);
 }));
 
 /* ---------- Notepad autosave ---------- */
