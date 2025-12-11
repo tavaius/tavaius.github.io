@@ -209,6 +209,10 @@ nav.tabs {
     opacity: 0.5;
 }
 
+.tab-btn.locked {
+    opacity: 0.5;
+}
+
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -329,6 +333,17 @@ main {
     display: grid;
     grid-template-rows: auto auto 1fr;
     overflow: hidden;
+}
+
+.panel-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panel-title {
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .panel-heading {
@@ -875,43 +890,6 @@ input[list]::-webkit-calendar-picker-indicator {
     color: var(--muted);
     margin-bottom: 6px;
     display: block;
-.shift-panel {
-    display: block;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-}
-
-.csd-extension {
-    margin-top: 12px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-}
-
-.csd-extension-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 8px;
-}
-
-.csd-extension-row .desc-input {
-    flex: 1;
-    text-align: center;
-}
-
-#csd-extension-set {
-    min-width: 88px;
-}
-
-.shift-panel .label {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    display: block;
 }
 
 .breaks-row {
@@ -924,27 +902,6 @@ input[list]::-webkit-calendar-picker-indicator {
     }
 
 
-.scripts-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 4px; /* was 8px, reduce to shrink vertical spacing */
-    margin-top: 12px;
-}
-
-.csd-templates {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 12px;
-}
-
-.script-chip {
-    padding: 10px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    line-height: 1.25;
-    background: #D0E0E3; /* light cyan 3 */
-    border: 1px solid var(--border,#444);
 .scripts-grid {
     display: flex;
     flex-direction: column;
@@ -1010,9 +967,12 @@ input[list]::-webkit-calendar-picker-indicator {
 }
 
 .script-chip.copy-flash,
-.script-chip-csd.copy-flash,
-.script-chip-csd-red.copy-flash {
+.script-chip-csd.copy-flash {
     animation: chip-copy-flash .6s ease;
+}
+
+.script-chip-csd-red.copy-flash {
+    animation: chip-copy-flash-red .6s ease;
 }
 
 @keyframes chip-copy-flash {
@@ -1030,181 +990,20 @@ input[list]::-webkit-calendar-picker-indicator {
         transform: none;
     }
 }
-.scripts-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 4px; /* reduce vertical gap */
-}
 
-.script-chip-chase {
-    background: #FFF2CC; /* golden yellow for distinction */
-    color: #000;
-    flex: 2; /* equal width side by side */
-    text-align: center;
-}
-
-    .script-chip-chase.flash {
-        animation: flash-chase .6s ease;
+@keyframes chip-copy-flash-red {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, .12), 0 6px 10px rgba(0, 0, 0, .08);
+        transform: translateY(-1px);
     }
 
-@keyframes flash-chase {
-    0% {
-        background: #E0FFCC;
-        box-shadow: 0 0 0 0 rgba(72,199,142,.4);
+    60% {
+        box-shadow: 0 0 0 6px rgba(198, 40, 40, .18), 0 2px 6px rgba(0, 0, 0, .06);
     }
 
     100% {
-        background: #CAF2C2;
         box-shadow: none;
-    }
-}
-
-.script-chip-purple {
-    background: #D9D2E9; /* light purple 3 */
-    color: #000;
-}
-
-    .script-chip-purple.flash {
-        animation: flash-purple .6s ease;
-    }
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd-red {
-    background: #ffd1d1 !important; /* pastel red override */
-    color: #000;
-}
-
-.script-chip-csd.flash {
-    animation: flash-csd .6s ease !important;
-}
-
-.script-chip-csd-red.flash {
-    animation: flash-csd-red .6s ease !important;
-}
-
-@keyframes flash-csd {
-    0% {
-        background: #e8f4ff;
-        box-shadow: 0 0 0 0 rgba(41, 128, 185, .3);
-    }
-
-    100% {
-        background: #cbe8ff;
-        box-shadow: none;
-    }
-}
-
-@keyframes flash-csd-red {
-    0% {
-        background: #ffe5e5;
-        box-shadow: 0 0 0 0 rgba(198, 40, 40, .25);
-    }
-
-    100% {
-        background: #ffd1d1;
-        box-shadow: none;
-    }
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd-red {
-    background: #ffd1d1 !important; /* pastel red override */
-    color: #000;
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd-red {
-    background: #ffd1d1 !important; /* pastel red override */
-    color: #000;
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd-red {
-    background: #ffd7d7; /* pastel red */
-    color: #000;
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-.script-chip-csd {
-    background: #cbe8ff; /* sky blue tone */
-    color: #000;
-}
-
-@keyframes flash-purple {
-    0% {
-        background: #E0FFCC;
-        box-shadow: 0 0 0 0 rgba(72,199,142,.4);
-    }
-
-    100% {
-        background: #CAF2C2;
-        box-shadow: none;
-    }
-}
-
-.script-chip-magenta {
-    background: #EAD1DC; /* light magenta 3 */
-    color: #000;
-}
-
-    .script-chip-magenta.flash {
-        animation: flash-magenta .6s ease;
-    }
-
-@keyframes flash-magenta {
-    0% {
-        background: #E0FFCC;
-        box-shadow: 0 0 0 0 rgba(72,199,142,.4);
-    }
-
-    100% {
-        background: #CAF2C2;
-        box-shadow: none;
-    }
-}
-
-.script-chip:hover {
-    transform: translateY(-1px);
-}
-
-.script-chip.flash {
-    animation: flash-green .6s ease;
-}
-
-@keyframes flash-green {
-    0% {
-        background: #E0FFCC;
-        box-shadow: 0 0 0 0 rgba(72,199,142,.4);
-    }
-
-    100% {
-        background: #CAF2C2;
-        box-shadow: none;
+        transform: none;
     }
 }
 

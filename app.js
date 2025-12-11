@@ -292,6 +292,53 @@ function copyCsdTemplate(chip, templateId) {
     const text = getCsdTemplateText(templateId);
     if (!text) return;
 
+    const after = () => runCopyFlash(chip);
+
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
+    } else {
+        fallbackCopy(text); after();
+    }
+}
+
+document.querySelectorAll('.script-chip-csd').forEach(chip => {
+    const templateId = chip.dataset.template;
+    chip.addEventListener('click', () => copyCsdTemplate(chip, templateId));
+});
+
+/* ---------- CSD Templates: copy with extension insertion ---------- */
+function getCsdTemplateText(templateId) {
+    const ext = csdExtensionInput?.value.trim();
+    if (!ext || ext.length !== 5) {
+        alert('Please enter your CSD Extension first.');
+        csdExtensionInput?.focus();
+        return null;
+    }
+
+    const base = `CSD ${ext} -> `;
+
+    switch (templateId) {
+        case '1':
+            return `${base}`;
+        case '2':
+            return `${base}LINKED TO CASE: `;
+        case '3':
+            return `${base}CB1, NO CONTACT:  VOICEMAIL LEFT. `;
+        case '4':
+            return `${base}CB1, NO CONTACT:  COULD NOT LEAVE VOICEMAIL. `;
+        case '5':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL LEFT. CASE TO CLOSED.`;
+        case '6':
+            return `${base}CB2, NO CONTACT:  VOICEMAIL COULD NOT BE LEFT. CASE TO BE CLOSED. `;
+        default:
+            return null;
+    }
+}
+
+function copyCsdTemplate(chip, templateId) {
+    const text = getCsdTemplateText(templateId);
+    if (!text) return;
+
     const after = () => {
         chip.classList.remove('flash');
         void chip.offsetWidth;
