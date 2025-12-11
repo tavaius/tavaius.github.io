@@ -173,50 +173,6 @@ nav.tabs {
     opacity: 0.5;
 }
 
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
-.tab-btn.locked {
-    opacity: 0.5;
-}
-
     .tab-btn:hover {
         background: var(--bg-hover);
     }
@@ -339,12 +295,6 @@ main {
     overflow: hidden;
 }
 
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
 .panel-title {
     font-weight: 700;
     letter-spacing: .2px;
@@ -354,154 +304,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.panel-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.panel-title {
-    font-weight: 700;
-    letter-spacing: .2px;
 }
 
 .cad-grid {
@@ -1047,3 +849,4 @@ input[list]::-webkit-calendar-picker-indicator {
     .ops-copy:hover {
         filter: brightness(0.97);
     }
+
