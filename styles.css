@@ -135,6 +135,20 @@ header .title {
     object-fit: contain;
 }
 
+.shift-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+.shift-autofill-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
 aside.sidebar {
     grid-area: sidebar;
     background: #f0f6ff;
@@ -849,4 +863,5 @@ input[list]::-webkit-calendar-picker-indicator {
     .ops-copy:hover {
         filter: brightness(0.97);
     }
+
 
