@@ -472,6 +472,105 @@ labGenerate?.addEventListener('click', () => {
 updateLabAddState();
 updateLabGenerateState();
 
+const shiftAutoFillButton = document.getElementById('shift-autofill');
+shiftAutoFillButton?.addEventListener('click', autoFillShift);
+
+async function autoFillShift() {
+    let text = '';
+
+    if (navigator.clipboard?.readText) {
+        try {
+            text = await navigator.clipboard.readText();
+        } catch (e) {}
+    }
+
+    if (!text) {
+        text = window.prompt(
+            'Paste the WFM homepage text here (Ctrl+V), then press OK:',
+            ''
+        );
+        if (!text) return;
+    }
+
+    const data = parseWfmCurrentShift(text);
+    if (!data) {
+        alert('Could not find a Current Shift section in the pasted text.');
+        return;
+    }
+
+    const startInput = document.getElementById('shift-start');
+    const endInput = document.getElementById('shift-end');
+    if (startInput && data.shiftStart) startInput.value = data.shiftStart;
+    if (endInput && data.shiftEnd) endInput.value = data.shiftEnd;
+
+    const breakIds = ['break-1', 'break-2', 'break-3'];
+    breakIds.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) el.value = data.breaks[i] || '';
+    });
+
+    const lunchInput = document.getElementById('break-lunch');
+    if (lunchInput) lunchInput.value = data.lunch || '';
+}
+
+function parseWfmCurrentShift(raw) {
+    const lines = raw
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .map(l => l.trim())
+        .filter(l => l !== '');
+
+    const idxCurrent = lines.findIndex(l =>
+        l.toLowerCase().startsWith('current shift')
+    );
+    if (idxCurrent === -1) return null;
+
+    let idxUpcoming = lines.findIndex(
+        (l, i) => i > idxCurrent && l.toLowerCase().startsWith('upcoming shifts')
+    );
+    if (idxUpcoming === -1) idxUpcoming = lines.length;
+
+    const blockLines = lines.slice(idxCurrent, idxUpcoming);
+    const blockText = blockLines.join('\n');
+
+    const mainRange = blockText.match(
+        /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/
+    );
+    if (!mainRange) return null;
+
+    const shiftStart = toHHMM(mainRange[1]);
+    const shiftEnd = toHHMM(mainRange[2]);
+
+    const breaks = [];
+    let lunch = '';
+
+    const timeRangeRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
+
+    for (let i = 0; i < blockLines.length - 1; i++) {
+        const line = blockLines[i];
+        const next = blockLines[i + 1] || '';
+        const m = line.match(timeRangeRe);
+        if (!m) continue;
+
+        const start = toHHMM(m[1]);
+        const label = next.toLowerCase();
+
+        if (label.includes('lunch')) {
+            lunch = start;
+        } else if (label.includes('rest break')) {
+            breaks.push(start);
+        }
+    }
+
+    return { shiftStart, shiftEnd, breaks, lunch };
+}
+
+function toHHMM(timeText) {
+    const m = timeText.match(/(\d{1,2}):(\d{2})/);
+    if (!m) return '';
+    return m[1].padStart(2, '0') + m[2];
+}
+
 
 /* ---------- Repeat Prescriptions panel ---------- */
 const rpTrigger = document.getElementById('rp-trigger');
@@ -1075,6 +1174,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
