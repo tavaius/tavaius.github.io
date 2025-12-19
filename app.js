@@ -29,7 +29,11 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 
 /* ---------- Extra panels toggle ---------- */
 const extraToggle = document.getElementById('link-extra');
-const extraPanels = document.querySelectorAll('.links-panel, .flu-panel, .info-panel, .c3-panel');
+const notesPage = document.getElementById('page-notes');
+const extraPanels = notesPage
+    ? notesPage.querySelectorAll('.links-panel, .flu-panel, .info-panel, .c3-panel')
+    : [];
+
 if (extraToggle) {
     extraToggle.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1185,6 +1189,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
