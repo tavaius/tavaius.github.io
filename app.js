@@ -16,6 +16,17 @@ wireCollapse('wca-toggle', 'wca-body');
 wireCollapse('ccb-toggle', 'ccb-body');
 wireCollapse('ados-toggle', 'ados-body');
 
+document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
+    const toggle = panel.querySelector('[data-flu-toggle]');
+    const body = panel.querySelector('[data-flu-body]');
+    if (!toggle || !body) return;
+
+    toggle.addEventListener('click', () => {
+        const nowHidden = body.classList.toggle('flu-hidden');
+        toggle.textContent = nowHidden ? '[show]' : '[hide]';
+    });
+});
+
 /* ---------- Extra panels toggle ---------- */
 const extraToggle = document.getElementById('link-extra');
 const extraPanels = document.querySelectorAll('.links-panel, .flu-panel, .info-panel, .c3-panel');
@@ -1174,6 +1185,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
