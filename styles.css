@@ -864,4 +864,8 @@ input[list]::-webkit-calendar-picker-indicator {
         filter: brightness(0.97);
     }
 
+.flu-center {
+    text-align: center;
+}
+
 
