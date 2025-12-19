@@ -37,10 +37,14 @@ const extraPanels = notesPage
 if (extraToggle) {
     extraToggle.addEventListener('click', (e) => {
         e.preventDefault();
-        extraPanels.forEach(el => el.classList.toggle('hidden'));
+
+        const scope = extraToggle.closest('.page') || document;
+
+        scope
+            .querySelectorAll('.links-panel, .flu-panel:not(.flu-csd-callback), .info-panel, .c3-panel')
+            .forEach(el => el.classList.toggle('hidden'));
     });
 }
-
 /* ---------- Lab Results panel ---------- */
 const labTrigger = document.getElementById('lab-trigger');
 const labPanel = document.getElementById('lab-panel');
@@ -1189,6 +1193,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
