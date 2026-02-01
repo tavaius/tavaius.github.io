@@ -99,6 +99,8 @@ document.addEventListener("click", e => {
 
     e.target.textContent = panel.classList.contains("hidden")
         ? "[show]"
+        : "[hide]";
+});
 
 /* ---------- LanguageLine panel ---------- */
 const llTrigger = document.getElementById('ll-trigger');
@@ -1202,6 +1204,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
