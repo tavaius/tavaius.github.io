@@ -18,8 +18,14 @@ wireCollapse('ados-toggle', 'ados-body');
 
 document.querySelectorAll('.flu-panel').forEach(panel => {
     const toggle = panel.querySelector('[data-flu-toggle], .flu-toggle');
-    const body = panel.querySelector('[data-flu-body]') || panel.querySelector('.flu-table tr:last-child');
-    if (!toggle || !body) return;
+    if (!toggle) return;
+
+    const body =
+        panel.querySelector('[data-flu-body]') ||
+        panel.querySelector('.flu-table tr:nth-child(2)') ||
+        panel.querySelector('.symptoms');
+
+    if (!body) return;
 
     body.classList.add('flu-hidden');
     toggle.textContent = '[show]';
@@ -1185,6 +1191,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
