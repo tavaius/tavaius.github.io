@@ -91,6 +91,15 @@ if (fluToggle && fluRow) {
     });
 }
 
+document.addEventListener("click", e => {
+    if (!e.target.classList.contains("flu-toggle")) return;
+
+    const panel = e.target.closest(".flu-panel");
+    panel.classList.toggle("hidden");
+
+    e.target.textContent = panel.classList.contains("hidden")
+        ? "[show]"
+
 /* ---------- LanguageLine panel ---------- */
 const llTrigger = document.getElementById('ll-trigger');
 const llPanel = document.getElementById('ll-panel');
@@ -1193,6 +1202,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
