@@ -16,15 +16,13 @@ wireCollapse('wca-toggle', 'wca-body');
 wireCollapse('ccb-toggle', 'ccb-body');
 wireCollapse('ados-toggle', 'ados-body');
 
-document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
-    const toggle = panel.querySelector('[data-flu-toggle]');
-    const body = panel.querySelector('[data-flu-body]');
-    if (!toggle || !body) return;
+document.addEventListener('click', e => {
+  const t = e.target.closest('.flu-toggle');
+  if (!t) return;
 
-    toggle.addEventListener('click', () => {
-        const nowHidden = body.classList.toggle('flu-hidden');
-        toggle.textContent = nowHidden ? '[show]' : '[hide]';
-    });
+  const panel = t.closest('.flu-panel');
+  panel.classList.toggle('hidden');
+  t.textContent = panel.classList.contains('hidden') ? '[show]' : '[hide]';
 });
 
 /* ---------- Extra panels toggle ---------- */
@@ -1193,6 +1191,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
