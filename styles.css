@@ -514,10 +514,6 @@ main {
     margin-top: 12px;
 }
 
-.contact-panel {
-    margin-top: 12px;
-}
-
 .flu-table {
     width: 100%;
     border-collapse: separate;
@@ -871,6 +867,7 @@ input[list]::-webkit-calendar-picker-indicator {
 .flu-center {
     text-align: center;
 }
+
 
 
 
