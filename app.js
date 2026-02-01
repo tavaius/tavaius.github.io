@@ -16,13 +16,18 @@ wireCollapse('wca-toggle', 'wca-body');
 wireCollapse('ccb-toggle', 'ccb-body');
 wireCollapse('ados-toggle', 'ados-body');
 
-document.addEventListener('click', e => {
-  const t = e.target.closest('.flu-toggle');
-  if (!t) return;
+document.querySelectorAll('.flu-panel').forEach(panel => {
+    const toggle = panel.querySelector('[data-flu-toggle], .flu-toggle');
+    const body = panel.querySelector('[data-flu-body]') || panel.querySelector('.flu-table tr:last-child');
+    if (!toggle || !body) return;
 
-  const panel = t.closest('.flu-panel');
-  panel.classList.toggle('hidden');
-  t.textContent = panel.classList.contains('hidden') ? '[show]' : '[hide]';
+    body.classList.add('flu-hidden');
+    toggle.textContent = '[show]';
+
+    toggle.addEventListener('click', () => {
+        const nowHidden = body.classList.toggle('flu-hidden');
+        toggle.textContent = nowHidden ? '[show]' : '[hide]';
+    });
 });
 
 /* ---------- Extra panels toggle ---------- */
@@ -77,17 +82,6 @@ labCopy?.addEventListener('click', () => {
         fallbackCopy(text); done();
     }
 });
-
-/* ---------- Flu table last row toggle ---------- */
-const fluToggle = document.getElementById('flu-toggle');
-const fluRow = document.querySelector('.flu-table tr:last-child');
-if (fluRow) fluRow.classList.add('flu-hidden'); // start hidden
-if (fluToggle && fluRow) {
-    fluToggle.addEventListener('click', () => {
-        fluRow.classList.toggle('flu-hidden');
-        fluToggle.textContent = fluRow.classList.contains('flu-hidden') ? '[show]' : '[hide]';
-    });
-}
 
 /* ---------- LanguageLine panel ---------- */
 const llTrigger = document.getElementById('ll-trigger');
@@ -1191,6 +1185,7 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
