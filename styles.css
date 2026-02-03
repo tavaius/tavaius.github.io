@@ -554,9 +554,9 @@ input[list]::-webkit-calendar-picker-indicator {
 }
 
 .symptoms-col {
-    flex: 1; /* keep both columns balanced */
-    margin: 10px;
-    padding: 0 100px;
+    flex: 1;
+    margin: 0;
+    padding: 0 20px;
 }
 
     .symptoms-col.left {
