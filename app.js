@@ -29,10 +29,6 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 
 /* ---------- Extra panels toggle ---------- */
 const extraToggle = document.getElementById('link-extra');
-const notesPage = document.getElementById('page-notes');
-const extraPanels = notesPage
-    ? notesPage.querySelectorAll('.links-panel, .flu-panel, .info-panel, .c3-panel')
-    : [];
 
 if (extraToggle) {
     extraToggle.addEventListener('click', (e) => {
@@ -64,20 +60,10 @@ if (labTrigger && labPanel) {
 }
 
 /* Copy log */
-/* Copy log (and clear table + inputs) */
 labCopy?.addEventListener('click', () => {
     const text = labLog?.value ?? '';
     if (!text.trim()) return;
-
-    const done = () => {
-        showSuccessBar();
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
+    copyToClipboard(text, () => showSuccessBar());
 });
 
 /* ---------- Flu table last row toggle ---------- */
@@ -110,23 +96,6 @@ if (llTrigger && llPanel) {
     });
 }
 
-/* Copy (copy -> toast -> clear) */
-llCopy?.addEventListener('click', () => {
-    const text = llLog?.value ?? '';
-    if (!text.trim()) return;
-
-    const done = () => {
-        showSuccessBar();
-        if (llLog) llLog.value = '';
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
-});
-
 /* ---------- LanguageLine inputs ---------- */
 const llId = document.getElementById('ll-id');
 const llLang = document.getElementById('ll-lang');
@@ -157,20 +126,13 @@ llGenerate?.addEventListener('click', () => {
 llCopy?.addEventListener('click', () => {
     const text = llLog?.value ?? '';
     if (!text.trim()) return;
-
-    const done = () => {
+    copyToClipboard(text, () => {
         showSuccessBar();
         if (llLog) llLog.value = '';
         if (llId) llId.value = '';
         if (llLang) llLang.value = '';
         updateLlGenerateState();
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
+    });
 });
 
 /* ---------- CSD Notes ---------- */
@@ -232,12 +194,7 @@ function runCopyFlash(chip) {
 document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-chip-csd)').forEach(chip => {
     chip.addEventListener('click', () => {
         const text = chip.getAttribute('data-copy') || chip.innerText;
-        const after = () => runCopyFlash(chip);
-        if (navigator.clipboard?.writeText) {
-            navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-        } else {
-            fallbackCopy(text); after();
-        }
+        copyToClipboard(text, () => runCopyFlash(chip));
     });
 });
 
@@ -274,13 +231,7 @@ function copyCsdTemplate(chip, templateId) {
     const text = getCsdTemplateText(templateId);
     if (!text) return;
 
-    const after = () => runCopyFlash(chip);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chip));
 }
 
 document.querySelectorAll('.script-chip-csd').forEach(chip => {
@@ -297,13 +248,7 @@ chipChase111?.addEventListener('click', () => {
     const text = `NO NEW OR WORSENING SYMPTOMS. WCAG.
 PT CALLING TO CHASE CALLBACK, DAS RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => runCopyFlash(chipChase111);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chipChase111));
 });
 
 /* ---------- Special: CALL ENDED, DISCONNECTED ---------- */
@@ -315,13 +260,7 @@ chipCallDisc?.addEventListener('click', () => {
     const text = `CALL ENDED, CALLER DISCONNECTED.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => runCopyFlash(chipCallDisc);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chipCallDisc));
 });
 
 /* ---------- Special: CALL ENDED, SILENT ---------- */
@@ -333,13 +272,7 @@ chipCallSilent?.addEventListener('click', () => {
     const text = `CALL ENDED, LINE SILENT/UNRESPONSIVE.
 CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
 
-    const after = () => runCopyFlash(chipCallSilent);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chipCallSilent));
 });
 
 
@@ -351,13 +284,7 @@ chipDatix?.addEventListener('click', () => {
 
     const text = `DATIX RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => runCopyFlash(chipDatix);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chipDatix));
 });
 
 /* ---------- Special: SAFEGUARDING asks for ref, then copies ---------- */
@@ -368,13 +295,7 @@ chipSafeguarding?.addEventListener('click', () => {
 
     const text = `SAFEGUARDING RAISED (${ref.trim()})`.toUpperCase();
 
-    const after = () => runCopyFlash(chipSafeguarding);
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(after).catch(() => { fallbackCopy(text); after(); });
-    } else {
-        fallbackCopy(text); after();
-    }
+    copyToClipboard(text, () => runCopyFlash(chipSafeguarding));
 });
 
 /* Init */
@@ -687,21 +608,14 @@ rpGenerate?.addEventListener('click', () => {
 rpCopy?.addEventListener('click', () => {
     const text = rpLog?.value ?? '';
     if (!text.trim()) return;
-
-    const done = () => {
+    copyToClipboard(text, () => {
         showSuccessBar();
         if (rpLog) rpLog.value = '';
         if (rpTbody) {
-            rpTbody.innerHTML = '';   // clear the table
-            updateRpGenerateState();  // disable Generate now that it's empty
+            rpTbody.innerHTML = '';
+            updateRpGenerateState();
         }
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
+    });
 });
 
 /* Init */
@@ -754,17 +668,10 @@ pofGenerate?.addEventListener('click', () => {
 pofCopy?.addEventListener('click', () => {
     const text = pofLog?.value ?? '';
     if (!text.trim()) return;
-
-    const done = () => {
-        showSuccessBar(); 
+    copyToClipboard(text, () => {
+        showSuccessBar();
         if (pofLog) pofLog.value = '';
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
+    });
 });
 
 /* Init state */
@@ -899,11 +806,7 @@ confirmBtn?.addEventListener('click', () => {
         ? `${cat} VALIDATION ARRANGED BY CLINICAL (${initials}) - ${desc}`
         : `${cat} VALIDATION ARRANGED, NO CLINICAL RESPONSE - ${desc}`;
 
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(line).catch(() => fallbackCopy(line));
-    } else {
-        fallbackCopy(line);
-    }
+    copyToClipboard(line);
 
     [cat3, cat4].forEach(b => b?.setAttribute('aria-pressed', 'false'));
     if (clinInit) clinInit.value = '';
@@ -911,6 +814,17 @@ confirmBtn?.addEventListener('click', () => {
     updateConfirmState();
     showSuccessBar();
 });
+
+/* ---------- Clipboard helpers ---------- */
+function copyToClipboard(text, onSuccess) {
+    if (!text) return;
+    const done = () => { if (onSuccess) onSuccess(); };
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+}
 
 /* ---------- Clipboard fallback ---------- */
 function fallbackCopy(text) {
@@ -1161,17 +1075,10 @@ ADVISED: ${advice}`;
 opsCopy?.addEventListener('click', () => {
     const text = opsLog?.value ?? '';
     if (!text.trim()) return;
-
-    const done = () => {
+    copyToClipboard(text, () => {
         showSuccessBar();
         if (opsLog) opsLog.value = '';
-    };
-
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
+    });
 });
 
 /* ---------- Physical Orange Flag panel ---------- */
@@ -1193,17 +1100,3 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
