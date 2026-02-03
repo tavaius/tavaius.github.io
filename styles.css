@@ -336,22 +336,13 @@ main {
     font-weight: 600;
 }
 
-.p2 {
-    background: #ffeecb;
-}
-
+.p2,
 .p3 {
     background: #ffeecb;
 }
 
-.p4 {
-    background: #d6f0ff;
-}
-
-.p5 {
-    background: #d6f0ff;
-}
-
+.p4,
+.p5,
 .p6 {
     background: #d6f0ff;
 }
@@ -386,20 +377,6 @@ main {
 }
 
     .val-trigger:hover {
-        filter: brightness(0.98);
-    }
-
-.pof-trigger {
-    background: #ffeecb;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 10px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-    .pof-trigger:hover {
         filter: brightness(0.98);
     }
 
@@ -578,8 +555,8 @@ input[list]::-webkit-calendar-picker-indicator {
 
 .symptoms-col {
     flex: 1; /* keep both columns balanced */
-    margin: 10;
-    padding: 0 100px; /* tighten padding if needed */
+    margin: 10px;
+    padding: 0 100px;
 }
 
     .symptoms-col.left {
@@ -867,7 +844,3 @@ input[list]::-webkit-calendar-picker-indicator {
 .flu-center {
     text-align: center;
 }
-
-
-
-
