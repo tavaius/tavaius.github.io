@@ -547,27 +547,27 @@ input[list]::-webkit-calendar-picker-indicator {
     background: #f7fbff;
 }
 
-.symptoms {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
+.symptoms{
+    display:flex;
+    justify-content:center;
+    gap:40px;
 }
 
-.symptoms-col {
-    flex: 0 0 auto;
-    padding: 0;
-    display: flex;
-    justify-content: center;
+ul.symptoms-col{
+    flex:0 0 auto;
+    margin:0;
+    padding:0;
+    display:inline-block;
+    list-style:disc;
+    list-style-position:outside;
+    padding-left:22px;
 }
 
-.symptoms-col ul {
-    list-style: disc;
-    padding-left: 20px;
-    margin: 0;
-}
-
-.symptoms-col li {
-    white-space: nowrap;
+ul.symptoms-col li{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:220px;
 }
 
 .c3-panel {
@@ -847,4 +847,5 @@ input[list]::-webkit-calendar-picker-indicator {
 .flu-center {
     text-align: center;
 }
+
 
