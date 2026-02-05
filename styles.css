@@ -549,25 +549,26 @@ input[list]::-webkit-calendar-picker-indicator {
 
 .symptoms {
     display: flex;
-    justify-content: space-between;
-    gap: 0px; /* reduce this (was 40px) */
+    justify-content: center;
+    gap: 40px;
 }
 
 .symptoms-col {
-    flex: 1;
-    margin: 0;
-    padding: 0 20px;
+    flex: 0 0 auto;
+    padding: 0;
     display: flex;
     justify-content: center;
 }
 
-    .symptoms-col.left {
-        text-align: left;
-    }
+.symptoms-col ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+}
 
-    .symptoms-col.right {
-        text-align: left;
-    }
+.symptoms-col li {
+    white-space: nowrap;
+}
 
 .c3-panel {
     border: 1px solid var(--border);
@@ -846,3 +847,4 @@ input[list]::-webkit-calendar-picker-indicator {
 .flu-center {
     text-align: center;
 }
+
