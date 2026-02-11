@@ -396,7 +396,7 @@ labGenerate?.addEventListener('click', () => {
 
     if (pairs.length === 0) return;
 
-    let header = `${hospital.toUpperCase()} - #${phone}`;
+    let header = `${hospital.toUpperCase()} - LAB #${phone}`;
     if (ext) header += `, EXT: ${ext}`;
     if (bleep) header += `, BLEEP: ${bleep}`;
 
@@ -1100,3 +1100,4 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
