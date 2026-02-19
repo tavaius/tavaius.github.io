@@ -252,9 +252,9 @@ labGenerate?.addEventListener('click', () => {
 
     if (pairs.length === 0) return;
 
-    let header = `${hospital.toUpperCase()} - LAB #${phone}`;
+    let header = `${hospital.toUpperCase()} - LAB NUMBER: ${phone}`;
     if (ext) header += `, EXT: ${ext}`;
-    if (bleep) header += `, BLEEP: ${bleep}`;
+    if (bleep) header += `, PT NUMBER: ${bleep}`;
 
     const output = `${header} - ${pairs.join(', ')}`.toUpperCase();
 
@@ -1130,4 +1130,5 @@ opsCopy?.addEventListener('click', () => {
 load();
 updateConfirmState();
 updateOpsConfirmState();
+
 
