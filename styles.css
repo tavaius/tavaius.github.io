@@ -722,7 +722,7 @@ ul.symptoms-col li{
 
 .shift-actions {
     margin-left: auto;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 6px;
 }
@@ -871,6 +871,7 @@ ul.symptoms-col li{
 .flu-center {
     text-align: center;
 }
+
 
 
 
