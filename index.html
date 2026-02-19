@@ -200,8 +200,8 @@
                         <button id="shift-autofill" class="confirm-btn shift-autofill-btn" type="button">Auto-Fill</button>
                     </div>
                     <div class="subtext" style="margin-bottom:10px;">
-                        Enter the start and finishing time of your shift.<br>
-                        For example, A 3 to 11 would be 1500–2300.
+                        Enter the start and finishing time of your shift, in 24 hour time.<br>
+                        For example, an evening 3 to 11 shift would be 1500 - 2300.
                     </div>
                     <!-- Start/Finish row -->
                     <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
@@ -245,7 +245,7 @@
                 </div>
                 <div class="csd-extension">
                     <div class="header-left" style="font-size:1.05rem;">CSD Extension</div>
-                    <div class="subtext">The extension you've been assigned.</div>
+                    <div class="subtext">The extension you've been assigned - if you're on CSD.</div>
                     <div class="csd-extension-row">
                         <input id="csd-extension" class="desc-input" type="text" inputmode="numeric" aria-label="CSD Extension" maxlength="5" />
                         <button id="csd-extension-set" class="confirm-btn" type="button" disabled>Set</button>
@@ -294,7 +294,7 @@
                             </div>
 
                             <div>
-                                <span class="label">Phone Number</span>
+                                <span class="label">Laboratory Phone Number</span>
                                 <input id="lab-phone" class="desc-input" type="text" aria-label="Lab Phone Number" />
                             </div>
 
@@ -382,7 +382,7 @@
                             <datalist id="rp-meds">
                                 <option value="Propranolol"></option>
                                 <option value="Atorvastatin"></option>
-                                <option value="⚠️ Diazepam"></option>
+                                <option value="Diazepam"></option>
                                 <option value="Simvastatin"></option>
                                 <option value="Lisinopril"></option>
                                 <option value="Ramipril"></option>
@@ -390,8 +390,8 @@
                                 <option value="Co-codamol"></option>
                                 <option value="Bisoprolol"></option>
                                 <option value="Metformin"></option>
-                                <option value="⚠️ Oramorph"></option>
-                                <option value="⚠️ Zomorph"></option>
+                                <option value="Oramorph"></option>
+                                <option value="Zomorph"></option>
                                 <option value="Levothyroxine"></option>
                                 <option value="Omeprazole"></option>
                                 <option value="Esomeprazole"></option>
@@ -414,7 +414,7 @@
                                 <option value="Circadin"></option>
                                 <option value="Furosemide"></option>
                                 <option value="Lansoprazole"></option>
-                                <option value="⚠️ Gabapentin"></option>
+                                <option value="Gabapentin"></option>
                                 <option value="Sertraline"></option>
                                 <option value="Prednisolone"></option>
                                 <option value="Clopidogrel"></option>
@@ -423,9 +423,9 @@
                                 <option value="Salbutamol"></option>
                                 <option value="Naproxen"></option>
                                 <option value="Ibuprofen"></option>
-                                <option value="⚠️ Codeine phosphate"></option>
-                                <option value="⚠️ Tramadol"></option>
-                                <option value="⚠️ Pregabalin"></option>
+                                <option value="Codeine phosphate"></option>
+                                <option value="Tramadol"></option>
+                                <option value="Pregabalin"></option>
                                 <option value="Mirtazapine"></option>
                                 <option value="Venlafaxine"></option>
                                 <option value="Duloxetine"></option>
@@ -443,7 +443,6 @@
                                     </tr>
                                 </thead>
                                 <tbody id="rp-tbody">
-                                    <!-- rows injected here -->
                                 </tbody>
                             </table>
                         </div>
