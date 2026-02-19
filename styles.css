@@ -138,9 +138,7 @@ header .title {
 .shift-header {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
     gap: 8px;
-    padding-right: 4px;
 }
 
 .shift-autofill-btn {
@@ -722,6 +720,13 @@ ul.symptoms-col li{
     display: block;
 }
 
+.shift-actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .breaks-row {
     display: flex;
     gap: 10px; /* space between each box */
@@ -866,6 +871,7 @@ ul.symptoms-col li{
 .flu-center {
     text-align: center;
 }
+
 
 
 
