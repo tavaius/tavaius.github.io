@@ -532,7 +532,7 @@ async function autoFillShift() {
 
     const data = parseWfmCurrentShift(text);
     if (!data) {
-        alert('Copy your WFM shift (Ctrl+A) & (Ctrl+C), then click.');
+        alert('To use this, first copy your WFM shift using (Ctrl+A) and (Ctrl+C), then click Auto-Fill.');
         return;
     }
 
@@ -1130,3 +1130,4 @@ opsCopy?.addEventListener('click', () => {
 load();
 updateConfirmState();
 updateOpsConfirmState();
+
