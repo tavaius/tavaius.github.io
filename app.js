@@ -1,4 +1,90 @@
-/* ---------- Collapsible helpers ---------- */
+/* ============================================================
+   HELPERS — defined first so they're available everywhere
+   ============================================================ */
+
+/* ---------- Clipboard helpers ---------- */
+function copyToClipboard(text, onSuccess) {
+    if (!text) return;
+    const done = () => { if (onSuccess) onSuccess(); };
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
+    } else {
+        fallbackCopy(text); done();
+    }
+}
+
+/* ---------- Clipboard fallback ---------- */
+function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (_) { }
+    document.body.removeChild(ta);
+}
+
+/* ---------- Success bar ---------- */
+const successBar = document.getElementById('cad-success');
+function showSuccessBar() {
+    if (!successBar) return;
+    successBar.classList.remove('hidden');
+    clearTimeout(successBar._hideT);
+    successBar._hideT = setTimeout(() => {
+        successBar.classList.add('hidden');
+    }, 10000);
+}
+
+/* ---------- Validation panel: openExclusive ---------- */
+const allPanels = document.querySelectorAll('.val-panel');
+function openExclusive(panel) {
+    allPanels.forEach(p => {
+        if (p !== panel) {
+            p.classList.remove('show');
+            p.setAttribute('aria-hidden', 'true');
+        }
+    });
+    panel.classList.add('show');
+    panel.setAttribute('aria-hidden', 'false');
+}
+
+/* ---------- Notepad autosave ---------- */
+const editor = document.getElementById('editor');
+const countEl = document.getElementById('count');
+
+function wordCount(html) {
+    return (html.replace(/<[^>]*>/g, ' ').match(/\b\w+\b/g) || []).length;
+}
+function save() {
+    if (!editor) return;
+    localStorage.setItem('seclcleric_note_html', editor.innerHTML);
+    if (countEl) countEl.textContent = wordCount(editor.innerHTML) + ' words';
+}
+function load() {
+    if (!editor) return;
+    const html = localStorage.getItem('seclcleric_note_html');
+    if (html) editor.innerHTML = html;
+    if (countEl) countEl.textContent = wordCount(editor.innerHTML) + ' words';
+}
+
+editor?.addEventListener('input', save);
+document.getElementById('link-clear')?.addEventListener('click', () => {
+    if (!editor) return;
+    editor.innerHTML = '';
+    save();
+});
+document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        save();
+    }
+});
+
+/* ============================================================
+   COLLAPSIBLE HELPERS
+   ============================================================ */
 function wireCollapse(toggleId, bodyId) {
     const t = document.getElementById(toggleId);
     const b = document.getElementById(bodyId);
@@ -26,7 +112,10 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
         toggle.textContent = nowHidden ? '[show]' : '[hide]';
     });
 });
-/* ---------- Extra panels toggle ---------- */
+
+/* ============================================================
+   EXTRA PANELS TOGGLE
+   ============================================================ */
 const extraToggle = document.getElementById('link-extra');
 
 if (extraToggle) {
@@ -40,7 +129,10 @@ if (extraToggle) {
             .forEach(el => el.classList.toggle('hidden'));
     });
 }
-/* ---------- Lab Results panel ---------- */
+
+/* ============================================================
+   LAB RESULTS PANEL
+   ============================================================ */
 const labTrigger = document.getElementById('lab-trigger');
 const labPanel = document.getElementById('lab-panel');
 const labLog = document.getElementById('lab-log');
@@ -65,7 +157,120 @@ labCopy?.addEventListener('click', () => {
     copyToClipboard(text, () => showSuccessBar());
 });
 
-/* ---------- Flu table last row toggle ---------- */
+/* ---------- Lab Results: fields ---------- */
+const labHospital = document.getElementById('lab-hospital');
+const labPhone = document.getElementById('lab-phone');
+const labBleep = document.getElementById('lab-bleep');
+const labExt = document.getElementById('lab-ext');
+
+const labResult = document.getElementById('lab-result');
+const labValue = document.getElementById('lab-value');
+const labAdd = document.getElementById('lab-add');
+
+const labTable = document.getElementById('lab-table');
+const labTbody = document.getElementById('lab-tbody');
+const labGenerate = document.getElementById('lab-generate');
+
+/* Enable Add when both result + value present */
+function updateLabAddState() {
+    const ok = (labResult?.value.trim().length ?? 0) > 0 && (labValue?.value.trim().length ?? 0) > 0;
+    if (labAdd) labAdd.disabled = !ok;
+}
+labResult?.addEventListener('input', updateLabAddState);
+labValue?.addEventListener('input', updateLabAddState);
+
+/* Add a result row */
+labAdd?.addEventListener('click', () => {
+    const res = labResult.value.trim();
+    const val = labValue.value.trim();
+    if (!res || !val) return;
+
+    const tr = document.createElement('tr');
+
+    const tdRes = document.createElement('td');
+    tdRes.textContent = res;
+    tdRes.style.padding = '8px';
+
+    const tdVal = document.createElement('td');
+    tdVal.textContent = val;
+    tdVal.style.padding = '8px';
+
+    const tdAct = document.createElement('td');
+    tdAct.style.textAlign = 'right';
+    tdAct.style.padding = '8px';
+
+    const btnX = document.createElement('button');
+    btnX.type = 'button';
+    btnX.textContent = '✕';
+    btnX.setAttribute('aria-label', `Remove ${res}`);
+    btnX.style.minWidth = '32px';
+    btnX.style.height = '28px';
+    btnX.className = 'pill';
+    btnX.addEventListener('click', () => {
+        tr.remove();
+        updateLabGenerateState();
+    });
+
+    tdAct.appendChild(btnX);
+    tr.appendChild(tdRes);
+    tr.appendChild(tdVal);
+    tr.appendChild(tdAct);
+    labTbody.appendChild(tr);
+
+    labResult.value = '';
+    labValue.value = '';
+    updateLabAddState();
+    updateLabGenerateState();
+});
+
+/* Enable Generate when: hospital + phone present AND at least one row */
+function updateLabGenerateState() {
+    const hasRows = !!labTbody && labTbody.children.length > 0;
+    const hasHospital = (labHospital?.value.trim().length ?? 0) > 0;
+    const hasPhone = (labPhone?.value.trim().length ?? 0) > 0;
+    if (labGenerate) labGenerate.disabled = !(hasRows && hasHospital && hasPhone);
+}
+[labHospital, labPhone, labBleep, labExt].forEach(el => el?.addEventListener('input', updateLabGenerateState));
+
+/* Generate log line:
+   <HOSPITAL> - #<PHONE>[, EXT: <EXT>][, BLEEP: <BLEEP>] - RESULT: VALUE, RESULT: VALUE
+*/
+labGenerate?.addEventListener('click', () => {
+    const hospital = labHospital?.value.trim();
+    const phone = labPhone?.value.trim();
+    const ext = labExt?.value.trim();
+    const bleep = labBleep?.value.trim();
+
+    if (!hospital || !phone) return;
+
+    const pairs = [...(labTbody?.children || [])].map(tr => {
+        const tds = tr.querySelectorAll('td');
+        const r = tds[0]?.textContent?.trim() || '';
+        const v = tds[1]?.textContent?.trim() || '';
+        return r && v ? `${r.toUpperCase()}: ${v}` : null;
+    }).filter(Boolean);
+
+    if (pairs.length === 0) return;
+
+    let header = `${hospital.toUpperCase()} - LAB #${phone}`;
+    if (ext) header += `, EXT: ${ext}`;
+    if (bleep) header += `, BLEEP: ${bleep}`;
+
+    const output = `${header} - ${pairs.join(', ')}`.toUpperCase();
+
+    if (labLog) {
+        labLog.value = output;
+        labLog.scrollTop = labLog.scrollHeight;
+    }
+});
+
+/* Init states */
+updateLabAddState();
+updateLabGenerateState();
+
+/* ============================================================
+   FLU TABLE LAST ROW TOGGLE
+   ============================================================ */
 const fluToggle = document.getElementById('flu-toggle');
 const fluRow = document.querySelector('.flu-table tr:last-child');
 if (fluRow) fluRow.classList.add('flu-hidden'); // start hidden
@@ -76,7 +281,9 @@ if (fluToggle && fluRow) {
     });
 }
 
-/* ---------- LanguageLine panel ---------- */
+/* ============================================================
+   LANGUAGELINE PANEL
+   ============================================================ */
 const llTrigger = document.getElementById('ll-trigger');
 const llPanel = document.getElementById('ll-panel');
 const llLog = document.getElementById('ll-log');
@@ -134,8 +341,12 @@ llCopy?.addEventListener('click', () => {
     });
 });
 
-/* ---------- CSD Notes ---------- */
+/* Init */
+updateLlGenerateState();
 
+/* ============================================================
+   CSD NOTES
+   ============================================================ */
 const csdExtensionInput = document.getElementById('csd-extension');
 const csdExtensionSet = document.getElementById('csd-extension-set');
 const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
@@ -274,7 +485,6 @@ CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
     copyToClipboard(text, () => runCopyFlash(chipCallSilent));
 });
 
-
 /* ---------- Special: DATIX asks for ref, then copies ---------- */
 const chipDatix = document.getElementById('chip-datix');
 chipDatix?.addEventListener('click', () => {
@@ -297,120 +507,9 @@ chipSafeguarding?.addEventListener('click', () => {
     copyToClipboard(text, () => runCopyFlash(chipSafeguarding));
 });
 
-/* Init */
-updateLlGenerateState();
-
-/* ---------- Lab Results: fields ---------- */
-const labHospital = document.getElementById('lab-hospital');
-const labPhone = document.getElementById('lab-phone');
-const labBleep = document.getElementById('lab-bleep');
-const labExt = document.getElementById('lab-ext');
-
-const labResult = document.getElementById('lab-result');
-const labValue = document.getElementById('lab-value');
-const labAdd = document.getElementById('lab-add');
-
-const labTable = document.getElementById('lab-table');
-const labTbody = document.getElementById('lab-tbody');
-const labGenerate = document.getElementById('lab-generate');
-
-/* Enable Add when both result + value present */
-function updateLabAddState() {
-    const ok = (labResult?.value.trim().length ?? 0) > 0 && (labValue?.value.trim().length ?? 0) > 0;
-    if (labAdd) labAdd.disabled = !ok;
-}
-labResult?.addEventListener('input', updateLabAddState);
-labValue?.addEventListener('input', updateLabAddState);
-
-/* Add a result row */
-labAdd?.addEventListener('click', () => {
-    const res = labResult.value.trim();
-    const val = labValue.value.trim();
-    if (!res || !val) return;
-
-    const tr = document.createElement('tr');
-
-    const tdRes = document.createElement('td');
-    tdRes.textContent = res;
-    tdRes.style.padding = '8px';
-
-    const tdVal = document.createElement('td');
-    tdVal.textContent = val;
-    tdVal.style.padding = '8px';
-
-    const tdAct = document.createElement('td');
-    tdAct.style.textAlign = 'right';
-    tdAct.style.padding = '8px';
-
-    const btnX = document.createElement('button');
-    btnX.type = 'button';
-    btnX.textContent = '✕';
-    btnX.setAttribute('aria-label', `Remove ${res}`);
-    btnX.style.minWidth = '32px';
-    btnX.style.height = '28px';
-    btnX.className = 'pill';
-    btnX.addEventListener('click', () => {
-        tr.remove();
-        updateLabGenerateState();
-    });
-
-    tdAct.appendChild(btnX);
-    tr.appendChild(tdRes);
-    tr.appendChild(tdVal);
-    tr.appendChild(tdAct);
-    labTbody.appendChild(tr);
-
-    labResult.value = '';
-    labValue.value = '';
-    updateLabAddState();
-    updateLabGenerateState();
-});
-
-/* Enable Generate when: hospital + phone present AND at least one row */
-function updateLabGenerateState() {
-    const hasRows = !!labTbody && labTbody.children.length > 0;
-    const hasHospital = (labHospital?.value.trim().length ?? 0) > 0;
-    const hasPhone = (labPhone?.value.trim().length ?? 0) > 0;
-    if (labGenerate) labGenerate.disabled = !(hasRows && hasHospital && hasPhone);
-}
-[labHospital, labPhone, labBleep, labExt].forEach(el => el?.addEventListener('input', updateLabGenerateState));
-
-/* Generate log line:
-   <HOSPITAL> - #<PHONE>[, EXT: <EXT>][, BLEEP: <BLEEP>] - RESULT: VALUE, RESULT: VALUE
-*/
-labGenerate?.addEventListener('click', () => {
-    const hospital = labHospital?.value.trim();
-    const phone = labPhone?.value.trim();
-    const ext = labExt?.value.trim();
-    const bleep = labBleep?.value.trim();
-
-    if (!hospital || !phone) return;
-
-    const pairs = [...(labTbody?.children || [])].map(tr => {
-        const tds = tr.querySelectorAll('td');
-        const r = tds[0]?.textContent?.trim() || '';
-        const v = tds[1]?.textContent?.trim() || '';
-        return r && v ? `${r.toUpperCase()}: ${v}` : null;
-    }).filter(Boolean);
-
-    if (pairs.length === 0) return;
-
-    let header = `${hospital.toUpperCase()} - LAB #${phone}`;
-    if (ext) header += `, EXT: ${ext}`;
-    if (bleep) header += `, BLEEP: ${bleep}`;
-
-    const output = `${header} - ${pairs.join(', ')}`.toUpperCase();
-
-    if (labLog) {
-        labLog.value = output;
-        labLog.scrollTop = labLog.scrollHeight;
-    }
-});
-
-/* Init states */
-updateLabAddState();
-updateLabGenerateState();
-
+/* ============================================================
+   SHIFT AUTOFILL
+   ============================================================ */
 const shiftAutoFillButton = document.getElementById('shift-autofill');
 shiftAutoFillButton?.addEventListener('click', autoFillShift);
 
@@ -510,8 +609,9 @@ function toHHMM(timeText) {
     return m[1].padStart(2, '0') + m[2];
 }
 
-
-/* ---------- Repeat Prescriptions panel ---------- */
+/* ============================================================
+   REPEAT PRESCRIPTIONS PANEL
+   ============================================================ */
 const rpTrigger = document.getElementById('rp-trigger');
 const rpPanel = document.getElementById('rp-panel');
 
@@ -565,7 +665,7 @@ rpAdd?.addEventListener('click', () => {
     btnRemove.setAttribute('aria-label', `Remove ${text}`);
     btnRemove.style.minWidth = '32px';
     btnRemove.style.height = '28px';
-    btnRemove.className = 'pill'; // reuse small button styling if you have it
+    btnRemove.className = 'pill';
 
     btnRemove.addEventListener('click', () => {
         tr.remove();
@@ -620,7 +720,24 @@ rpCopy?.addEventListener('click', () => {
 /* Init */
 updateRpGenerateState();
 
-/* ---------- Physical Orange Flag: inputs ---------- */
+/* ============================================================
+   PHYSICAL ORANGE FLAG PANEL
+   ============================================================ */
+const pofTrigger = document.getElementById('pof-trigger');
+const pofPanel = document.getElementById('pof-panel');
+
+if (pofTrigger && pofPanel) {
+    pofTrigger.addEventListener('click', () => {
+        const isOpen = pofPanel.classList.contains('show');
+        if (isOpen) {
+            pofPanel.classList.remove('show');
+            pofPanel.setAttribute('aria-hidden', 'true');
+        } else {
+            openExclusive(pofPanel);
+        }
+    });
+}
+
 const pofRaise = document.getElementById('pof-raise');
 const pofTime = document.getElementById('pof-time');
 const pofInit = document.getElementById('pof-init');
@@ -658,12 +775,12 @@ pofGenerate?.addEventListener('click', () => {
 
     const line = `ORANGE FLAG RAISED @ ${time}, ASSISTED IN PERSON BY (${init})`;
     if (pofLog) {
-        pofLog.value = line;                 // replace contents as requested
+        pofLog.value = line;
         pofLog.scrollTop = pofLog.scrollHeight;
     }
 });
 
-/* Copy-all (same behaviour as OPS: copy -> success -> clear) */
+/* Copy-all (copy -> success -> clear) */
 pofCopy?.addEventListener('click', () => {
     const text = pofLog?.value ?? '';
     if (!text.trim()) return;
@@ -676,7 +793,9 @@ pofCopy?.addEventListener('click', () => {
 /* Init state */
 updatePofGenerateState();
 
-/* ---------- Tabs ---------- */
+/* ============================================================
+   TABS
+   ============================================================ */
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.page');
 function setActiveTab(tabName) {
@@ -701,53 +820,12 @@ tabs.forEach(btn => btn.addEventListener('click', () => {
     setActiveTab(btn.dataset.tab);
 }));
 
-/* ---------- Notepad autosave ---------- */
-const editor = document.getElementById('editor');
-const countEl = document.getElementById('count');
-
-function wordCount(html) {
-    return (html.replace(/<[^>]*>/g, ' ').match(/\b\w+\b/g) || []).length;
-}
-function save() {
-    if (!editor) return;
-    localStorage.setItem('seclcleric_note_html', editor.innerHTML);
-    if (countEl) countEl.textContent = wordCount(editor.innerHTML) + ' words';
-}
-function load() {
-    if (!editor) return;
-    const html = localStorage.getItem('seclcleric_note_html');
-    if (html) editor.innerHTML = html;
-    if (countEl) countEl.textContent = wordCount(editor.innerHTML) + ' words';
-}
-
-editor?.addEventListener('input', save);
-document.getElementById('link-clear')?.addEventListener('click', () => {
-    if (!editor) return;
-    editor.innerHTML = '';
-    save();
-});
-document.addEventListener('keydown', e => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
-        e.preventDefault();
-        save();
-    }
-});
-
-/* ---------- Validation panel (C3/C4) ---------- */
+/* ============================================================
+   VALIDATION PANEL (C3/C4)
+   ============================================================ */
 const valTrigger = document.getElementById('val-trigger');
 const valPanel = document.getElementById('val-panel');
 
-const allPanels = document.querySelectorAll('.val-panel');
-function openExclusive(panel) {
-    allPanels.forEach(p => {
-        if (p !== panel) {
-            p.classList.remove('show');
-            p.setAttribute('aria-hidden', 'true');
-        }
-    });
-    panel.classList.add('show');
-    panel.setAttribute('aria-hidden', 'false');
-}
 valTrigger?.addEventListener('click', () => {
     if (!valPanel) return;
     const isOpen = valPanel.classList.contains('show');
@@ -814,31 +892,9 @@ confirmBtn?.addEventListener('click', () => {
     showSuccessBar();
 });
 
-/* ---------- Clipboard helpers ---------- */
-function copyToClipboard(text, onSuccess) {
-    if (!text) return;
-    const done = () => { if (onSuccess) onSuccess(); };
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(text).then(done).catch(() => { fallbackCopy(text); done(); });
-    } else {
-        fallbackCopy(text); done();
-    }
-}
-
-/* ---------- Clipboard fallback ---------- */
-function fallbackCopy(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'absolute';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); } catch (_) { }
-    document.body.removeChild(ta);
-}
-
-/* ---------- Shift Lock logic ---------- */
+/* ============================================================
+   SHIFT LOCK LOGIC
+   ============================================================ */
 const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
 const shiftLock = document.getElementById('shift-lock');
@@ -882,7 +938,9 @@ function updateBreakLockState() {
 
 [br1, br2, br3, brL].forEach(el => el?.addEventListener('input', updateBreakLockState));
 
-/* ---- helpers for notifications & scheduling ---- */
+/* ============================================================
+   NOTIFICATIONS & SCHEDULING
+   ============================================================ */
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('SW registered:', reg.scope))
@@ -952,7 +1010,6 @@ shiftLock2?.addEventListener('click', async () => {
 
     // schedule the toasts
     // yummers
-
     if (br1) scheduleBreak(br1, 'Break 1');
     if (br2) scheduleBreak(br2, 'Break 2');
     if (br3) scheduleBreak(br3, 'Break 3');
@@ -965,19 +1022,9 @@ if (shiftPanel) {
     updateBreakLockState();
 }
 
-/* ---------- Success bar ---------- */
-load();
-const successBar = document.getElementById('cad-success');
-function showSuccessBar() {
-    if (!successBar) return;
-    successBar.classList.remove('hidden');
-    clearTimeout(successBar._hideT);
-    successBar._hideT = setTimeout(() => {
-        successBar.classList.add('hidden');
-    }, 10000);
-}
-
-/* ---------- OPS/CIL panel ---------- */
+/* ============================================================
+   OPS/CIL PANEL
+   ============================================================ */
 const opsTrigger = document.getElementById('ops-trigger');
 const opsPanel   = document.getElementById('ops-panel');
 
@@ -1032,9 +1079,6 @@ function updateOpsConfirmState() {
 
 opsInit?.addEventListener('input', updateOpsConfirmState);
 
-updateOpsConfirmState();
-
-// OPS/CIL Confirm (append only, add trailing newline; no popup, no copy)
 /* OPS/CIL Confirm */
 opsConfirm?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -1063,7 +1107,7 @@ ADVISED: ${advice}`;
             : `${entry}\n`;
         opsLog.scrollTop = opsLog.scrollHeight;
     }
-    
+
     // Reset
     [opsOp, opsCl].forEach(b => b.setAttribute('aria-pressed', 'false'));
     opsInit.value = '';
@@ -1080,25 +1124,9 @@ opsCopy?.addEventListener('click', () => {
     });
 });
 
-/* ---------- Physical Orange Flag panel ---------- */
-const pofTrigger = document.getElementById('pof-trigger');
-const pofPanel = document.getElementById('pof-panel');
-
-if (pofTrigger && pofPanel) {
-    pofTrigger.addEventListener('click', () => {
-        const isOpen = pofPanel.classList.contains('show');
-        if (isOpen) {
-            pofPanel.classList.remove('show');
-            pofPanel.setAttribute('aria-hidden', 'true');
-        } else {
-            openExclusive(pofPanel);
-        }
-    });
-}
-
-/* ---------- init states dont touch ---------- */
+/* ============================================================
+   INIT STATES — run after everything is defined
+   ============================================================ */
+load();
 updateConfirmState();
 updateOpsConfirmState();
-
-
-
