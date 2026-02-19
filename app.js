@@ -26,9 +26,6 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
         toggle.textContent = nowHidden ? '[show]' : '[hide]';
     });
 });
-
-extraToggle.click();
-
 /* ---------- Extra panels toggle ---------- */
 const extraToggle = document.getElementById('link-extra');
 
@@ -1102,5 +1099,6 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
