@@ -170,6 +170,25 @@ nav.tabs {
     transition: opacity .25s ease;
 }
 
+.info-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.info-title {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.info-subtitle {
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.info-author {
+    margin-top: 6px;
+}
+
 .tab-btn {
     display: flex;
     align-items: center;
@@ -847,5 +866,6 @@ ul.symptoms-col li{
 .flu-center {
     text-align: center;
 }
+
 
 
