@@ -436,7 +436,7 @@ async function autoFillShift() {
 
     const data = parseWfmCurrentShift(text);
     if (!data) {
-        alert('Could not find a Current Shift section in the pasted text.');
+        alert('Copy your WFM shift (Ctrl+A) & (Ctrl+C), then click.');
         return;
     }
 
@@ -1102,5 +1102,6 @@ if (pofTrigger && pofPanel) {
 /* ---------- init states dont touch ---------- */
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
