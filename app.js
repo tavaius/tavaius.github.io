@@ -848,12 +848,6 @@ function setCat(button) {
 cat3?.addEventListener('click', () => setCat(cat3));
 cat4?.addEventListener('click', () => setCat(cat4));
 
-/* Initials enforcement (clinical validation) */
-const clinInit = document.getElementById('clin-init');
-clinInit?.addEventListener('input', () => {
-    clinInit.value = clinInit.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
-});
-
 /* Description + Confirm (C3/C4) */
 const descInput = document.getElementById('desc-input');
 const confirmBtn = document.getElementById('confirm-btn');
@@ -878,15 +872,11 @@ confirmBtn?.addEventListener('click', () => {
     const desc = descInput?.value.trim();
     if (!cat || !desc) return;
 
-    const initials = clinInit?.value.trim() ?? '';
-    const line = initials.length > 0
-        ? `${cat} VALIDATION ARRANGED BY CLINICAL (${initials}) - ${desc}`
-        : `${cat} VALIDATION ARRANGED, NO CLINICAL RESPONSE - ${desc}`;
+    const line = `${cat} VALIDATION ARRANGED - ${desc}`;
 
     copyToClipboard(line);
 
     [cat3, cat4].forEach(b => b?.setAttribute('aria-pressed', 'false'));
-    if (clinInit) clinInit.value = '';
     if (descInput) descInput.value = '';
     updateConfirmState();
     showSuccessBar();
@@ -1130,6 +1120,7 @@ opsCopy?.addEventListener('click', () => {
 load();
 updateConfirmState();
 updateOpsConfirmState();
+
 
 
 
