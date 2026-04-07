@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
       <script>
       const password = prompt("This project is temporarily suspended.\nSorry! For more information, please contact Tavaius Wisbey.\n\nEnter password to continue:");
-      if (password !== "servicemerchandiser") {
+      if (password !== "servicemerchandiser") { <!-- unsecure password, bite me. i dont care. -->
         window.location.replace("https://www.google.com");
       }
     </script>
@@ -30,6 +30,10 @@
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">Templates (CSD)</span>
                 </button>
+                <button class="tab-btn" data-tab="lp" aria-controls="page-lp">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="label">Local Policies</span>
+                </button>
                 <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">My Shift</span>
@@ -40,7 +44,6 @@
                 </button>
             </nav>
         </aside>
-
         <header>
             <div class="header-left">
                 <img class="logo" alt="SECAmb Crest" src="crest.png" />
@@ -198,6 +201,8 @@
                         </tr>
                     </table>
                 </div>
+            </section>
+            <section id="page-lp" class="page">
             </section>
             <section id="page-shift" class="page">
                 <div id="shift-panel" class="shift-panel" aria-hidden="false">
