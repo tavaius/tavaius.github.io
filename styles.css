@@ -29,7 +29,10 @@ body {
     overflow-x: hidden; /* hide horizontal scroll */
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
     font: inherit;
     line-height: inherit;
 }
