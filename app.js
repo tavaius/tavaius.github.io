@@ -75,6 +75,13 @@ document.getElementById('link-clear')?.addEventListener('click', () => {
     editor.innerHTML = '';
     save();
 });
+
+document.getElementById('link-upper')?.addEventListener('click', () => {
+    if (!editor) return;
+    editor.innerHTML = editor.innerHTML.replace(/>([^<]*)</g, (match, text) => `>${text.toUpperCase()}<`);
+    save();
+});
+
 document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
