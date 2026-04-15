@@ -338,6 +338,20 @@ main {
         opacity: .85;
     }
 
+.link-upper {
+    color: var(--success);
+    text-decoration: underline;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: 0;
+    font: inherit;
+}
+
+    .link-upper:hover {
+        opacity: .85;
+    }
+
 .link-extra {
     color: #3399ff;
     text-decoration: underline;
