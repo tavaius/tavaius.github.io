@@ -499,10 +499,10 @@ chipDatix?.addEventListener('click', () => {
 /* ---------- Special: SAFEGUARDING asks for ref, then copies ---------- */
 const chipSafeguarding = document.getElementById('chip-safeguarding');
 chipSafeguarding?.addEventListener('click', () => {
-    const ref = window.prompt('Please enter the Safeguarding reference number.');
+    const ref = window.prompt('Please enter the DAS reference number.');
     if (!ref) return;
 
-    const text = `SAFEGUARDING RAISED (${ref.trim()})`.toUpperCase();
+    const text = `DAS RAISED (${ref.trim()})`.toUpperCase();
 
     copyToClipboard(text, () => runCopyFlash(chipSafeguarding));
 });
