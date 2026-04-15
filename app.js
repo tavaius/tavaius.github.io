@@ -73,17 +73,17 @@ editor?.addEventListener('input', save);
 
 document.getElementById('link-clear')?.addEventListener('click', () => {
     if (!editor) return;
-    const walk = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
-    let node;
-    while ((node = walk.nextNode())) {
-        node.textContent = node.textContent.toUpperCase();
-    }
+    editor.innerHTML = '';
     save();
 });
 
 document.getElementById('link-upper')?.addEventListener('click', () => {
     if (!editor) return;
-    editor.innerHTML = editor.innerHTML.replace(/>([^<]*)</g, (match, text) => `>${text.toUpperCase()}<`);
+    const walk = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walk.nextNode())) {
+        node.textContent = node.textContent.toUpperCase();
+    }
     save();
 });
 
