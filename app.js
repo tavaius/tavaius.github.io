@@ -70,9 +70,14 @@ function load() {
 }
 
 editor?.addEventListener('input', save);
+
 document.getElementById('link-clear')?.addEventListener('click', () => {
     if (!editor) return;
-    editor.innerHTML = '';
+    const walk = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walk.nextNode())) {
+        node.textContent = node.textContent.toUpperCase();
+    }
     save();
 });
 
