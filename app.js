@@ -81,7 +81,10 @@ document.getElementById('link-upper')?.addEventListener('click', () => {
     if (!editor) return;
     const plainText = editor.innerText.toUpperCase();
     editor.innerHTML = '';
-    editor.appendChild(document.createTextNode(plainText));
+    const p = document.createElement('p');
+    p.style.cssText = 'color: black; background: none; font: inherit;';
+    p.appendChild(document.createTextNode(plainText));
+    editor.appendChild(p);
 
     save();
 });
@@ -91,6 +94,12 @@ document.addEventListener('keydown', e => {
         e.preventDefault();
         save();
     }
+});
+
+editor.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const plain = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, plain);
 });
 
 /* ============================================================
