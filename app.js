@@ -79,11 +79,10 @@ document.getElementById('link-clear')?.addEventListener('click', () => {
 
 document.getElementById('link-upper')?.addEventListener('click', () => {
     if (!editor) return;
-    const walk = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT);
-    let node;
-    while ((node = walk.nextNode())) {
-        node.textContent = node.textContent.toUpperCase();
-    }
+    const plainText = editor.innerText.toUpperCase();
+    editor.innerHTML = '';
+    editor.appendChild(document.createTextNode(plainText));
+
     save();
 });
 
