@@ -79,13 +79,9 @@ document.getElementById('link-clear')?.addEventListener('click', () => {
 
 document.getElementById('link-upper')?.addEventListener('click', () => {
     if (!editor) return;
-    const plainText = editor.innerText.toUpperCase();
+    const plainText = editor.innerText.trim().toUpperCase();
     editor.innerHTML = '';
-    const p = document.createElement('p');
-    p.style.cssText = 'color: black; background: none; font: inherit;';
-    p.appendChild(document.createTextNode(plainText));
-    editor.appendChild(p);
-
+    editor.appendChild(document.createTextNode(plainText));
     save();
 });
 
