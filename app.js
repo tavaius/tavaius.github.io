@@ -161,8 +161,7 @@ function runGuideSearch() {
     }
 }
 
-guideSearchBtn?.addEventListener('click', runGuideSearch);
-guideInput?.addEventListener('keydown', e => { if (e.key === 'Enter') runGuideSearch(); });
+guideInput?.addEventListener('input', runGuideSearch);
 
 /* ============================================================
    EXTRA PANELS TOGGLE
