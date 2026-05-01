@@ -130,6 +130,41 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 });
 
 /* ============================================================
+   GUIDE SEARCH
+   ============================================================ */
+
+// ==========================================
+// SEARCH ANSWERS — edit these freely
+// key: exactly matches the search term (case-insensitive)
+// value: the text shown in the result label
+// ==========================================
+const guideAnswers = {
+    'test1':               'This is test1.',
+    'test2':               'This is test2.',
+    'chest pain':          'For chest pain, follow the cardiac pathway. Ensure 999 is considered.',
+    'breathing difficulty': 'For breathing difficulty, assess severity and consider immediate dispatch.',
+    // add more 'term': 'answer' lines here
+};
+
+const guideInput     = document.getElementById('guide-input');
+const guideSearchBtn = document.getElementById('guide-search-btn');
+const guideResult    = document.getElementById('guide-result');
+
+function runGuideSearch() {
+    const query  = guideInput?.value.trim().toLowerCase() ?? '';
+    const answer = guideAnswers[query];
+    if (guideResult) {
+        guideResult.querySelector('.guide-result-text').textContent =
+            answer ?? 'No result found for that search.';
+        guideResult.classList.toggle('guide-result--found',   !!answer);
+        guideResult.classList.toggle('guide-result--missing', !answer);
+    }
+}
+
+guideSearchBtn?.addEventListener('click', runGuideSearch);
+guideInput?.addEventListener('keydown', e => { if (e.key === 'Enter') runGuideSearch(); });
+
+/* ============================================================
    EXTRA PANELS TOGGLE
    ============================================================ */
 const extraToggle = document.getElementById('link-extra');
