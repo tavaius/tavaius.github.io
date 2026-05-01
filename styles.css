@@ -202,6 +202,57 @@ header .title {
     line-height: 1.2;
 }
 
+/* ============================================================
+   GUIDE SEARCH
+   ============================================================ */
+.guide-search-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 14px;
+}
+
+.guide-input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: box-shadow .15s;
+}
+
+.guide-input:focus {
+    box-shadow: 0 0 0 3px rgba(30,144,255,.18);
+}
+
+.guide-result {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: #f0f6ff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    transition: background .2s, border-color .2s;
+}
+
+.guide-result--found {
+    background: #e6f7e9;
+    border-color: #9ad4a3;
+    color: #145c2e;
+}
+
+.guide-result--missing {
+    background: #fff5f5;
+    border-color: #f5a3a3;
+    color: var(--danger);
+}
+
 aside.sidebar {
     grid-area: sidebar;
     background: #f0f6ff;
