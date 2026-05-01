@@ -703,8 +703,31 @@ CALLER/PATIENT TO CALL BACK LATER.">
             </section>
             <section id="page-guide" class="page">
             <div class="cad-wrap">
+                <div class="panel-heading">
+                    <div class="panel-title">Guide</div>
+                    <div class="subtext">Search for a topic below.</div>
+                </div>
+
+                <div class="guide-search-wrap">
+                    <input id="guide-input" class="guide-input" type="text" list="guide-options" placeholder="Search..." autocomplete="off" />
+                    <datalist id="guide-options">
+                <!-- ==========================================
+                     AUTOCOMPLETE OPTIONS — edit these freely
+                     ========================================== -->
+                        <option value="Test1">
+                        <option value="Test2">
+                        <option value="Chest Pain">
+                        <option value="Breathing Difficulty">
+                <!-- add more <option value="..."> lines here -->
+                    </datalist>
+                    <button id="guide-search-btn" class="confirm-btn">Search</button>
+                </div>
+
+                <div id="guide-result" class="guide-result">
+                    <span class="guide-result-text">Enter a search term above.</span>
+                </div>
             </div>
-            </section>
+        </section>
         </main>
     </div>
     <script src="app.js"></script>
