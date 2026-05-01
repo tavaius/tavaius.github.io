@@ -234,7 +234,7 @@ header .title {
     border: 1px solid var(--border);
     background: #f0f6ff;
     font-size: 1.15rem;
-    font-weight: 600;
+    font-weight: 400;
     min-height: 56px;
     display: flex;
     align-items: center;
