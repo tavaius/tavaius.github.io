@@ -139,7 +139,8 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 // value: the text shown in the result label
 // ==========================================
 const guideAnswers = {
-    'Is the problem stopping (you/them) from doing ALL of (your/their) everyday activities now?':               'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.',
+    'Is the problem stopping you from doing ALL of your everyday activities now?':               'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.',
+    'Is the problem stopping them from doing ALL of their everyday activities now?':               'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.',
     'test2':               'This is test2.',
     'chest pain':          'For chest pain, follow the cardiac pathway. Ensure 999 is considered.',
     'breathing difficulty': 'For breathing difficulty, assess severity and consider immediate dispatch.',
