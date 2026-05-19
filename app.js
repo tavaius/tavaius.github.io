@@ -37,6 +37,13 @@ function showSuccessBar() {
     }, 10000);
 }
 
+/* program mode thing */
+let csdMode = 'call-taker';
+document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => csdMode = 'call-taker');
+document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => csdMode = 'call-taker-coach');
+document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('click', () => csdMode = 'csd');
+document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => csdMode = 'ops');
+
 /* ---------- Validation panel: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
 function openExclusive(panel) {
