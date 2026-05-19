@@ -442,7 +442,7 @@ main {
     box-shadow: var(--shadow);
     padding: 12px;
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto;
     overflow: hidden;
 }
 
