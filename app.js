@@ -38,11 +38,60 @@ function showSuccessBar() {
 }
 
 /* program mode thing */
+
+let csdExtension = null; // only set for CSD/OPS modes
+
+function promptExtension() {
+    while (true) {
+        const raw = prompt('Enter your 5-digit extension:');
+
+        if (raw === null) return null; // user hit Cancel
+
+        const trimmed = raw.trim();
+
+        if (trimmed === '') {
+            alert('Extension cannot be empty. Please enter your extension.');
+            continue;
+        }
+
+        if (!/^\d{5}$/.test(trimmed)) {
+            alert('Invalid extension — must be exactly 5 digits. Please try again.');
+            continue;
+        }
+
+        return trimmed; // valid
+    }
+}
+
 let csdMode = 'call-taker';
-document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => csdMode = 'call-taker');
-document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => csdMode = 'call-taker-coach');
-document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('click', () => csdMode = 'csd');
-document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => csdMode = 'ops');
+
+document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('click', () => {
+    const ext = promptExtension();
+    if (ext === null) return;
+    csdMode = 'csd';
+    csdExtension = ext;
+    updateCsdTabState();
+});
+
+document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => {
+    const ext = promptExtension();
+    if (ext === null) return;
+    csdMode = 'ops';
+    csdExtension = ext;
+    updateCsdTabState();
+});
+
+document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => {
+    csdMode = 'call-taker';
+    csdExtension = null;
+    updateCsdTabState();
+});
+
+document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => {
+    csdMode = 'call-taker-coach';
+    csdExtension = null;
+    updateCsdTabState();
+});
 
 /* ---------- Validation panel: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
@@ -405,8 +454,6 @@ updateLlGenerateState();
 /* ============================================================
    CSD NOTES
    ============================================================ */
-const csdExtensionInput = document.getElementById('csd-extension');
-const csdExtensionSet = document.getElementById('csd-extension-set');
 const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
 
 function setCsdTabLocked(locked) {
@@ -416,28 +463,13 @@ function setCsdTabLocked(locked) {
     csdTabBtn.classList.toggle('locked', locked);
 }
 
-function updateCsdExtensionState() {
-    if (!csdExtensionInput || !csdExtensionSet) return;
-    csdExtensionInput.value = csdExtensionInput.value.replace(/\D/g, '').slice(0, 5);
-    const val = csdExtensionInput.value.trim();
-    const isSaved = csdExtensionInput.readOnly && val.length === 5;
-    csdExtensionSet.disabled = csdExtensionInput.readOnly || val.length !== 5;
-    setCsdTabLocked(!isSaved);
+// CSD tab is only unlocked when mode is csd or ops (and extension is set)
+function updateCsdTabState() {
+    const unlocked = (csdMode === 'csd' || csdMode === 'ops') && !!csdExtension;
+    setCsdTabLocked(!unlocked);
 }
 
-csdExtensionInput?.addEventListener('input', updateCsdExtensionState);
-
-csdExtensionSet?.addEventListener('click', () => {
-    if (!csdExtensionInput || !csdExtensionSet) return;
-    const val = csdExtensionInput.value.trim();
-    if (val.length !== 5) return;
-    csdExtensionInput.readOnly = true;
-    csdExtensionSet.disabled = true;
-    showSuccessBar();
-    setCsdTabLocked(false);
-});
-
-updateCsdExtensionState();
+updateCsdTabState();
 
 /* ---------- Copy flash helper ---------- */
 function runCopyFlash(chip) {
@@ -468,12 +500,11 @@ document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-ch
 
 /* ---------- CSD Templates: copy with extension insertion ---------- */
 function getCsdTemplateText(templateId) {
-    const ext = csdExtensionInput?.value.trim();
-    if (!ext || ext.length !== 5) {
-        alert('Please enter your CSD Extension first.');
-        csdExtensionInput?.focus();
+    if (!csdExtension) {
+        alert('No extension set. Please select CSD Duties first.');
         return null;
     }
+    const ext = csdExtension;
 
     const base = `CSD ${ext} -> `;
 
