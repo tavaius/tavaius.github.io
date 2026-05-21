@@ -451,6 +451,12 @@ llCopy?.addEventListener('click', () => {
 /* Init */
 updateLlGenerateState();
 
+function updateCoachChip() {
+    const coachChip = document.querySelector('.script-chip-chase');
+    if (!coachChip) return;
+    coachChip.classList.toggle('hidden', csdMode !== 'call-taker-coach');
+}
+
 /* ============================================================
    CSD NOTES
    ============================================================ */
