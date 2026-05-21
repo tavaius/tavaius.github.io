@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    HELPERS — defined first so they're available everywhere
    ============================================================ */
 
@@ -79,15 +79,27 @@ function updateSidebarStatus() {
     dot.className = `status-dot ${info.dotClass}`;
 }
 
+function showsCoachTemplates() {
+    return csdMode === 'call-taker-coach' || csdMode === 'ops';
+}
+
 function updateCoachChip() {
     const coachSection = document.getElementById('coach-scripts-section');
     if (!coachSection) return;
-    coachSection.classList.toggle('hidden', csdMode !== 'call-taker-coach');
+    coachSection.classList.toggle('hidden', !showsCoachTemplates());
+}
+
+function updateTemplatePanels() {
+    const csdPanel = document.getElementById('csd-templates-panel');
+    const opsPanel = document.getElementById('ops-templates-panel');
+    if (csdPanel) csdPanel.classList.toggle('hidden', csdMode !== 'csd');
+    if (opsPanel) opsPanel.classList.toggle('hidden', csdMode !== 'ops');
 }
 
 function updateDutyState() {
     updateCsdTabState();
     updateCoachChip();
+    updateTemplatePanels();
     updateSidebarStatus();
 }
 

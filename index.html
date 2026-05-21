@@ -547,10 +547,10 @@ CALLER/PATIENT TO CALL BACK LATER.">
                 </div>
             </section>
             <section id="page-csd" class="page">
-                <div class="cad-wrap">
+                <div id="csd-templates-panel" class="cad-wrap template-panel hidden">
                     <div class="panel-heading">
-                        <div class="panel-title">CSD Notes</div>
-                        <div class="subtext">Use quick templates to copy CSD-specific notes without leaving this page.</div>
+                        <div class="panel-title">CSD Templates</div>
+                        <div class="subtext">Use these quick templates to copy CSD-specific notes without spending too much time.</div>
                     </div>
                     <div class="csd-templates" style="margin-top:14px;">
                         <button class="script-chip script-chip-csd" type="button" data-template="1">
@@ -570,6 +570,32 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         </button>
                         <button class="script-chip script-chip-csd script-chip-csd-red" type="button" data-template="6">
                             CB2, NO VM
+                        </button>
+                    </div>
+                </div>
+                <div id="ops-templates-panel" class="cad-wrap template-panel hidden">
+                    <div class="panel-heading">
+                        <div class="panel-title">OPS Templates</div>
+                        <div class="subtext">Use these quick templates to copy OPS-specific notes without spending too much time.</div>
+                    </div>
+                    <div class="ops-templates-grid">
+                        <button class="script-chip script-chip-ops" type="button"
+                                data-copy="OPENED FOR IN-LINE SUPPORT">
+                            OPENED FOR IN-LINE SUPPORT
+                        </button>
+                        <button class="script-chip script-chip-ops-orange" type="button" data-copy="REPLACE ME">
+                            ENTER ORANGE FLAG
+                        </button>
+                        <button class="script-chip script-chip-ops-orange" type="button"
+                                data-copy="LISTENING INTO YOUR CALL NOW">
+                            LISTENING TO CALL
+                        </button>
+                        <button class="script-chip script-chip-ops-orange" type="button" data-copy="REPLACE ME">
+                            LEAVE ORANGE FLAG
+                        </button>
+                        <button class="script-chip script-chip-ops-orange" type="button"
+                                data-copy="JUST REVIEWING THE CASE NOTES AND PATHWAYS SUMMARY, ONE MOMENT">
+                            VIEWING CALL NOTES
                         </button>
                     </div>
                 </div>

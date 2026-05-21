@@ -833,7 +833,7 @@ ul.symptoms-col li{
     background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 12px;
+    padding: 0 12px 12px;
 }
 
 .csd-extension-row {
@@ -905,7 +905,32 @@ ul.symptoms-col li{
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
+    margin-top: 0;
+}
+
+.template-panel + .template-panel {
     margin-top: 12px;
+}
+
+.ops-templates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.ops-templates-grid > .script-chip:first-child {
+    grid-column: 1 / -1;
+}
+
+.script-chip-ops {
+    background: #ffeecb;
+    color: #000;
+}
+
+.script-chip-ops-orange {
+    background: #ffcc80;
+    color: #000;
 }
 
 .script-chip {
