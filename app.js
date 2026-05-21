@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    HELPERS — defined first so they're available everywhere
    ============================================================ */
 
@@ -118,9 +118,6 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
     csdExtension = ext;
     updateDutyState();
 });
-
-// init
-updateDutyState();
 
 /* ---------- Task panels: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
@@ -497,6 +494,8 @@ function updateCsdTabState() {
     const unlocked = (csdMode === 'csd' || csdMode === 'ops') && !!csdExtension;
     setCsdTabLocked(!unlocked);
 }
+
+updateDutyState();
 
 /* ---------- Copy flash helper ---------- */
 function runCopyFlash(chip) {
