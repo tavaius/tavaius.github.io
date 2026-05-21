@@ -417,12 +417,13 @@ updateLabAddState();
 updateLabGenerateState();
 
 /* ============================================================
-   FLU TABLE LAST ROW TOGGLE
+   COLD & FLU SYMPTOMS (starts expanded)
    ============================================================ */
 const fluToggle = document.getElementById('flu-toggle');
-const fluRow = document.querySelector('.flu-table tr:last-child');
-if (fluRow) fluRow.classList.add('flu-hidden'); // start hidden
+const fluRow = document.getElementById('flu-body');
 if (fluToggle && fluRow) {
+    fluRow.classList.remove('flu-hidden');
+    fluToggle.textContent = '[hide]';
     fluToggle.addEventListener('click', () => {
         fluRow.classList.toggle('flu-hidden');
         fluToggle.textContent = fluRow.classList.contains('flu-hidden') ? '[show]' : '[hide]';
