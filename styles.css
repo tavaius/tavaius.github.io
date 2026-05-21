@@ -428,7 +428,7 @@ main {
     }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 #page-notepad .editor-wrap {
