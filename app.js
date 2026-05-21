@@ -65,12 +65,27 @@ function promptExtension() {
 
 let csdMode = 'call-taker';
 
+document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => {
+    csdMode = 'call-taker';
+    csdExtension = null;
+    updateCsdTabState();
+    updateCoachChip();
+});
+
+document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => {
+    csdMode = 'call-taker-coach';
+    csdExtension = null;
+    updateCsdTabState();
+    updateCoachChip();
+});
+
 document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('click', () => {
     const ext = promptExtension();
     if (ext === null) return;
     csdMode = 'csd';
     csdExtension = ext;
     updateCsdTabState();
+    updateCoachChip();
 });
 
 document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => {
@@ -79,19 +94,11 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
     csdMode = 'ops';
     csdExtension = ext;
     updateCsdTabState();
+    updateCoachChip();
 });
 
-document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => {
-    csdMode = 'call-taker';
-    csdExtension = null;
-    updateCsdTabState();
-});
-
-document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => {
-    csdMode = 'call-taker-coach';
-    csdExtension = null;
-    updateCsdTabState();
-});
+// init
+updateCoachChip();
 
 /* ---------- Validation panel: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
