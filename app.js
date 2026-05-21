@@ -983,7 +983,6 @@ if (shiftPanel) {
    INIT STATES — run after everything is defined
    ============================================================ */
 load();
-updateConfirmState();
 updateOpsConfirmState();
 
 
