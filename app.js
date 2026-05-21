@@ -94,6 +94,9 @@ function updateTemplatePanels() {
     const opsPanel = document.getElementById('ops-templates-panel');
     if (csdPanel) csdPanel.classList.toggle('hidden', csdMode !== 'csd');
     if (opsPanel) opsPanel.classList.toggle('hidden', csdMode !== 'ops');
+    document.querySelectorAll('.flu-csd-callback').forEach(el => {
+        el.classList.toggle('hidden', csdMode !== 'csd');
+    });
 }
 
 function updateDutyState() {

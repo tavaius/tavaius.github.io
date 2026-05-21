@@ -833,7 +833,11 @@ ul.symptoms-col li{
     background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 0 12px 12px;
+    padding: 12px;
+}
+
+.csd-extension .csd-templates {
+    margin: 0;
 }
 
 .csd-extension-row {
@@ -923,14 +927,35 @@ ul.symptoms-col li{
     grid-column: 1 / -1;
 }
 
-.script-chip-ops {
-    background: #ffeecb;
+.ops-templates-grid .script-chip-ops {
+    background: #ffe0b2 !important;
     color: #000;
 }
 
-.script-chip-ops-orange {
-    background: #ffcc80;
+.ops-templates-grid .script-chip-ops-orange {
+    background: #f5a623 !important;
     color: #000;
+}
+
+.ops-templates-grid .script-chip-ops.copy-flash,
+.ops-templates-grid .script-chip-ops-orange.copy-flash {
+    animation: chip-copy-flash-ops .6s ease;
+}
+
+@keyframes chip-copy-flash-ops {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, .12), 0 6px 10px rgba(0, 0, 0, .08);
+        transform: translateY(-1px);
+    }
+
+    60% {
+        box-shadow: 0 0 0 6px rgba(230, 126, 34, .35), 0 2px 6px rgba(0, 0, 0, .06);
+    }
+
+    100% {
+        box-shadow: none;
+        transform: none;
+    }
 }
 
 .script-chip {
