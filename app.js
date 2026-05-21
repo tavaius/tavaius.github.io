@@ -37,8 +37,6 @@ function showSuccessBar() {
     }, 10000);
 }
 
-/* program mode thing */
-
 let csdExtension = null; // only set for CSD/OPS modes
 
 function promptExtension() {
@@ -100,7 +98,7 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
 // init
 updateCoachChip();
 
-/* ---------- Validation panel: openExclusive ---------- */
+/* ---------- Task panels: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
 function openExclusive(panel) {
     allPanels.forEach(p => {
@@ -459,10 +457,9 @@ llCopy?.addEventListener('click', () => {
 updateLlGenerateState();
 
 function updateCoachChip() {
-    const coachChip = document.querySelector('.script-chip-chase');
-    console.log('updateCoachChip fired | mode:', csdMode, '| chip found:', !!coachChip);
-    if (!coachChip) return;
-    coachChip.classList.toggle('hidden', csdMode !== 'call-taker-coach');
+    const mentorChip = document.getElementById('chip-opened-for-mentoring');
+    if (!mentorChip) return;
+    mentorChip.classList.toggle('hidden', csdMode !== 'call-taker-coach');
 }
 
 /* ============================================================
@@ -967,7 +964,6 @@ shiftLock2?.addEventListener('click', async () => {
     await ensureNotifyPermission();
 
     // schedule the toasts
-    // yummers
     if (br1) scheduleBreak(br1, 'Break 1');
     if (br2) scheduleBreak(br2, 'Break 2');
     if (br3) scheduleBreak(br3, 'Break 3');

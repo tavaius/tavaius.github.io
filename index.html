@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
       <script>
       const password = prompt("This project is temporarily suspended.\nSorry! For more information, please contact Tavaius Wisbey.\n\nEnter password to continue:");
-      if (password !== "servicemerchandiser") { <!-- unsecure password, bite me. i dont care. -->
+      if (password !== "servicemerchandiser") { // gate for internal use only
         window.location.replace("https://www.google.com");
       }
     </script>
@@ -533,7 +533,7 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
-                    <br><button class="script-chip script-chip-chase script-chip-special hidden" type="button"
+                    <button id="chip-opened-for-mentoring" class="script-chip script-chip-chase hidden" type="button"
                             data-copy="OPENED FOR MENTORING.">
                         OPENED FOR MENTORING.
                     </button>
