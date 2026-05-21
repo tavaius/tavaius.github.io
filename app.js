@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    HELPERS — defined first so they're available everywhere
    ============================================================ */
 
@@ -235,9 +235,13 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 // key: exactly matches the search term (case-insensitive)
 // value: the text shown in the result label
 // ==========================================
+const everydayActivitiesAnswer =
+    'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.';
+
 const guideAnswers = {
-    'Is the problem stopping you from doing ALL of your everyday activities now?':               'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.',
-    'Is the problem stopping them from doing ALL of their everyday activities now?':               'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.',
+    'Is the problem stopping (you/them) from doing ALL of (your/their) everyday activities now?': everydayActivitiesAnswer,
+    'Is the problem stopping you from doing ALL of your everyday activities now?':               everydayActivitiesAnswer,
+    'Is the problem stopping them from doing ALL of their everyday activities now?':               everydayActivitiesAnswer,
     'test2':               'This is test2.',
     'chest pain':          'For chest pain, follow the cardiac pathway. Ensure 999 is considered.',
     'breathing difficulty': 'For breathing difficulty, assess severity and consider immediate dispatch.',
@@ -248,9 +252,13 @@ const guideInput     = document.getElementById('guide-input');
 const guideSearchBtn = document.getElementById('guide-search-btn');
 const guideResult    = document.getElementById('guide-result');
 
+const guideAnswersByKey = Object.fromEntries(
+    Object.entries(guideAnswers).map(([key, value]) => [key.toLowerCase(), value])
+);
+
 function runGuideSearch() {
     const query  = guideInput?.value.trim().toLowerCase() ?? '';
-    const answer = guideAnswers[query];
+    const answer = guideAnswersByKey[query];
     if (guideResult) {
         guideResult.querySelector('.guide-result-text').textContent =
             answer ?? 'No result found for that search.';
