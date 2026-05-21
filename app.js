@@ -64,10 +64,10 @@ function promptExtension() {
 let csdMode = 'call-taker';
 
 const SIDEBAR_STATUS = {
-    'call-taker': { label: 'Call Taking', dotClass: 'status-dot--call-taker' },
-    'call-taker-coach': { label: 'Call Taking (Coach)', dotClass: 'status-dot--call-taker' },
-    csd: { label: 'CSD Support', dotClass: 'status-dot--csd' },
-    ops: { label: 'OPS Support', dotClass: 'status-dot--ops' },
+    'call-taker': { label: '📞 Call Taking', dotClass: 'status-dot--call-taker' },
+    'call-taker-coach': { label: '📞 Call Taking (Coach)', dotClass: 'status-dot--call-taker' },
+    csd: { label: '📋 CSD Support', dotClass: 'status-dot--csd' },
+    ops: { label: '🎧 OPS Support', dotClass: 'status-dot--ops' },
 };
 
 function updateSidebarStatus() {
