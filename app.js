@@ -500,8 +500,8 @@ document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-ch
 
 /* ---------- CSD Templates: copy with extension insertion ---------- */
 function getCsdTemplateText(templateId) {
-    if (!csdExtension) {
-        alert('No extension set. Please select CSD Duties first.');
+    if ((csdMode === 'csd' || csdMode === 'ops') && !csdExtension) {
+        alert('No extension set. Please select CSD Duties or OPS Duties first.');
         return null;
     }
     const ext = csdExtension;
