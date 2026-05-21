@@ -47,6 +47,13 @@
                     <span class="label">Information</span>
                 </button>
             </nav>
+            <div class="sidebar-status" id="sidebar-status" aria-live="polite">
+                <div class="sidebar-status-heading">Current Status:</div>
+                <div class="sidebar-status-row">
+                    <span class="status-dot status-dot--call-taker" id="sidebar-status-dot" aria-hidden="true"></span>
+                    <span class="sidebar-status-label" id="sidebar-status-label">Call Taking</span>
+                </div>
+            </div>
         </aside>
         <header>
             <div class="header-left">
@@ -309,7 +316,6 @@
                         </button>
                     </div>
                     <div id="lab-panel" class="val-panel" aria-hidden="true">
-                        <br>
                         <div class="val-grid">
                             <div>
                                 <span class="label">Hospital Laboratory</span>
@@ -374,7 +380,6 @@
 
                     <!-- LanguageLine Panel -->
                     <div id="ll-panel" class="val-panel" aria-hidden="true">
-                        <br>
                         <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:10px;">
                             <div style="flex:1;">
                                 <span class="label">Interpreter ID</span>
@@ -396,7 +401,6 @@
 
                     <!-- Repeat Prescriptions Panel -->
                     <div id="rp-panel" class="val-panel" aria-hidden="true">
-                        <br>
                         <!-- Input row -->
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                             <input id="rp-input" class="desc-input" type="text" placeholder=""
@@ -533,7 +537,10 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
-                    <button id="chip-opened-for-mentoring" class="script-chip script-chip-chase hidden" type="button"
+                </div>
+                <div id="coach-scripts-section" class="coach-scripts hidden">
+                    <p class="scripts-section-label">⎯⎯⎯⎯⎯ Coaches Templates ⎯⎯⎯⎯⎯</p>
+                    <button id="chip-opened-for-mentoring" class="script-chip script-chip-chase" type="button"
                             data-copy="OPENED FOR MENTORING.">
                         OPENED FOR MENTORING.
                     </button>

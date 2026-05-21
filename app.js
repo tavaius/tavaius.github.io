@@ -63,18 +63,44 @@ function promptExtension() {
 
 let csdMode = 'call-taker';
 
+const SIDEBAR_STATUS = {
+    'call-taker': { label: 'Call Taking', dotClass: 'status-dot--call-taker' },
+    'call-taker-coach': { label: 'Call Taking (Coach)', dotClass: 'status-dot--call-taker' },
+    csd: { label: 'CSD Support', dotClass: 'status-dot--csd' },
+    ops: { label: 'OPS Support', dotClass: 'status-dot--ops' },
+};
+
+function updateSidebarStatus() {
+    const dot = document.getElementById('sidebar-status-dot');
+    const label = document.getElementById('sidebar-status-label');
+    if (!dot || !label) return;
+    const info = SIDEBAR_STATUS[csdMode] || SIDEBAR_STATUS['call-taker'];
+    label.textContent = info.label;
+    dot.className = `status-dot ${info.dotClass}`;
+}
+
+function updateCoachChip() {
+    const coachSection = document.getElementById('coach-scripts-section');
+    if (!coachSection) return;
+    coachSection.classList.toggle('hidden', csdMode !== 'call-taker-coach');
+}
+
+function updateDutyState() {
+    updateCsdTabState();
+    updateCoachChip();
+    updateSidebarStatus();
+}
+
 document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventListener('click', () => {
     csdMode = 'call-taker';
     csdExtension = null;
-    updateCsdTabState();
-    updateCoachChip();
+    updateDutyState();
 });
 
 document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => {
     csdMode = 'call-taker-coach';
     csdExtension = null;
-    updateCsdTabState();
-    updateCoachChip();
+    updateDutyState();
 });
 
 document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('click', () => {
@@ -82,8 +108,7 @@ document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('c
     if (ext === null) return;
     csdMode = 'csd';
     csdExtension = ext;
-    updateCsdTabState();
-    updateCoachChip();
+    updateDutyState();
 });
 
 document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => {
@@ -91,12 +116,11 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
     if (ext === null) return;
     csdMode = 'ops';
     csdExtension = ext;
-    updateCsdTabState();
-    updateCoachChip();
+    updateDutyState();
 });
 
 // init
-updateCoachChip();
+updateDutyState();
 
 /* ---------- Task panels: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
@@ -456,12 +480,6 @@ llCopy?.addEventListener('click', () => {
 /* Init */
 updateLlGenerateState();
 
-function updateCoachChip() {
-    const mentorChip = document.getElementById('chip-opened-for-mentoring');
-    if (!mentorChip) return;
-    mentorChip.classList.toggle('hidden', csdMode !== 'call-taker-coach');
-}
-
 /* ============================================================
    CSD NOTES
    ============================================================ */
@@ -479,8 +497,6 @@ function updateCsdTabState() {
     const unlocked = (csdMode === 'csd' || csdMode === 'ops') && !!csdExtension;
     setCsdTabLocked(!unlocked);
 }
-
-updateCsdTabState();
 
 /* ---------- Copy flash helper ---------- */
 function runCopyFlash(chip) {
@@ -839,8 +855,7 @@ tabs.forEach(btn => btn.addEventListener('click', () => {
     const csdLocked = csdTabBtn?.dataset.locked === 'true';
 
     if (isCsdTab && csdLocked) {
-        alert('Please enter your CSD Extension first.');
-        csdExtensionInput?.focus();
+        alert('These are templates for CSD/OPS only.\nChange your status to access this.');
         return;
     }
 
