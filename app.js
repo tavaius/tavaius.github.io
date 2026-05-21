@@ -533,7 +533,7 @@ function copyCsdTemplate(chip, templateId) {
     copyToClipboard(text, () => runCopyFlash(chip));
 }
 
-document.querySelectorAll('.script-chip-csd').forEach(chip => {
+document.querySelectorAll('.script-chip-csd[data-template]').forEach(chip => {
     const templateId = chip.dataset.template;
     chip.addEventListener('click', () => copyCsdTemplate(chip, templateId));
 });
