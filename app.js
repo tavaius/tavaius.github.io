@@ -460,6 +460,7 @@ updateLlGenerateState();
 
 function updateCoachChip() {
     const coachChip = document.querySelector('.script-chip-chase');
+    console.log('updateCoachChip fired | mode:', csdMode, '| chip found:', !!coachChip);
     if (!coachChip) return;
     coachChip.classList.toggle('hidden', csdMode !== 'call-taker-coach');
 }
