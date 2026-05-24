@@ -15,40 +15,6 @@
     <link rel="icon" href="favicon.ico">
 </head>
 <body>
-
-<div class="gate">
-    <h2>🔒 Access Required</h2>
-    <p>This project is temporarily suspended.<br>Contact Tavaius Wisbey for access.</p>
-    <input type="password" id="pw" placeholder="Enter password" />
-    <button onclick="checkPassword()">Enter</button>
-    <div class="error" id="err"></div>
-  </div>
-
-  <script>
-    // SHA-256 hash of your password — generated at: https://emn178.github.io/online-tools/sha256.html
-    // Hash below = sha256("servicemerchandiser")
-    const CORRECT_HASH = "b94f2c1a8e3d6b7f2e5c9a0d4f1b8e3d6a7c2f5b9e0d3a6c1f4b7e2d5a8c3f6";
-    //                    ^ replace this with YOUR actual hash (see instructions below)
-
-    async function checkPassword() {
-      const input = document.getElementById("pw").value;
-      const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
-      const hash = Array.from(new Uint8Array(buffer)).map(b => b.to String(16).padStart(2, "0")).join("");
-
-      if (hash === CORRECT_HASH) {
-        sessionStorage.setItem("auth", "1");
-        window.location.reload(); // or redirect to your actual content
-      } else {
-        document.getElementById("err").textContent = "Incorrect password.";
-      }
-    }
-
-    // Block page if not authenticated
-    if (sessionStorage.getItem("auth") !== "1") {
-      document.body.innerHTML = document.querySelector(".gate").outerHTML;
-    }
-  </script>
-    
     <div class="app">
         <aside class="sidebar" role="navigation" aria-label="Primary">
             <nav class="tabs">
