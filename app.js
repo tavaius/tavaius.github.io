@@ -85,10 +85,8 @@ function showsCoachTemplates() {
 
 function updateCoachChip() {
     const coachSection = document.getElementById('coach-scripts-section');
-    const opsPanel = document.getElementById('ops-templates-panel');
     const show = showsCoachTemplates();
     if (coachSection) coachSection.classList.toggle('hidden', !show);
-    if (opsPanel) opsPanel.classList.toggle('hidden', !show);
 }
 
 function updateTemplatePanels() {
@@ -232,8 +230,8 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 
 // ==========================================
 // SEARCH ANSWERS — edit these freely
-// key: exactly matches the search term (case-insensitive)
-// value: the text shown in the result label
+// key: search term (also used for autocomplete suggestions)
+// value: the text shown in the result box (\n for line breaks)
 // ==========================================
 const everydayActivitiesAnswer =
     'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.';
@@ -255,6 +253,19 @@ const guideResult    = document.getElementById('guide-result');
 const guideAnswersByKey = Object.fromEntries(
     Object.entries(guideAnswers).map(([key, value]) => [key.toLowerCase(), value])
 );
+
+function populateGuideDatalist() {
+    const datalist = document.getElementById('guide-options');
+    if (!datalist) return;
+    datalist.replaceChildren();
+    for (const key of Object.keys(guideAnswers)) {
+        const option = document.createElement('option');
+        option.value = key;
+        datalist.appendChild(option);
+    }
+}
+
+populateGuideDatalist();
 
 function runGuideSearch() {
     const query  = guideInput?.value.trim().toLowerCase() ?? '';

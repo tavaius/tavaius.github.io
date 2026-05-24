@@ -544,10 +544,7 @@ CALLER/PATIENT TO CALL BACK LATER.">
                             data-copy="OPENED FOR MENTORING.">
                         OPENED FOR MENTORING.
                     </button>
-                </div>
-                <div id="ops-templates-panel" class="coach-scripts hidden">
-                    <p class="scripts-section-label">⎯⎯⎯⎯⎯ OPS Templates ⎯⎯⎯⎯⎯</p>
-                    <div class="ops-templates-grid">
+                    <div class="ops-templates-grid ops-templates-grid--coach">
                         <button class="script-chip script-chip-ops-orange" type="button"
                                 data-copy="OPENED FOR IN-LINE SUPPORT">
                             OPENED FOR IN-LINE SUPPORT
@@ -643,7 +640,8 @@ Please let me know on Teams if you need anything else or speak to a HATL on shif
                 </div>
 
                 <div class="guide-search-wrap">
-                    <input id="guide-input" class="guide-input" type="text" placeholder="Search..." autocomplete="off" />
+                    <input id="guide-input" class="guide-input" type="text" list="guide-options" placeholder="Search..." autocomplete="off" />
+                    <datalist id="guide-options"></datalist>
                 </div>
                 <div id="guide-result" class="guide-result">
                     <span class="guide-result-text">Enter a Pathways question for further guidance and advice.</span>

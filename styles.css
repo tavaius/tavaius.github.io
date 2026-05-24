@@ -922,6 +922,10 @@ ul.symptoms-col li{
     margin-top: 12px;
 }
 
+.coach-scripts .ops-templates-grid--coach {
+    margin-top: 8px;
+}
+
 .coach-scripts .ops-templates-grid {
     margin-top: 0;
 }
