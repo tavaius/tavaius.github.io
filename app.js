@@ -234,16 +234,33 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 // value: the text shown in the result box (\n for line breaks)
 // ==========================================
 const everydayActivitiesAnswer =
-    'This question focuses on what they can do right now. A few examples can include, but not limited to:\n• Getting dressed\n• Making a drink\n• Scrolling through a phone\n• Focus on watching TV\nIt is important we do not use going to the toilet as an example.';
+    'This question focuses on what they can do at the time of the assessment so right now. A few examples can include, but not limited to:\n• Get changed\n• Make a drink\n• Watch TV\n• Read a book\n\nDo not use going to the toilet as an example.';
+
+const edeathlyAnswer =
+    'IMPORTANT: Before selecting "yes", read this to the patient:\n\n"On brown or black skin, you can check the palms of the hands for changes in colour."\n\nWe are looking for grey, blue or otherwise extremely pale. If they still answer "yes" go with it, ensuring you have probed with the other supporting information.';
+
+const touchAnswer =
+    'A clearer way to ask this question is:\n\n"If you place your hand on the skin of your/their chest, does it feel a normal temperature?"\n\nThis question is ruling out shock, NOT a fever. Do not except answers like "I dont have a fever" or if they checked at any time other than right now.';
+
+const breathlessAnswer =
+    'If you are talking to the patient, and they are able to say more than a sentence to you, you can select "no". This question is looking for someone who is fighting desperately for every single breath they take.\n\nAnything less than this, you can select "no".';
+
+const bloodLossAnswer =
+    'So since the problem has began, has there been ANY blood loss at all, even if it is unrelated to the problem. This INCLUDES things like:\n• Unrelated injuries\n• Nosebleeds\n• Periods (for females)\n\nNote that urinating blood DOES count for this question, but not for the next question.';
 
 const guideAnswers = {
-    'Is the problem stopping (you/them) from doing ALL of (your/their) everyday activities now?': everydayActivitiesAnswer,
-    'Is the problem stopping you from doing ALL of your everyday activities now?':               everydayActivitiesAnswer,
-    'Is the problem stopping them from doing ALL of their everyday activities now?':               everydayActivitiesAnswer,
-    'test2':               'This is test2.',
-    'chest pain':          'For chest pain, follow the cardiac pathway. Ensure 999 is considered.',
-    'breathing difficulty': 'For breathing difficulty, assess severity and consider immediate dispatch.',
-    // add more 'term': 'answer' lines here
+    'Is the problem stopping you from doing ALL of your everyday activities now?': everydayActivitiesAnswer,
+    'Is the problem stopping them from doing ALL of their everyday activities now?': everydayActivitiesAnswer,
+    'Have you lost any blood?': bloodLossAnswer,
+    'Has he lost any blood?': bloodLossAnswer,
+    'Has she lost any blood?': bloodLossAnswer,
+    'Is he a deathly colour?': deathlyAnswer,
+    'Is she a deathly colour?': deathlyAnswer,
+    'Are you a deathly colour?': deathlyAnswer,
+    'Are you so breathless that speaking more than a few words is impossible?': breathlessAnswer,
+    'Is she so breathless that speaking more than a few words is impossible?': breathlessAnswer,
+    'Is he so breathless that speaking more than a few words is impossible?': breathlessAnswer,
+    'Does the skin on the chest, back or abdomen feel a normal temperature when touched?': touchAnswer,
 };
 
 const guideInput     = document.getElementById('guide-input');
