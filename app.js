@@ -236,7 +236,7 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 const everydayActivitiesAnswer =
     'This question focuses on what they can do at the time of the assessment so right now. A few examples can include, but not limited to:\n• Get changed\n• Make a drink\n• Watch TV\n• Read a book\n\nDo not use going to the toilet as an example.';
 
-const edeathlyAnswer =
+const deathlyAnswer =
     'IMPORTANT: Before selecting "yes", read this to the patient:\n\n"On brown or black skin, you can check the palms of the hands for changes in colour."\n\nWe are looking for grey, blue or otherwise extremely pale. If they still answer "yes" go with it, ensuring you have probed with the other supporting information.';
 
 const touchAnswer =
