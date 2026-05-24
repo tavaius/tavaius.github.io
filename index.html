@@ -545,6 +545,31 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         OPENED FOR MENTORING.
                     </button>
                 </div>
+                <div id="ops-templates-panel" class="coach-scripts hidden">
+                    <p class="scripts-section-label">⎯⎯⎯⎯⎯ OPS Templates ⎯⎯⎯⎯⎯</p>
+                    <div class="ops-templates-grid">
+                        <button class="script-chip script-chip-ops-orange" type="button"
+                                data-copy="OPENED FOR IN-LINE SUPPORT">
+                            OPENED FOR IN-LINE SUPPORT
+                        </button>
+                        <button class="script-chip script-chip-ops" type="button" data-copy="Just listening into the call.
+                            Do you need help or are you okay at the moment?">
+                            ENTER ORANGE FLAG (C1 Only)
+                        </button>
+                        <button class="script-chip script-chip-ops" type="button"
+                                data-copy="Just listening into the call.">
+                            LISTENING TO CALL
+                        </button>
+                        <button class="script-chip script-chip-ops" type="button" data-copy="I will now be exiting the case, but if you need any further support with this, please raise another alert.
+Please let me know on Teams if you need anything else or speak to a HATL on shift.">
+                            LEAVE ORANGE FLAG
+                        </button>
+                        <button class="script-chip script-chip-ops" type="button"
+                                data-copy="I am in the case just reviewing the notes and pathways summary, bare with me.">
+                            VIEWING CALL NOTES
+                        </button>
+                    </div>
+                </div>
             </section>
             <section id="page-csd" class="page">
                 <div id="csd-templates-panel" class="cad-wrap template-panel hidden">
@@ -570,34 +595,6 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         </button>
                         <button class="script-chip script-chip-csd script-chip-csd-red" type="button" data-template="6">
                             CB2, NO VM
-                        </button>
-                    </div>
-                </div>
-                <div id="ops-templates-panel" class="cad-wrap template-panel hidden">
-                    <div class="panel-heading">
-                        <div class="panel-title">OPS Templates</div>
-                        <div class="subtext">Use these quick templates to copy OPS-specific notes without spending too much time.</div>
-                    </div>
-                    <div class="ops-templates-grid">
-                        <button class="script-chip script-chip-ops-orange" type="button"
-                                data-copy="OPENED FOR IN-LINE SUPPORT">
-                            OPENED FOR IN-LINE SUPPORT
-                        </button>
-                        <button class="script-chip script-chip-ops" type="button" data-copy="Just listening into the call.
-                            Do you need help or are you okay at the moment?">
-                            ENTER ORANGE FLAG (C1 Only)
-                        </button>
-                        <button class="script-chip script-chip-ops" type="button"
-                                data-copy="Just listening into the call.">
-                            LISTENING TO CALL
-                        </button>
-                        <button class="script-chip script-chip-ops" type="button" data-copy="I will now be exiting the case, but if you need any further support with this, please raise another alert.
-Please let me know on Teams if you need anything else or speak to a HATL on shift.">
-                            LEAVE ORANGE FLAG
-                        </button>
-                        <button class="script-chip script-chip-ops" type="button"
-                                data-copy="I am in the case just reviewing the notes and pathways summary, bare with me.">
-                            VIEWING CALL NOTES
                         </button>
                     </div>
                 </div>
@@ -646,17 +643,7 @@ Please let me know on Teams if you need anything else or speak to a HATL on shif
                 </div>
 
                 <div class="guide-search-wrap">
-                    <input id="guide-input" class="guide-input" type="text" list="guide-options" placeholder="Search..." autocomplete="off" />
-                    <datalist id="guide-options">
-                <!-- ==========================================
-                     AUTOCOMPLETE OPTIONS — edit these freely
-                     ========================================== -->
-                        <option value="Is the problem stopping (you/them) from doing ALL of (your/their) everyday activities now?">
-                        <option value="Test2">
-                        <option value="Chest Pain">
-                        <option value="Breathing Difficulty">
-                <!-- add more <option value="..."> lines here -->
-                    </datalist>
+                    <input id="guide-input" class="guide-input" type="text" placeholder="Search..." autocomplete="off" />
                 </div>
                 <div id="guide-result" class="guide-result">
                     <span class="guide-result-text">Enter a Pathways question for further guidance and advice.</span>

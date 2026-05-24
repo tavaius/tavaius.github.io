@@ -85,15 +85,15 @@ function showsCoachTemplates() {
 
 function updateCoachChip() {
     const coachSection = document.getElementById('coach-scripts-section');
-    if (!coachSection) return;
-    coachSection.classList.toggle('hidden', !showsCoachTemplates());
+    const opsPanel = document.getElementById('ops-templates-panel');
+    const show = showsCoachTemplates();
+    if (coachSection) coachSection.classList.toggle('hidden', !show);
+    if (opsPanel) opsPanel.classList.toggle('hidden', !show);
 }
 
 function updateTemplatePanels() {
     const csdPanel = document.getElementById('csd-templates-panel');
-    const opsPanel = document.getElementById('ops-templates-panel');
     if (csdPanel) csdPanel.classList.toggle('hidden', csdMode !== 'csd');
-    if (opsPanel) opsPanel.classList.toggle('hidden', csdMode !== 'ops');
     document.querySelectorAll('.flu-csd-callback').forEach(el => {
         el.classList.toggle('hidden', csdMode !== 'csd');
     });
