@@ -248,6 +248,12 @@ const breathlessAnswer =
 const breathingAnswer =
     'A clearer way to ask this question is:\n\n"So when you are doing nothing at all, for example just sitting still, is your breathing any FASTER or HARDER? than normal?"\n\nTry your best to get them to specify if their breathing is specifically HARDER or FASTER, not irrelevant words like "shallow" or "rattled".';
 
+const severeAnswer =
+    'This question is NOT strictly current-tense. We are looking for if, whenever the pain has been at its worst, they cannot do or think about anything else, that is enough to go "Yes" to this question.';
+
+const seriousRashAnswer =
+    'This question is looking for any NEW (so since the problem began) rash, that looks like any of the following:\n• Small red/blue/purple/brown marks\n• Pinprick spots\n• Blood blisters\n• Larger purple blotches\n\nIt is important this rash is UNDER the skin. Keep in mind we can still go "Yes" to this question even if there are seperate parts/areas of the rash that are different to this.';
+
 const staystillAnswer =
     'This question is looking if, right now, the pain is so bad they cannot move AT ALL, otherwise they would be in extreme, unberable pain. Patients often exaggerate this.\n\nA great way to reword this question is:\n"Are you/they still able to move despite the pain?"\nIf they answer yes, we have ruled out they do not have to stay completely still.';
 
@@ -269,6 +275,11 @@ const guideAnswers = {
     'Are you breathing faster or harder when doing nothing at all?': breatingAnswer,
     'Is he breathing faster or harder when doing nothing at all?': breatingAnswer,
     'Is she breathing faster or harder when doing nothing at all?': breatingAnswer,
+    'Is the pain severe?': severeAnswer,
+    'Has he developed new marks, like bruising or bleeding under the skin?': seriousRashAnswer,
+    'Has she developed new marks, like bruising or bleeding under the skin?': seriousRashAnswer,
+    'Does the rash look like blood spots or bruises under the skin?': seriousRashAnswer,
+    'Have you developed new marks, like bruising or bleeding under the skin?': seriousRashAnswer,
     'Are you so breathless that speaking more than a few words is impossible?': breathlessAnswer,
     'Is she so breathless that speaking more than a few words is impossible?': breathlessAnswer,
     'Is he so breathless that speaking more than a few words is impossible?': breathlessAnswer,
