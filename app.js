@@ -234,7 +234,7 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
 // value: the text shown in the result box (\n for line breaks)
 // ==========================================
 const everydayActivitiesAnswer =
-    'This question focuses on what they can do at the time of the assessment so right now. A few examples can include, but not limited to:\n• Get changed\n• Make a drink\n• Watch TV\n• Read a book\n\nDo not use going to the toilet as an example.';
+    'This question focuses on what they can do at the time of the assessment so right now. A few examples can include:\n• Get changed\n• Make a drink\n• Watch TV\n• Read a book\n\nDo not use going to the toilet as an example.';
 
 const deathlyAnswer =
     'IMPORTANT: Before selecting "yes", read this to the patient:\n\n"On brown or black skin, you can check the palms of the hands for changes in colour."\n\nWe are looking for grey, blue or otherwise extremely pale. If they still answer "yes" go with it, ensuring you have probed with the other supporting information.';
@@ -244,6 +244,12 @@ const touchAnswer =
 
 const breathlessAnswer =
     'If you are talking to the patient, and they are able to say more than a sentence to you, you can select "no". This question is looking for someone who is fighting desperately for every single breath they take.\n\nAnything less than this, you can select "no".';
+
+const breathingAnswer =
+    'A clearer way to ask this question is:\n\n"So when you are doing nothing at all, for example just sitting still, is your breathing any FASTER or HARDER? than normal?"\n\nTry your best to get them to specify if their breathing is specifically HARDER or FASTER, not irrelevant words like "shallow" or "rattled".';
+
+const staystillAnswer =
+    'This question is looking if, right now, the pain is so bad they cannot move AT ALL, otherwise they would be in extreme, unberable pain. Patients often exaggerate this.\n\nA great way to reword this question is:\n"Are you/they still able to move despite the pain?"\nIf they answer yes, we have ruled out they do not have to stay completely still.';
 
 const bloodLossAnswer =
     'So since the problem has began, has there been ANY blood loss at all, even if it is unrelated to the problem. This INCLUDES things like:\n• Unrelated injuries\n• Nosebleeds\n• Periods (for females)\n\nNote that urinating blood DOES count for this question, but not for the next question.';
@@ -257,6 +263,12 @@ const guideAnswers = {
     'Is he a deathly colour?': deathlyAnswer,
     'Is she a deathly colour?': deathlyAnswer,
     'Are you a deathly colour?': deathlyAnswer,
+    'Do you have to stay COMPLETELY still because of the pain?': staystillAnswer,
+    'Does he have to stay COMPLETELY still because of the pain?': staystillAnswer,
+    'Does she have to stay COMPLETELY still because of the pain?': staystillAnswer,
+    'Are you breathing faster or harder when doing nothing at all?': breatingAnswer,
+    'Is he breathing faster or harder when doing nothing at all?': breatingAnswer,
+    'Is she breathing faster or harder when doing nothing at all?': breatingAnswer,
     'Are you so breathless that speaking more than a few words is impossible?': breathlessAnswer,
     'Is she so breathless that speaking more than a few words is impossible?': breathlessAnswer,
     'Is he so breathless that speaking more than a few words is impossible?': breathlessAnswer,
