@@ -615,13 +615,13 @@ function getCsdTemplateText(templateId) {
         case '2':
             return `${base}LINKED TO CASE: `;
         case '3':
-            return `${base}CB1, NO CONTACT: VOICEMAIL LEFT. `;
+            return `${base}CB1, NO CONTACT: VOICEMAIL LEFT.`;
         case '4':
-            return `${base}CB1, NO CONTACT: COULD NOT LEAVE VOICEMAIL. `;
+            return `${base}CB1, NO CONTACT: COULD NOT LEAVE VOICEMAIL.`;
         case '5':
-            return `${base}CB2, NO CONTACT: VOICEMAIL LEFT. CASE TO BE CLOSED.`;
+            return `${base}CB2, NO CONTACT: VOICEMAIL LEFT. MARKED FOR CCN.`;
         case '6':
-            return `${base}CB2, NO CONTACT: VOICEMAIL COULD NOT BE LEFT. CASE TO BE CLOSED. `;
+            return `${base}CB2, NO CONTACT: COULD NOT LEAVE VOICEMAIL. MARKED FOR CCN.`;
         default:
             return null;
     }
