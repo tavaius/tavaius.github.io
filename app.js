@@ -101,18 +101,14 @@ function isCoachActive() {
 }
 
 function showsCoachTemplates() {
-    if (!isCoachActive()) return false;
-    return csdMode === 'call-taker' || csdMode === 'ops';
+    return isCoachActive();
 }
 
 function updateSidebarStatus() {
     const dot = document.getElementById('sidebar-status-dot');
     const label = document.getElementById('sidebar-status-label');
     if (!dot || !label) return;
-    let info = SIDEBAR_STATUS[csdMode] || SIDEBAR_STATUS['call-taker'];
-    if (csdMode === 'call-taker' && coachEnabled) {
-        info = { label: '📞 Call Taking (Coach)', dotClass: 'status-dot--call-taker' };
-    }
+    const info = SIDEBAR_STATUS[csdMode] || SIDEBAR_STATUS['call-taker'];
     label.textContent = info.label;
     dot.className = `status-dot ${info.dotClass}`;
 }
@@ -126,7 +122,9 @@ function updateCoachChip() {
 
 function updateTemplatePanels() {
     const csdPanel = document.getElementById('csd-templates-panel');
+    const opsInlinePanel = document.getElementById('ops-inline-support-panel');
     if (csdPanel) csdPanel.classList.toggle('hidden', csdMode !== 'csd');
+    if (opsInlinePanel) opsInlinePanel.classList.toggle('hidden', csdMode !== 'ops');
     document.querySelectorAll('.flu-csd-callback').forEach(el => {
         el.classList.toggle('hidden', csdMode !== 'csd');
     });
