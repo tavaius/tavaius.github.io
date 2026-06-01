@@ -28,10 +28,6 @@
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">Pathway Guide</span>
                 </button>
-                <!--<button class="tab-btn" data-tab="lp" aria-controls="page-lp">!-->
-                    <!--<span class="dot" aria-hidden="true"></span>!-->
-                    <!--<span class="label">Local Policies</span>!-->
-                <!--</button>!-->
                 <button class="tab-btn" data-tab="shift" aria-controls="page-shift">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="label">My Shift</span>
@@ -220,28 +216,6 @@
                     </table>
                 </div>
             </section>
-            <section id="page-lp" class="page">
-                <div class="btn-grid" id="grid">
-                    <button>Button 1</button>
-                    <button>Button 2</button>
-                    <button>Button 3</button>
-                    <button>Button 4</button>
-                    <button>Button 5</button>
-                    <button>Button 6</button>
-                    <button>Button 7</button>
-                    <button>Button 8</button>
-                    <button>Button 9</button>
-                    <button>Button 10</button>
-                    <button>Button 11</button>
-                    <button>Button 12</button>
-                    <button>Button 13</button>
-                    <button>Button 14</button>
-                    <button>Button 15</button>
-                    <button>Button 16</button>
-                    <button>Button 17</button>
-                    <button>Button 18</button
-                </div>
-            </section>
             <section id="page-shift" class="page">
                 <div id="shift-panel" class="shift-panel" aria-hidden="false">
                     <div class="shift-header">
@@ -319,6 +293,7 @@
                             <small><br><i>(inserted into pathways)</i></small>
                         </button>
                     </div>
+                    <div id="cad-success" class="cad-success hidden" role="status" aria-live="polite">Copied to clipboard.</div>
                     <div id="lab-panel" class="val-panel" aria-hidden="true">
                         <div class="val-grid">
                             <div>
@@ -611,10 +586,10 @@ Do you need help or are you okay at the moment?">
                     <tr>
                         <td class="flu-header">
                             1st Callback Attempt Script
-                            <span class="arrow" data-flu-toggle>[show]</span>
+                            <span class="arrow" data-flu-toggle>[hide]</span>
                         </td>
                     </tr>
-                    <tr class="flu-body flu-hidden flu-center" data-flu-body>
+                    <tr class="flu-body flu-center" data-flu-body>
                         <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
                         This is the first failed contact, and as such we will call you back momentarily to continue.</i></td>
                     </tr>
@@ -625,10 +600,10 @@ Do you need help or are you okay at the moment?">
                     <tr>
                         <td class="flu-header">
                             2nd Callback Attempt Script
-                            <span class="arrow" data-flu-toggle>[show]</span>
+                            <span class="arrow" data-flu-toggle>[hide]</span>
                         </td>
                     </tr>
-                    <tr class="flu-body flu-hidden flu-center" data-flu-body>
+                    <tr class="flu-body flu-center" data-flu-body>
                         <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
                         This is the second failed contact, and as such we will now be closing this case as we cannot
                         reach you. If at any point there are any new symptoms, any of your conditions get worse, changes,

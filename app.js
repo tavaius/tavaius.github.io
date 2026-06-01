@@ -230,15 +230,26 @@ function wireCollapse(toggleId, bodyId) {
     const t = document.getElementById(toggleId);
     const b = document.getElementById(bodyId);
     if (!t || !b) return;
-    b.classList.add('flu-hidden'); // start hidden
+    b.classList.add('flu-hidden');
     t.addEventListener('click', () => {
         b.classList.toggle('flu-hidden');
         t.textContent = b.classList.contains('flu-hidden') ? '[show]' : '[hide]';
     });
 }
 
-wireCollapse('c3-toggle', 'c3-body');
-wireCollapse('c3-toggle', 'c3-body2');
+function wireCollapseMany(toggleId, bodyIds) {
+    const t = document.getElementById(toggleId);
+    const bodies = bodyIds.map(id => document.getElementById(id)).filter(Boolean);
+    if (!t || !bodies.length) return;
+    bodies.forEach(b => b.classList.add('flu-hidden'));
+    t.addEventListener('click', () => {
+        const expand = bodies.some(b => b.classList.contains('flu-hidden'));
+        bodies.forEach(b => b.classList.toggle('flu-hidden', !expand));
+        t.textContent = expand ? '[hide]' : '[show]';
+    });
+}
+
+wireCollapseMany('c3-toggle', ['c3-body', 'c3-body2']);
 wireCollapse('wca-toggle', 'wca-body');
 wireCollapse('ccb-toggle', 'ccb-body');
 wireCollapse('ados-toggle', 'ados-body');
@@ -247,6 +258,9 @@ document.querySelectorAll('.flu-panel.flu-csd-callback').forEach(panel => {
     const toggle = panel.querySelector('[data-flu-toggle]');
     const body = panel.querySelector('[data-flu-body]');
     if (!toggle || !body) return;
+
+    body.classList.remove('flu-hidden');
+    toggle.textContent = '[hide]';
 
     toggle.addEventListener('click', () => {
         const nowHidden = body.classList.toggle('flu-hidden');
@@ -316,9 +330,8 @@ const guideAnswers = {
     'Does the skin on the chest, back or abdomen feel a normal temperature when touched?': touchAnswer,
 };
 
-const guideInput     = document.getElementById('guide-input');
-const guideSearchBtn = document.getElementById('guide-search-btn');
-const guideResult    = document.getElementById('guide-result');
+const guideInput  = document.getElementById('guide-input');
+const guideResult = document.getElementById('guide-result');
 
 const guideAnswersByKey = Object.fromEntries(
     Object.entries(guideAnswers).map(([key, value]) => [key.toLowerCase(), value])
