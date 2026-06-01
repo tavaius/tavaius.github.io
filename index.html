@@ -1,15 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <script>
-      const password = prompt("This project is temporarily suspended.\nSorry! For more information, please contact Tavaius Wisbey.\n\nEnter password to continue:");
-      if (password !== "123") { // gate for internal use only
-        window.location.replace("https://www.google.com");
-      }
-    </script>
     <title>Assessment Assistant</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
@@ -47,6 +41,10 @@
                     <span class="label">Information</span>
                 </button>
             </nav>
+            <div class="sidebar-theme" role="group" aria-label="Colour theme">
+                <button type="button" class="theme-btn active" data-theme="light" aria-pressed="true">Light</button>
+                <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false">Dark</button>
+            </div>
             <div class="sidebar-status" id="sidebar-status" aria-live="polite">
                 <div class="sidebar-status-heading">Current Status:</div>
                 <div class="sidebar-status-row">
