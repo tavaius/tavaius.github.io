@@ -61,7 +61,7 @@ function showSuccessBar() {
     }, 10000);
 }
 
-let csdExtension = null; // only set for CSD/OPS modes
+let csdExtension = null; // only set for CSD duty
 
 function promptExtension() {
     while (true) {
@@ -86,31 +86,42 @@ function promptExtension() {
 }
 
 let csdMode = 'call-taker';
+let coachEnabled = false;
+
+const coachToggle = document.getElementById('coach-toggle');
 
 const SIDEBAR_STATUS = {
     'call-taker': { label: '📞 Call Taking', dotClass: 'status-dot--call-taker' },
-    'call-taker-coach': { label: '📞 Call Taking (Coach)', dotClass: 'status-dot--call-taker' },
     csd: { label: '📋 CSD Support', dotClass: 'status-dot--csd' },
     ops: { label: '🎧 OPS Support', dotClass: 'status-dot--ops' },
 };
+
+function isCoachActive() {
+    return coachEnabled;
+}
+
+function showsCoachTemplates() {
+    if (!isCoachActive()) return false;
+    return csdMode === 'call-taker' || csdMode === 'ops';
+}
 
 function updateSidebarStatus() {
     const dot = document.getElementById('sidebar-status-dot');
     const label = document.getElementById('sidebar-status-label');
     if (!dot || !label) return;
-    const info = SIDEBAR_STATUS[csdMode] || SIDEBAR_STATUS['call-taker'];
+    let info = SIDEBAR_STATUS[csdMode] || SIDEBAR_STATUS['call-taker'];
+    if (csdMode === 'call-taker' && coachEnabled) {
+        info = { label: '📞 Call Taking (Coach)', dotClass: 'status-dot--call-taker' };
+    }
     label.textContent = info.label;
     dot.className = `status-dot ${info.dotClass}`;
-}
-
-function showsCoachTemplates() {
-    return csdMode === 'call-taker-coach' || csdMode === 'ops';
 }
 
 function updateCoachChip() {
     const coachSection = document.getElementById('coach-scripts-section');
     const show = showsCoachTemplates();
     if (coachSection) coachSection.classList.toggle('hidden', !show);
+    if (coachToggle) coachToggle.checked = coachEnabled;
 }
 
 function updateTemplatePanels() {
@@ -134,9 +145,8 @@ document.querySelector('.script-chip-csd[data-mode="call-taker"]')?.addEventList
     updateDutyState();
 });
 
-document.querySelector('.script-chip-csd[data-mode="call-taker-coach"]')?.addEventListener('click', () => {
-    csdMode = 'call-taker-coach';
-    csdExtension = null;
+coachToggle?.addEventListener('change', () => {
+    coachEnabled = coachToggle.checked;
     updateDutyState();
 });
 
@@ -149,10 +159,8 @@ document.querySelector('.script-chip-csd[data-mode="csd"]')?.addEventListener('c
 });
 
 document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('click', () => {
-    const ext = promptExtension();
-    if (ext === null) return;
     csdMode = 'ops';
-    csdExtension = ext;
+    csdExtension = null;
     updateDutyState();
 });
 
@@ -588,9 +596,9 @@ function setCsdTabLocked(locked) {
     csdTabBtn.classList.toggle('locked', locked);
 }
 
-// CSD tab is only unlocked when mode is csd or ops (and extension is set)
+// CSD tab: unlocked for OPS always; for CSD only when extension is set
 function updateCsdTabState() {
-    const unlocked = (csdMode === 'csd' || csdMode === 'ops') && !!csdExtension;
+    const unlocked = csdMode === 'ops' || (csdMode === 'csd' && !!csdExtension);
     setCsdTabLocked(!unlocked);
 }
 
@@ -625,8 +633,8 @@ document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-ch
 
 /* ---------- CSD Templates: copy with extension insertion ---------- */
 function getCsdTemplateText(templateId) {
-    if ((csdMode === 'csd' || csdMode === 'ops') && !csdExtension) {
-        alert('No extension set. Please select CSD Duties or OPS Duties first.');
+    if (csdMode === 'csd' && !csdExtension) {
+        alert('No extension set. Please select CSD Duties first.');
         return null;
     }
     const ext = csdExtension;

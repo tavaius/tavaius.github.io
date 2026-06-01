@@ -106,6 +106,7 @@
     --input-bg: #1c2129;
     --focus-ring: rgba(94, 176, 255, .25);
     --chip-text: #111111;
+    --chip-on-dark-text: #ffffff;
     --chip-default-bg: #4a5c5f;
     --chip-chase-bg: #5c4f2a;
     --chip-purple-bg: #4a4258;
@@ -394,23 +395,26 @@ nav.tabs {
 
 .theme-btn {
     padding: 10px 12px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-subtle);
     border-radius: 10px;
     background: var(--surface);
     color: var(--text);
     font-weight: 600;
     font-size: 13px;
     cursor: pointer;
-    transition: background .15s ease, border-color .15s ease;
+    transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 
 .theme-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border);
 }
 
 .theme-btn.active {
-    background: var(--tab-active-bg);
+    background: var(--surface);
+    color: var(--text);
     border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .sidebar-status {
@@ -431,6 +435,77 @@ nav.tabs {
     align-items: center;
     gap: 10px;
     min-height: 28px;
+}
+
+.coach-toggle {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.coach-toggle__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+}
+
+.coach-toggle__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.coach-toggle__track {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--surface-muted);
+    border: 1px solid var(--border-subtle);
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.coach-toggle__thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+    transition: transform .2s ease, background .2s ease;
+}
+
+.coach-toggle__input:checked + .coach-toggle__track {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.coach-toggle__input:checked + .coach-toggle__track .coach-toggle__thumb {
+    transform: translateX(18px);
+    background: var(--accent-on);
+    border-color: transparent;
+}
+
+.coach-toggle__input:focus-visible + .coach-toggle__track {
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.coach-toggle:hover .coach-toggle__track {
+    border-color: var(--border);
 }
 
 .sidebar-status-label {
@@ -1064,6 +1139,21 @@ ul.symptoms-col li{
     margin-top: 0;
 }
 
+.csd-templates--duty {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, auto));
+}
+
+.csd-templates--duty .duty-btn-call-taker {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+}
+
 .template-panel + .template-panel {
     margin-top: 12px;
 }
@@ -1236,6 +1326,12 @@ ul.symptoms-col li{
 
 .flu-center {
     text-align: center;
+}
+
+[data-theme="dark"] #page-tasks .script-chip,
+[data-theme="dark"] #page-tasks .coach-scripts .script-chip,
+[data-theme="dark"] #page-shift .script-chip {
+    color: var(--chip-on-dark-text) !important;
 }
 
 

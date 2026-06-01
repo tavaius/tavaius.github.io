@@ -50,6 +50,13 @@
                 <div class="sidebar-status-row">
                     <span class="status-dot status-dot--call-taker" id="sidebar-status-dot" aria-hidden="true"></span>
                     <span class="sidebar-status-label" id="sidebar-status-label">Call Taking</span>
+                    <label class="coach-toggle" for="coach-toggle" title="Show coach and OPS template tools">
+                        <span class="coach-toggle__label">Coach</span>
+                        <input type="checkbox" id="coach-toggle" class="coach-toggle__input" />
+                        <span class="coach-toggle__track" aria-hidden="true">
+                            <span class="coach-toggle__thumb"></span>
+                        </span>
+                    </label>
                 </div>
             </div>
         </aside>
@@ -289,9 +296,8 @@
                     </div>
                 </div>
                 <div class="csd-extension">
-                    <div class="csd-templates">
-                        <button class="script-chip script-chip-csd" data-mode="call-taker">Call Taking</button>
-                        <button class="script-chip script-chip-csd" data-mode="call-taker-coach">Call Taking (Coach)</button>
+                    <div class="csd-templates csd-templates--duty">
+                        <button class="script-chip script-chip-csd duty-btn-call-taker" data-mode="call-taker">Call Taking</button>
                         <button class="script-chip script-chip-csd" data-mode="csd">CSD Duties</button>
                         <button class="script-chip script-chip-csd" data-mode="ops">OPS Duties</button>
                     </div>
