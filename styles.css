@@ -60,7 +60,7 @@
     --copy-btn-bg: #f0f6ff;
 }
 
-[data-theme="dark"] {
+html[data-theme="dark"] {
     color-scheme: dark;
     --bg: #0f1218;
     --bg-elev: #181c24;
@@ -411,10 +411,6 @@ nav.tabs {
 .theme-btn.active:hover {
     background: var(--bg-hover);
     border-color: var(--border);
-}
-
-.theme-btn.active {
-    font-weight: 700;
 }
 
 .sidebar-status {
@@ -1173,10 +1169,6 @@ ul.symptoms-col li{
     margin-top: 14px;
 }
 
-.ops-templates-grid > .script-chip:first-child {
-    grid-column: 1 / -1;
-}
-
 .ops-templates-grid .script-chip-ops {
     background: var(--chip-ops-bg) !important;
     color: var(--chip-text);
@@ -1336,10 +1328,10 @@ ul.symptoms-col li{
     width: 100%;
 }
 
-[data-theme="dark"] #page-tasks .script-chip,
-[data-theme="dark"] #page-tasks .coach-scripts .script-chip,
-[data-theme="dark"] #page-shift .script-chip,
-[data-theme="dark"] #page-csd .script-chip {
+html[data-theme="dark"] #page-tasks .script-chip,
+html[data-theme="dark"] #page-tasks .coach-scripts .script-chip,
+html[data-theme="dark"] #page-shift .script-chip,
+html[data-theme="dark"] #page-csd .script-chip {
     color: var(--chip-on-dark-text) !important;
 }
 
