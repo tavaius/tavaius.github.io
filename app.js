@@ -748,13 +748,11 @@ shiftAutoFillButton?.addEventListener('click', autoFillShift);
 
 async function autoFillShift() {
     let text = '';
-
     if (navigator.clipboard?.readText) {
         try {
             text = await navigator.clipboard.readText();
         } catch (e) {}
     }
-
     if (!text) {
         text = window.prompt(
             'Paste the WFM homepage text here (Ctrl+V), then press OK:',
@@ -762,24 +760,20 @@ async function autoFillShift() {
         );
         if (!text) return;
     }
-
     const data = parseWfmCurrentShift(text);
     if (!data) {
         alert('To use this, first copy your WFM shift using (Ctrl+A) and (Ctrl+C).');
         return;
     }
-
     const startInput = document.getElementById('shift-start');
     const endInput = document.getElementById('shift-end');
     if (startInput && data.shiftStart) startInput.value = data.shiftStart;
     if (endInput && data.shiftEnd) endInput.value = data.shiftEnd;
-
     const breakIds = ['break-1', 'break-2', 'break-3'];
     breakIds.forEach((id, i) => {
         const el = document.getElementById(id);
         if (el) el.value = data.breaks[i] || '';
     });
-
     const lunchInput = document.getElementById('break-lunch');
     if (lunchInput) lunchInput.value = data.lunch || '';
 }
@@ -792,44 +786,72 @@ function parseWfmCurrentShift(raw) {
         .filter(l => l !== '');
 
     const idxCurrent = lines.findIndex(l =>
-        l.toLowerCase().startsWith('current shift')
+        l.toLowerCase().startsWith('current shift') ||
+        l.toLowerCase().startsWith('next shift') ||
+        l.toLowerCase().startsWith("today's shift") ||
+        l.toLowerCase().startsWith('todays shift')
     );
     if (idxCurrent === -1) return null;
 
-    let idxUpcoming = lines.findIndex(
-        (l, i) => i > idxCurrent && l.toLowerCase().startsWith('upcoming shifts')
+    // End block at "upcoming shifts", "my shifts", or end of array
+    let idxEnd = lines.findIndex(
+        (l, i) =>
+            i > idxCurrent &&
+            (l.toLowerCase().startsWith('upcoming shifts') ||
+             l.toLowerCase().startsWith('my shifts'))
     );
-    if (idxUpcoming === -1) idxUpcoming = lines.length;
+    if (idxEnd === -1) idxEnd = lines.length;
 
-    const blockLines = lines.slice(idxCurrent, idxUpcoming);
+    const blockLines = lines.slice(idxCurrent, idxEnd);
     const blockText = blockLines.join('\n');
 
-    const mainRange = blockText.match(
-        /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/
-    );
+    // Main shift range: first bare "HH:MM - HH:MM" (possibly followed by duration like "8 hours")
+    const mainRange = blockText.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
     if (!mainRange) return null;
 
     const shiftStart = toHHMM(mainRange[1]);
-    const shiftEnd = toHHMM(mainRange[2]);
+    const shiftEnd   = toHHMM(mainRange[2]);
 
     const breaks = [];
     let lunch = '';
 
-    const timeRangeRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
+    // New format: label is on the SAME line as the time range
+    // e.g. "09:00 - 09:10Rest break" or "12:50 - 13:20Meal break"
+    const inlineRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*(.*)/i;
 
-    for (let i = 0; i < blockLines.length - 1; i++) {
+    // Old format: label is on the NEXT line
+    const timeRangeRe = /^(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/;
+
+    for (let i = 0; i < blockLines.length; i++) {
         const line = blockLines[i];
-        const next = blockLines[i + 1] || '';
-        const m = line.match(timeRangeRe);
-        if (!m) continue;
 
-        const start = toHHMM(m[1]);
-        const label = next.toLowerCase();
+        // Try inline label first (new format)
+        const inlineMatch = line.match(inlineRe);
+        if (inlineMatch) {
+            const start = toHHMM(inlineMatch[1]);
+            const label = inlineMatch[3].toLowerCase();
 
-        if (label.includes('lunch')) {
-            lunch = start;
-        } else if (label.includes('rest break')) {
-            breaks.push(start);
+            if (i === 0) continue; // skip the main shift range line itself
+
+            if (label.includes('meal') || label.includes('lunch')) {
+                lunch = start;
+            } else if (label.includes('rest') || label.includes('break')) {
+                breaks.push(start);
+            }
+            continue;
+        }
+
+        // Fall back to next-line label (old format)
+        const bareMatch = line.match(timeRangeRe);
+        if (bareMatch) {
+            const start = toHHMM(bareMatch[1]);
+            const nextLabel = (blockLines[i + 1] || '').toLowerCase();
+
+            if (nextLabel.includes('lunch') || nextLabel.includes('meal')) {
+                lunch = start;
+            } else if (nextLabel.includes('rest break')) {
+                breaks.push(start);
+            }
         }
     }
 
