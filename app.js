@@ -793,7 +793,6 @@ function parseWfmCurrentShift(raw) {
     );
     if (idxCurrent === -1) return null;
 
-    // End block at "upcoming shifts", "my shifts", or end of array
     let idxEnd = lines.findIndex(
         (l, i) =>
             i > idxCurrent &&
@@ -805,7 +804,6 @@ function parseWfmCurrentShift(raw) {
     const blockLines = lines.slice(idxCurrent, idxEnd);
     const blockText = blockLines.join('\n');
 
-    // Main shift range: first bare "HH:MM - HH:MM" (possibly followed by duration like "8 hours")
     const mainRange = blockText.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
     if (!mainRange) return null;
 
@@ -815,41 +813,23 @@ function parseWfmCurrentShift(raw) {
     const breaks = [];
     let lunch = '';
 
-    // New format: label is on the SAME line as the time range
-    // e.g. "09:00 - 09:10Rest break" or "12:50 - 13:20Meal break"
     const inlineRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*(.*)/i;
 
-    // Old format: label is on the NEXT line
-    const timeRangeRe = /^(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/;
-
     for (let i = 0; i < blockLines.length; i++) {
-        const line = blockLines[i];
+        // Strip leading bullet characters before matching
+        const line = blockLines[i].replace(/^[*\-•]\s*/, '');
 
-        // Try inline label first (new format)
         const inlineMatch = line.match(inlineRe);
         if (inlineMatch) {
             const start = toHHMM(inlineMatch[1]);
             const label = inlineMatch[3].toLowerCase();
 
-            if (i === 0) continue; // skip the main shift range line itself
+            // Skip the main shift range (no label after it)
+            if (!label) continue;
 
             if (label.includes('meal') || label.includes('lunch')) {
                 lunch = start;
             } else if (label.includes('rest') || label.includes('break')) {
-                breaks.push(start);
-            }
-            continue;
-        }
-
-        // Fall back to next-line label (old format)
-        const bareMatch = line.match(timeRangeRe);
-        if (bareMatch) {
-            const start = toHHMM(bareMatch[1]);
-            const nextLabel = (blockLines[i + 1] || '').toLowerCase();
-
-            if (nextLabel.includes('lunch') || nextLabel.includes('meal')) {
-                lunch = start;
-            } else if (nextLabel.includes('rest break')) {
                 breaks.push(start);
             }
         }
