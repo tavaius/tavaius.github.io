@@ -833,6 +833,26 @@ function toHHMM(timeText) {
     if (!m) return '';
     return m[1].padStart(2, '0') + m[2];
 }
+
+/* ============================================================
+   WFM LINK THINGY
+   ============================================================ */
+
+function setWfmLink() {
+    const link = document.getElementById('wfm-link');
+    if (!link) return;
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+
+    link.href = `https://wfm.secamb.nhs.uk/agent-breaks/breaks-by-person?employeeId=33186719&startDate=${dateStr}&endDate=${dateStr}`;
+}
+
+document.addEventListener('DOMContentLoaded', setWfmLink);
+
 /* ============================================================
    REPEAT PRESCRIPTIONS PANEL
    ============================================================ */
