@@ -785,53 +785,43 @@ function parseWfmCurrentShift(raw) {
         .map(l => l.trim())
         .filter(l => l !== '');
 
-    const idxCurrent = lines.findIndex(l =>
-        l.toLowerCase().startsWith('current shift') ||
-        l.toLowerCase().startsWith('next shift') ||
-        l.toLowerCase().startsWith("today's shift") ||
-        l.toLowerCase().startsWith('todays shift')
-    );
-    if (idxCurrent === -1) return null;
+    const dateRe = /^\d{1,2}\s+[A-Za-z]+\s+\d{4}$/;
+    const shiftRangeRe = /^(\d{1,2}:\d{2}(?::\d{2})?)\s*-\s*(\d{1,2}:\d{2}(?::\d{2})?)$/;
+    const breakRe = /^(Rest|Lunch|Break|Meal)\s*:\s*(\d{1,2}:\d{2}(?::\d{2})?)\s*-\s*(\d{1,2}:\d{2}(?::\d{2})?)\s*\(\s*\d+\s*m\s*\)$/i;
 
-    let idxEnd = lines.findIndex(
-        (l, i) =>
-            i > idxCurrent &&
-            (l.toLowerCase().startsWith('upcoming shifts') ||
-             l.toLowerCase().startsWith('my shifts'))
-    );
-    if (idxEnd === -1) idxEnd = lines.length;
+    // Find the first date line that is immediately followed by a shift time range.
+    let dateIdx = -1;
+    for (let i = 0; i < lines.length - 1; i++) {
+        if (dateRe.test(lines[i]) && shiftRangeRe.test(lines[i + 1])) {
+            dateIdx = i;
+            break;
+        }
+    }
+    if (dateIdx === -1) return null;
 
-    const blockLines = lines.slice(idxCurrent, idxEnd);
-    const blockText = blockLines.join('\n');
-
-    const mainRange = blockText.match(/(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/);
-    if (!mainRange) return null;
-
-    const shiftStart = toHHMM(mainRange[1]);
-    const shiftEnd   = toHHMM(mainRange[2]);
+    const shiftMatch = lines[dateIdx + 1].match(shiftRangeRe);
+    const shiftStart = toHHMM(shiftMatch[1]);
+    const shiftEnd = toHHMM(shiftMatch[2]);
 
     const breaks = [];
     let lunch = '';
 
-    const inlineRe = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*(.*)/i;
+    for (let i = dateIdx + 2; i < lines.length; i++) {
+        const line = lines[i];
 
-    for (let i = 0; i < blockLines.length; i++) {
-        // Strip leading bullet characters before matching
-        const line = blockLines[i].replace(/^[*\-•]\s*/, '');
+        // Stop once we reach the next shift's date block
+        if (dateRe.test(line) && shiftRangeRe.test(lines[i + 1] || '')) break;
 
-        const inlineMatch = line.match(inlineRe);
-        if (inlineMatch) {
-            const start = toHHMM(inlineMatch[1]);
-            const label = inlineMatch[3].toLowerCase();
+        const breakMatch = line.match(breakRe);
+        if (!breakMatch) continue; // e.g. the employee name line - skip it
 
-            // Skip the main shift range (no label after it)
-            if (!label) continue;
+        const type = breakMatch[1].toLowerCase();
+        const start = toHHMM(breakMatch[2]);
 
-            if (label.includes('meal') || label.includes('lunch')) {
-                lunch = start;
-            } else if (label.includes('rest') || label.includes('break')) {
-                breaks.push(start);
-            }
+        if (type === 'lunch' || type === 'meal') {
+            lunch = start;
+        } else {
+            breaks.push(start);
         }
     }
 
@@ -843,7 +833,6 @@ function toHHMM(timeText) {
     if (!m) return '';
     return m[1].padStart(2, '0') + m[2];
 }
-
 /* ============================================================
    REPEAT PRESCRIPTIONS PANEL
    ============================================================ */
