@@ -118,6 +118,7 @@ function updateCoachChip() {
     const show = showsCoachTemplates();
     if (coachSection) coachSection.classList.toggle('hidden', !show);
     if (coachToggle) coachToggle.checked = coachEnabled;
+    updateMentorTabState();
 }
 
 function updateTemplatePanels() {
@@ -517,6 +518,20 @@ labGenerate?.addEventListener('click', () => {
 /* Init states */
 updateLabAddState();
 updateLabGenerateState();
+
+/* mentor tab */
+const mentorTabBtn = document.querySelector('.tab-btn[data-tab="mentor"]');
+
+function setMentorTabLocked(locked) {
+    if (!mentorTabBtn) return;
+    mentorTabBtn.dataset.locked = locked ? 'true' : 'false';
+    mentorTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    mentorTabBtn.classList.toggle('locked', locked);
+}
+
+function updateMentorTabState() {
+    setMentorTabLocked(!showsCoachTemplates());
+}
 
 /* ============================================================
    COLD & FLU SYMPTOMS (starts expanded)
