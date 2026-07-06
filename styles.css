@@ -327,6 +327,44 @@ nav.tabs {
     margin-top: auto;
 }
 
+.rotate-panel {
+  margin-top: 12px;
+}
+
+.rotate-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+}
+
+.rotate-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.rotate-table tr:last-child td {
+  border-bottom: none;
+}
+
+.rotate-row.state-green td {
+  background: #d9f7be;
+}
+
+.rotate-row.state-red td {
+  background: #ffd6d6;
+}
+
+.rotate-output {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  resize: vertical;
+  min-height: 80px;
+}
+
 .theme-btn,
 .theme-btn.active {
     padding: 10px 12px;
