@@ -847,6 +847,25 @@ function toHHMM(timeText) {
     return m[1].padStart(2, '0') + m[2];
 }
 
+/* mentor table rotate */
+document.querySelectorAll('.rotate-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const current = row.dataset.state;
+
+    row.classList.remove('state-green', 'state-red');
+
+    if (current === 'none') {
+      row.dataset.state = 'green';
+      row.classList.add('state-green');
+    } else if (current === 'green') {
+      row.dataset.state = 'red';
+      row.classList.add('state-red');
+    } else {
+      row.dataset.state = 'none';
+    }
+  });
+});
+
 /* ============================================================
    WFM LINK THINGY
    ============================================================ */
