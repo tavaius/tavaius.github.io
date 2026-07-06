@@ -614,21 +614,32 @@ updateLlGenerateState();
    CSD NOTES
    ============================================================ */
 const csdTabBtn = document.querySelector('.tab-btn[data-tab="csd"]');
-
 function setCsdTabLocked(locked) {
     if (!csdTabBtn) return;
     csdTabBtn.dataset.locked = locked ? 'true' : 'false';
     csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
     csdTabBtn.classList.toggle('locked', locked);
 }
-
 // CSD tab: unlocked for OPS always; for CSD only when extension is set
 function updateCsdTabState() {
     const unlocked = csdMode === 'ops' || (csdMode === 'csd' && !!csdExtension);
     setCsdTabLocked(!unlocked);
 }
 
+const mentorTabBtn = document.querySelector('.tab-btn[data-tab="mentor"]');
+function setMentorTabLocked(locked) {
+    if (!mentorTabBtn) return;
+    mentorTabBtn.dataset.locked = locked ? 'true' : 'false';
+    mentorTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    mentorTabBtn.classList.toggle('locked', locked);
+}
+// Mentor tab: unlocked only when coach templates are active
+function updateMentorTabState() {
+    setMentorTabLocked(!showsCoachTemplates());
+}
+
 updateDutyState();
+updateMentorTabState();
 
 /* ---------- Copy flash helper ---------- */
 function runCopyFlash(chip) {
