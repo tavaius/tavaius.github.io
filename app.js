@@ -536,6 +536,18 @@ function updateMentorTabState() {
     setMentorTabLocked(!showsCoachTemplates());
 }
 
+document.getElementById('mentor-reset')?.addEventListener('click', () => {
+    document.querySelectorAll('#page-mentor .rotate-row').forEach(row => {
+        row.dataset.state = 'none';
+        row.classList.remove('state-green', 'state-red');
+    });
+
+    const output = document.getElementById('rotate-output');
+    if (output) output.value = '';
+
+    updateMentorOutput();
+});
+
 /* ============================================================
    COLD & FLU SYMPTOMS (starts expanded)
    ============================================================ */
