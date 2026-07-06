@@ -866,47 +866,47 @@ function toHHMM(timeText) {
 
 const mentorMessages = {
   "Makes efforts to speak directly to patient": {
-    green: "Made good efforts to speak directly to the patient.",
-    red: "Could make more consistent efforts to speak directly to the patient where appropriate."
+    green: "There is always a good effort made to speak to the patient directly.",
+    red: "${menteeRef} should make an attempt to speak to the patient where applicable."
   },
   "Sets the scene appropriately": {
-    green: "Set the scene appropriately at the start of the call.",
-    red: "Could improve how the scene is set at the start of the call."
+    green: "${menteeRef} does a great job setting the scene of the call and assessment.",
+    red: "Greater effort should be made in setting the scene and explaining the process of the call."
   },
   "Controls the flow and pace of the call appropriately": {
-    green: "Controlled the flow and pace of the call well.",
-    red: "Could improve control of the flow and pace of the call."
+    green: "${menteeRef} controls the pace and flow of the call well, inturrupting where needed.",
+    red: "Further effort should be made to inturrupt/cut off the patient where nessecary."
   },
   "Conveys questions skilfully": {
-    green: "Conveyed questions clearly and skilfully.",
-    red: "Could work on conveying questions more clearly and naturally."
+    green: "Questions were relayed to the patient clearly and in a way they understand them.",
+    red: "${menteeRef} would sometimes unintentionally reword questions, losing clinical meaning."
   },
-  "Ensures enough we have enough information to answer all questions": {
-    green: "Gathered enough information to answer the required questions safely.",
-    red: "Could ensure enough information is gathered before answering questions."
+  "Ensures we have enough information to answer all questions": {
+    green: "${menteeRef} probes well where answers are unclear - ensuring adequate information.",
+    red: "Sometimes answers that're vague or unclear are not probed upon, where they should be."
   },
   "Listens carefully throughout the call and retains this information": {
-    green: "Listened carefully throughout the call and retained key information.",
-    red: "Could improve retention of key information throughout the call."
+    green: "Information and details given by the caller is recalled and relayed during the call.",
+    red: "${menteeRef} often times asks questions where the answer was already previously given."
   },
   "Demonstrates active listening to caller": {
-    green: "Demonstrated active listening with the caller.",
-    red: "Could demonstrate active listening more clearly during the call."
+    green: "${menteeRef} uses a good range of verbal nods with the caller.",
+    red: "No verbal nods or indicators were used during many of the calls."
   },
   "Information and advice is provided skilfully and accurately": {
-    green: "Provided information and advice skilfully and accurately.",
-    red: "Could improve the accuracy or delivery of information and advice."
+    green: "Care advice is always sent and confirmed to the patient.",
+    red: "${menteeRef} sometimes forgets pieces of care advice where relevant to the call."
   },
   "The disposition is conveyed effectively": {
-    green: "Conveyed the disposition effectively.",
-    red: "Could convey the final disposition more clearly."
+    green: "${menteeRef} always relays the disposition to the patient so that they understand it.",
+    red: "There are often difficulties in word choice/relaying the disposition to the patient."
   },
   "Communicates sensitively, professionally and with warmth": {
-    green: "Communicated sensitively, professionally and with warmth.",
-    red: "Could further develop a warm, sensitive and professional communication style."
+    green: "Calls taken are assessed professionally, politely and with care for the patient.",
+    red: "${menteeRef} can sometimes mirror frustration from the patient back to them."
   },
   "Adapts approach according to the needs of the situation": {
-    green: "Adapted approach well to the needs of the situation.",
+    green: "${menteeRef} adapts to the situation for all applicable calls, using LanguageLine etc.",
     red: "Could adapt approach more effectively to suit the situation."
   },
   "Negotiates where appropriate and does so effectively": {
