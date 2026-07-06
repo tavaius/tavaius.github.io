@@ -164,6 +164,9 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
 });
 
 /* ---------- Task panels: openExclusive ---------- */
+
+
+/* ---------- Task panels: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
 function openExclusive(panel) {
     allPanels.forEach(p => {
@@ -848,6 +851,87 @@ function toHHMM(timeText) {
 }
 
 /* mentor table rotate */
+
+const mentorMessages = {
+  "Makes efforts to speak directly to patient": {
+    green: "Made good efforts to speak directly to the patient.",
+    red: "Could make more consistent efforts to speak directly to the patient where appropriate."
+  },
+  "Sets the scene appropriately": {
+    green: "Set the scene appropriately at the start of the call.",
+    red: "Could improve how the scene is set at the start of the call."
+  },
+  "Controls the flow and pace of the call appropriately": {
+    green: "Controlled the flow and pace of the call well.",
+    red: "Could improve control of the flow and pace of the call."
+  },
+  "Conveys questions skilfully": {
+    green: "Conveyed questions clearly and skilfully.",
+    red: "Could work on conveying questions more clearly and naturally."
+  },
+  "Ensures enough we have enough information to answer all questions": {
+    green: "Gathered enough information to answer the required questions safely.",
+    red: "Could ensure enough information is gathered before answering questions."
+  },
+  "Listens carefully throughout the call and retains this information": {
+    green: "Listened carefully throughout the call and retained key information.",
+    red: "Could improve retention of key information throughout the call."
+  },
+  "Demonstrates active listening to caller": {
+    green: "Demonstrated active listening with the caller.",
+    red: "Could demonstrate active listening more clearly during the call."
+  },
+  "Information and advice is provided skilfully and accurately": {
+    green: "Provided information and advice skilfully and accurately.",
+    red: "Could improve the accuracy or delivery of information and advice."
+  },
+  "The disposition is conveyed effectively": {
+    green: "Conveyed the disposition effectively.",
+    red: "Could convey the final disposition more clearly."
+  },
+  "Communicates sensitively, professionally and with warmth": {
+    green: "Communicated sensitively, professionally and with warmth.",
+    red: "Could further develop a warm, sensitive and professional communication style."
+  },
+  "Adapts approach according to the needs of the situation": {
+    green: "Adapted approach well to the needs of the situation.",
+    red: "Could adapt approach more effectively to suit the situation."
+  },
+  "Negotiates where appropriate and does so effectively": {
+    green: "Negotiated appropriately and effectively when needed.",
+    red: "Could improve negotiation where appropriate."
+  },
+  "Operates within the boundaries of their role": {
+    green: "Operated safely within the boundaries of the role.",
+    red: "Could be more mindful of staying within the boundaries of the role."
+  },
+  "Documentation is clear, accurate, concise, adequate": {
+    green: "Documentation was clear, accurate, concise and adequate.",
+    red: "Could improve documentation to make it clearer, more accurate or more concise."
+  },
+  "Navigates the system safely, effectively and efficiently": {
+    green: "Navigated the system safely, effectively and efficiently.",
+    red: "Could improve system navigation for safety, efficiency or accuracy."
+  },
+  "Manages all risks appropriately to reach an appropriate outcome": {
+    green: "Managed risks appropriately to reach a safe outcome.",
+    red: "Could improve risk management to reach the most appropriate outcome."
+  }
+};
+
+const menteeNameInput = document.getElementById('mentee-name');
+const menteeExtInput = document.getElementById('mentee-ext');
+
+function getMenteeRef() {
+    const name = menteeNameInput?.value.trim();
+    const ext = menteeExtInput?.value.trim();
+
+    if (name && ext) return `${name} (${ext})`;
+    if (name) return name;
+    if (ext) return `Ext ${ext}`;
+    return 'the mentee';
+}
+
 document.querySelectorAll('.rotate-row').forEach(row => {
   row.addEventListener('click', () => {
     const current = row.dataset.state;
@@ -863,8 +947,46 @@ document.querySelectorAll('.rotate-row').forEach(row => {
     } else {
       row.dataset.state = 'none';
     }
+
+    updateMentorOutput();
   });
 });
+
+function updateMentorOutput() {
+  const menteeRef = getMenteeRef();
+   
+  const output = document.getElementById('rotate-output');
+  if (!output) return;
+
+  const wentWell = [];
+  const couldImprove = [];
+
+  document.querySelectorAll('#page-mentor .rotate-row').forEach(row => {
+    const text = row.textContent.trim();
+    const state = row.dataset.state;
+    const messages = mentorMessages[text];
+
+    if (!messages) return;
+
+    if (state === 'green') {
+      wentWell.push(`• ${messages.green}`);
+    } else if (state === 'red') {
+      couldImprove.push(`• ${messages.red}`);
+    }
+  });
+
+  output.value =
+`What went well?
+${wentWell.join('\n')}
+
+What could have gone better?
+${couldImprove.join('\n')}
+
+Aims for tomorrow`;
+}
+
+menteeNameInput?.addEventListener('input', updateMentorOutput);
+menteeExtInput?.addEventListener('input', updateMentorOutput);
 
 /* ============================================================
    WFM LINK THINGY
