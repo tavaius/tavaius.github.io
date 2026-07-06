@@ -259,6 +259,19 @@ header .title {
     line-height: 1.2;
 }
 
+.mentor-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mentor-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 /* ============================================================
    GUIDE SEARCH
    ============================================================ */
