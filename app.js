@@ -625,19 +625,6 @@ function updateCsdTabState() {
     const unlocked = csdMode === 'ops' || (csdMode === 'csd' && !!csdExtension);
     setCsdTabLocked(!unlocked);
 }
-
-const mentorTabBtn = document.querySelector('.tab-btn[data-tab="mentor"]');
-function setMentorTabLocked(locked) {
-    if (!mentorTabBtn) return;
-    mentorTabBtn.dataset.locked = locked ? 'true' : 'false';
-    mentorTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
-    mentorTabBtn.classList.toggle('locked', locked);
-}
-// Mentor tab: unlocked only when coach templates are active
-function updateMentorTabState() {
-    setMentorTabLocked(!showsCoachTemplates());
-}
-
 updateDutyState();
 updateMentorTabState();
 
