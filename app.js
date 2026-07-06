@@ -992,13 +992,18 @@ function setActiveTab(tabName) {
     pages.forEach(p => p.classList.remove('active'));
     document.getElementById(`page-${tabName}`)?.classList.add('active');
 }
-
 tabs.forEach(btn => btn.addEventListener('click', () => {
     const isCsdTab = btn.dataset.tab === 'csd';
     const csdLocked = csdTabBtn?.dataset.locked === 'true';
-
     if (isCsdTab && csdLocked) {
         alert('These are templates for CSD/OPS only.\nChange your status to access this.');
+        return;
+    }
+
+    const isMentorTab = btn.dataset.tab === 'mentor';
+    const mentorLocked = mentorTabBtn?.dataset.locked === 'true';
+    if (isMentorTab && mentorLocked) {
+        alert('These are templates for Coaches only.\nChange your status to access this.');
         return;
     }
 
