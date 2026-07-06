@@ -1164,6 +1164,14 @@ ul.symptoms-col li{
 }
 
 .script-chip-csd-red {
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    line-height: 1.25;
+    border: 1px solid var(--border);
+    width: 100%; /* expand full width */
+    text-align: center; /* center the text */
+    transition: transform .08s ease, background-color .2s ease, box-shadow .2s ease;
     background: var(--chip-csd-red-bg) !important;
     color: var(--chip-text);
 }
