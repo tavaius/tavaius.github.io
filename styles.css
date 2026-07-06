@@ -389,12 +389,13 @@ nav.tabs {
 
 .rotate-output {
   width: 100%;
+  background: var(--surface);
   margin-top: 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px;
   resize: vertical;
-  min-height: 80px;
+  min-height: 250px;
 }
 
 .theme-btn,
