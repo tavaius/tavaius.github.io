@@ -53,6 +53,12 @@
     --chip-magenta-bg: #ead1dc;
     --chip-ops-bg: #ffe0b2;
     --copy-btn-bg: #f0f6ff;
+    --rotate-green-bg: #d9f7be;
+    --rotate-green-text: #111111;
+    --rotate-red-bg: #ffd6d6;
+    --rotate-red-text: #111111;
+    --rotate-none-bg: #ffffff;
+    --rotate-none-text: #111111;
 }
 
 html[data-theme="dark"] {
@@ -110,6 +116,12 @@ html[data-theme="dark"] {
     --chip-magenta-bg: #523848;
     --chip-ops-bg: #5c4528;
     --copy-btn-bg: #243044;
+    --rotate-green-bg: #1f5c3b;
+    --rotate-green-text: #eafff1;
+    --rotate-red-bg: #6b2424;
+    --rotate-red-text: #fff0f0;
+    --rotate-none-bg: #1c2129;
+    --rotate-none-text: #e8eaef;
 }
 
 * {
@@ -348,11 +360,18 @@ nav.tabs {
 }
 
 .rotate-row.state-green td {
-  background: #d9f7be;
+    background: var(--rotate-green-bg);
+    color: var(--rotate-green-text);
 }
 
 .rotate-row.state-red td {
-  background: #ffd6d6;
+    background: var(--rotate-red-bg);
+    color: var(--rotate-red-text);
+}
+
+.rotate-row[data-state="none"] td {
+    background: var(--rotate-none-bg);
+    color: var(--rotate-none-text);
 }
 
 .rotate-output {
