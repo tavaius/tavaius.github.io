@@ -23,7 +23,7 @@ document.querySelectorAll('.theme-btn').forEach(btn => {
 });
 
 /* ============================================================
-   HELPERS — defined first so they're available everywhere
+   HELPER — defined first so they're available everywhere
    ============================================================ */
 
 /* ---------- Clipboard helpers ---------- */
