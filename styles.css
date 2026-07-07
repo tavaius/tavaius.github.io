@@ -1258,7 +1258,8 @@ ul.symptoms-col li{
 html[data-theme="dark"] #page-tasks .script-chip,
 html[data-theme="dark"] #page-tasks .coach-scripts .script-chip,
 html[data-theme="dark"] #page-shift .script-chip,
-html[data-theme="dark"] #page-csd .script-chip {
+html[data-theme="dark"] #page-csd .script-chip,
+html[data-theme="dark"] #page-mentor .script-chip {
     color: var(--chip-on-dark-text) !important;
 }
 
