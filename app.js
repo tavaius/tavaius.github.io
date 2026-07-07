@@ -864,6 +864,8 @@ function toHHMM(timeText) {
 
 /* mentor table rotate */
 
+const menteeRef = "The mentee";
+
 const mentorMessages = {
   "Makes efforts to speak directly to patient": {
     green: "There is always a good effort made to speak to the patient directly.",
