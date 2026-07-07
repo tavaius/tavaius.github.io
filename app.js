@@ -875,7 +875,7 @@ const mentorMessages = {
     green: `${menteeRef} does a great job setting the scene of the call and assessment.`,
     red: "Greater effort should be made in setting the scene and explaining the process of the call."
   },
-  "Controls the flow and pace of the call appropriately": {
+  "Controls flow and pace of the call appropriately": {
     green: `${menteeRef} controls the pace and flow of the call well, inturrupting where needed.`,
     red: "Further effort should be made to inturrupt/cut off the patient where nessecary."
   },
