@@ -907,27 +907,27 @@ const mentorMessages = {
   },
   "Adapts approach according to the needs of the situation": {
     green: "${menteeRef} adapts to the situation for all applicable calls, using LanguageLine etc.",
-    red: "Could adapt approach more effectively to suit the situation."
+    red: "There were points during the call that could have been adapted to better help the patient."
   },
   "Negotiates where appropriate and does so effectively": {
-    green: "Negotiated appropriately and effectively when needed.",
-    red: "Could improve negotiation where appropriate."
+    green: "Great effort negotiating DoS options and dispositions.",
+    red: "${menteeRef} seems to struggle with effectively negotiating DoS options and dispositions."
   },
   "Operates within the boundaries of their role": {
-    green: "Operated safely within the boundaries of the role.",
-    red: "Could be more mindful of staying within the boundaries of the role."
+    green: "${menteeRef} stayed within the boundaries of their role at all times during all calls.",
+    red: "In some calls it was noticed that they were acting outside the juristictions of their role."
   },
   "Documentation is clear, accurate, concise, adequate": {
-    green: "Documentation was clear, accurate, concise and adequate.",
-    red: "Could improve documentation to make it clearer, more accurate or more concise."
+    green: "Great documentation with all calls - clear, consise and accurate.",
+    red: "${menteeRef} sometimes needs reminding to document important details, and where to note it."
   },
   "Navigates the system safely, effectively and efficiently": {
-    green: "Navigated the system safely, effectively and efficiently.",
-    red: "Could improve system navigation for safety, efficiency or accuracy."
+    green: "${menteeRef} reached a safe and appropriate outcome for all calls taken today.",
+    red: "There were some calls that needed a mentor to intervene due to patient safety reasons."
   },
   "Manages all risks appropriately to reach an appropriate outcome": {
-    green: "Managed risks appropriately to reach a safe outcome.",
-    red: "Could improve risk management to reach the most appropriate outcome."
+    green: "All other/third-party risks were managed, ensuring patient safety throughout.",
+    red: "${menteeRef} neglected to manage present risks/concerns during some of the calls."
   }
 };
 
