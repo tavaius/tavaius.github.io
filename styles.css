@@ -28,13 +28,6 @@
     --link-btn-bg: #d6eaff;
     --link-btn-hover-bg: #c0dbff;
     --link-btn-text: #004a99;
-    --guide-result-bg: #f0f6ff;
-    --guide-found-bg: #e6f7e9;
-    --guide-found-border: #9ad4a3;
-    --guide-found-text: #145c2e;
-    --guide-missing-bg: #fff5f5;
-    --guide-missing-border: #f5a3a3;
-    --guide-missing-text: #c62828;
     --flu-header-bg: #e6f2ff;
     --info-flu-header-bg: #fffbb8;
     --success-bar-bg: #e6f7e9;
@@ -90,13 +83,6 @@ html[data-theme="dark"] {
     --link-btn-bg: #2a3f5c;
     --link-btn-hover-bg: #354d6e;
     --link-btn-text: #9ec5ff;
-    --guide-result-bg: #1a2433;
-    --guide-found-bg: #1a2e22;
-    --guide-found-border: #3d7a52;
-    --guide-found-text: #8fd4a6;
-    --guide-missing-bg: #2a1a1a;
-    --guide-missing-border: #8a4a4a;
-    --guide-missing-text: #f5a3a3;
     --flu-header-bg: #1e2d42;
     --info-flu-header-bg: #3d3820;
     --success-bar-bg: #1a2e22;
@@ -270,61 +256,6 @@ header .title {
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-/* ============================================================
-   GUIDE SEARCH
-   ============================================================ */
-.guide-search-wrap {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 14px;
-}
-
-.guide-input {
-    flex: 1;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 12px;
-    background: var(--input-bg);
-    color: var(--text);
-    outline: none;
-    transition: box-shadow .15s;
-}
-
-.guide-input:focus {
-    box-shadow: 0 0 0 3px var(--focus-ring);
-}
-
-.guide-result {
-    margin-top: 18px;
-    padding: 16px 18px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--guide-result-bg);
-    font-size: 1.15rem;
-    font-weight: 400;
-    min-height: 56px;
-    display: flex;
-    align-items: flex-start;
-    transition: background .2s, border-color .2s;
-}
-
-.guide-result-text {
-    white-space: pre-line;
-}
-
-.guide-result--found {
-    background: var(--guide-found-bg);
-    border-color: var(--guide-found-border);
-    color: var(--guide-found-text);
-}
-
-.guide-result--missing {
-    background: var(--guide-missing-bg);
-    border-color: var(--guide-missing-border);
-    color: var(--guide-missing-text, var(--danger));
 }
 
 aside.sidebar {
