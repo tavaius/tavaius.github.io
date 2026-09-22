@@ -1,113 +1,113 @@
 :root {
     color-scheme: light;
-    --bg: #ffffff;
-    --bg-elev: #f5f7fa;
-    --bg-hover: #e6f0ff;
-    --text: #111111;
-    --muted: #555555;
-    --border: dodgerblue;
-    --border-subtle: #a3c8ff;
-    --accent: dodgerblue;
+    --bg: #f4f6f8;
+    --bg-elev: #eef2f5;
+    --bg-hover: #edf4fa;
+    --text: #17202a;
+    --muted: #66717d;
+    --border: #ccd6df;
+    --border-subtle: #dde4ea;
+    --accent: #1877b9;
     --accent-on: #ffffff;
-    --danger: #c62828;
-    --success: #2e7d32;
-    --link-action: #3399ff;
-    --shadow: 0 4px 12px rgba(0, 0, 0, .1);
-    --radius: 12px;
-    --sidebar-bg: #f0f6ff;
-    --header-bg: #f0f6ff;
+    --danger: #b83232;
+    --success: #287a48;
+    --link-action: #176fae;
+    --shadow: 0 6px 18px rgba(31, 45, 61, .07);
+    --radius: 10px;
+    --sidebar-bg: #edf2f6;
+    --header-bg: #f8fafb;
     --surface: #ffffff;
-    --surface-muted: #f9f9f9;
-    --tab-active-bg: #e6f2ff;
-    --highlight-bg: #e6f2ff;
-    --cell-bg: #f7fbff;
-    --table-header-bg: #ffffff;
-    --table-header-text: #828282;
-    --table-row-bg: #e6f2ff;
-    --table-row-alt-bg: #f9f9f9;
-    --link-btn-bg: #d6eaff;
-    --link-btn-hover-bg: #c0dbff;
-    --link-btn-text: #004a99;
-    --flu-header-bg: #e6f2ff;
-    --info-flu-header-bg: #fffbb8;
-    --success-bar-bg: #e6f7e9;
-    --success-bar-border: #9ad4a3;
-    --success-bar-text: #145c2e;
-    --cad-p2-bg: #ffeecb;
-    --cad-p4-bg: #d6f0ff;
+    --surface-muted: #f6f8fa;
+    --tab-active-bg: #e4f0f8;
+    --highlight-bg: #e8f2f8;
+    --cell-bg: #fbfcfd;
+    --table-header-bg: #f4f7f9;
+    --table-header-text: #68727c;
+    --table-row-bg: #f3f8fb;
+    --table-row-alt-bg: #fbfcfd;
+    --link-btn-bg: #e3eef6;
+    --link-btn-hover-bg: #d5e6f2;
+    --link-btn-text: #135f93;
+    --flu-header-bg: #edf4f8;
+    --info-flu-header-bg: #f5efc9;
+    --success-bar-bg: #e9f5ed;
+    --success-bar-border: #b6d9c1;
+    --success-bar-text: #205f38;
+    --cad-p2-bg: #f6ecd7;
+    --cad-p4-bg: #e5f0f6;
     --input-bg: #ffffff;
-    --focus-ring: rgba(30, 144, 255, .18);
-    --chip-text: #000000;
-    --chip-default-bg: #d0e0e3;
-    --chip-chase-bg: #fff2cc;
-    --chip-purple-bg: #d9d2e9;
-    --chip-csd-bg: #cbe8ff;
-    --chip-csd-red-bg: #ffd1d1;
-    --chip-magenta-bg: #ead1dc;
-    --chip-ops-bg: #ffe0b2;
-    --copy-btn-bg: #f0f6ff;
-    --rotate-green-bg: #d9f7be;
-    --rotate-green-text: #111111;
-    --rotate-red-bg: #ffd6d6;
-    --rotate-red-text: #111111;
+    --focus-ring: rgba(24, 119, 185, .18);
+    --chip-text: #24303a;
+    --chip-default-bg: #e4e9ed;
+    --chip-chase-bg: #f5eccd;
+    --chip-purple-bg: #e8e2ef;
+    --chip-csd-bg: #dcecf6;
+    --chip-csd-red-bg: #f2dddd;
+    --chip-magenta-bg: #eddfe7;
+    --chip-ops-bg: #f2e5d2;
+    --copy-btn-bg: #f0f4f7;
+    --rotate-green-bg: #dff0e5;
+    --rotate-green-text: #183d27;
+    --rotate-red-bg: #f3dddd;
+    --rotate-red-text: #592323;
     --rotate-none-bg: #ffffff;
-    --rotate-none-text: #111111;
+    --rotate-none-text: #17202a;
 }
 
 html[data-theme="dark"] {
     color-scheme: dark;
-    --bg: #0f1218;
-    --bg-elev: #181c24;
-    --bg-hover: #243044;
-    --text: #e8eaef;
-    --muted: #9aa3b2;
-    --border: #4a9eff;
-    --border-subtle: #3a4f66;
-    --accent: #5eb0ff;
-    --accent-on: #0f1218;
-    --danger: #f28b82;
-    --success: #81c995;
-    --link-action: #8ab4f8;
-    --shadow: 0 4px 16px rgba(0, 0, 0, .45);
-    --sidebar-bg: #141820;
-    --header-bg: #141820;
-    --surface: #1c2129;
-    --surface-muted: #151920;
-    --tab-active-bg: #283548;
-    --highlight-bg: #1e2d42;
-    --cell-bg: #181e28;
-    --table-header-bg: #252b36;
-    --table-header-text: #b0b8c4;
-    --table-row-bg: #1e2d42;
-    --table-row-alt-bg: #1a1f28;
-    --link-btn-bg: #2a3f5c;
-    --link-btn-hover-bg: #354d6e;
-    --link-btn-text: #9ec5ff;
-    --flu-header-bg: #1e2d42;
-    --info-flu-header-bg: #3d3820;
-    --success-bar-bg: #1a2e22;
-    --success-bar-border: #3d7a52;
-    --success-bar-text: #8fd4a6;
-    --cad-p2-bg: #4a3d20;
-    --cad-p4-bg: #1e3348;
-    --input-bg: #1c2129;
-    --focus-ring: rgba(94, 176, 255, .25);
-    --chip-text: #111111;
-    --chip-on-dark-text: #ffffff;
-    --chip-default-bg: #4a5c5f;
-    --chip-chase-bg: #5c4f2a;
-    --chip-purple-bg: #4a4258;
-    --chip-csd-bg: #2a4560;
-    --chip-csd-red-bg: #5c3535;
-    --chip-magenta-bg: #523848;
-    --chip-ops-bg: #5c4528;
-    --copy-btn-bg: #243044;
-    --rotate-green-bg: #1f5c3b;
-    --rotate-green-text: #eafff1;
-    --rotate-red-bg: #6b2424;
+    --bg: #11171d;
+    --bg-elev: #182028;
+    --bg-hover: #202d38;
+    --text: #e8edf2;
+    --muted: #98a5b1;
+    --border: #33424f;
+    --border-subtle: #283641;
+    --accent: #58a8dc;
+    --accent-on: #0c151b;
+    --danger: #ed8c88;
+    --success: #80c79a;
+    --link-action: #79b9e5;
+    --shadow: 0 8px 24px rgba(0, 0, 0, .28);
+    --sidebar-bg: #151d24;
+    --header-bg: #151d24;
+    --surface: #19222a;
+    --surface-muted: #151c22;
+    --tab-active-bg: #203343;
+    --highlight-bg: #1e303e;
+    --cell-bg: #182129;
+    --table-header-bg: #202a33;
+    --table-header-text: #aab5bf;
+    --table-row-bg: #1d2b36;
+    --table-row-alt-bg: #182129;
+    --link-btn-bg: #213747;
+    --link-btn-hover-bg: #29465b;
+    --link-btn-text: #9fd1f2;
+    --flu-header-bg: #1d2c37;
+    --info-flu-header-bg: #3a3521;
+    --success-bar-bg: #1b3024;
+    --success-bar-border: #376e4c;
+    --success-bar-text: #91d2a7;
+    --cad-p2-bg: #403720;
+    --cad-p4-bg: #1c3040;
+    --input-bg: #182129;
+    --focus-ring: rgba(88, 168, 220, .25);
+    --chip-text: #17202a;
+    --chip-on-dark-text: #f0f4f7;
+    --chip-default-bg: #46545c;
+    --chip-chase-bg: #554c2f;
+    --chip-purple-bg: #484054;
+    --chip-csd-bg: #29475a;
+    --chip-csd-red-bg: #553535;
+    --chip-magenta-bg: #4f3947;
+    --chip-ops-bg: #57452f;
+    --copy-btn-bg: #202d38;
+    --rotate-green-bg: #214f36;
+    --rotate-green-text: #e8fff0;
+    --rotate-red-bg: #612b2b;
     --rotate-red-text: #fff0f0;
-    --rotate-none-bg: #1c2129;
-    --rotate-none-text: #e8eaef;
+    --rotate-none-bg: #19222a;
+    --rotate-none-text: #e8edf2;
 }
 
 * {
@@ -135,6 +135,31 @@ textarea {
     line-height: inherit;
 }
 
+button,
+a,
+.tab-btn,
+.script-chip,
+.cad-btn {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+button:active,
+.tab-btn:active,
+.script-chip:active,
+.cad-btn:active {
+    transform: translateY(1px);
+}
+
 .app {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -151,7 +176,7 @@ header {
     justify-content: space-between;
     padding: 10px 18px;
     background: var(--header-bg);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .header-left {
@@ -174,7 +199,7 @@ header img.logo {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: 0px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--shadow);
     text-align: center;
@@ -212,6 +237,7 @@ header img.logo {
 
     .link-btn:hover {
         background: var(--link-btn-hover-bg);
+        text-decoration: none;
     }
 
 header .title {
@@ -261,7 +287,7 @@ header .title {
 aside.sidebar {
     grid-area: sidebar;
     background: var(--sidebar-bg);
-    border-right: 1px solid var(--border);
+    border-right: 1px solid var(--border-subtle);
     padding: 16px 12px;
     display: flex;
     flex-direction: column;
@@ -340,7 +366,7 @@ nav.tabs {
     font-size: 13px;
     cursor: pointer;
     box-shadow: none;
-    transition: background .15s ease, border-color .15s ease;
+    transition: background .15s ease, border-color .15s ease, transform .08s ease, box-shadow .15s ease;
 }
 
 .theme-btn:hover,
@@ -456,15 +482,15 @@ nav.tabs {
 }
 
 .status-dot--call-taker {
-    background: #2e9b4a;
+    background: #3b9460;
 }
 
 .status-dot--ops {
-    background: #e67e22;
+    background: #c9833d;
 }
 
 .status-dot--csd {
-    background: #2b7cd3;
+    background: #4b86b4;
 }
 
 .break-dim {
@@ -492,11 +518,11 @@ nav.tabs {
     gap: 10px;
     padding: 12px 14px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-subtle);
     color: var(--text);
-    border-radius: 12px;
+    border-radius: 9px;
     cursor: pointer;
-    transition: background .15s ease, border-color .15s ease;
+    transition: background .15s ease, border-color .15s ease, transform .08s ease, box-shadow .15s ease;
 }
 
 .tab-btn.locked {
@@ -505,10 +531,13 @@ nav.tabs {
 
     .tab-btn:hover {
         background: var(--bg-hover);
+        border-color: color-mix(in srgb, var(--accent) 28%, var(--border-subtle));
     }
 
     .tab-btn.active {
         background: var(--tab-active-bg);
+        border-color: color-mix(in srgb, var(--accent) 38%, var(--border-subtle));
+        box-shadow: inset 3px 0 0 var(--accent);
     }
 
     .tab-btn .dot {
@@ -545,7 +574,7 @@ main {
 }
 
 #editor {
-    padding: 18px 20px 28px;
+    padding: 20px 22px 30px;
     height: 100%;
     overflow: auto;
     outline: none;
@@ -561,6 +590,7 @@ main {
     border-top: 1px solid var(--border);
     padding: 6px 10px;
     background: var(--surface-muted);
+    letter-spacing: .01em;
 }
 
 .rightline {
@@ -740,7 +770,8 @@ main {
     }
 
     .confirm-btn:hover {
-        filter: brightness(0.95);
+        filter: brightness(0.96);
+        box-shadow: 0 3px 10px rgba(24, 119, 185, .16);
     }
 
 .flu-panel {
@@ -755,7 +786,6 @@ main {
     table-layout: fixed; /* ensures even column widths */
 }
 
-/* Hide datalist dropdown arrow in Chrome/Edge */
 input[list]::-webkit-calendar-picker-indicator {
     display: none !important;
     -webkit-appearance: none;
@@ -765,7 +795,7 @@ input[list]::-webkit-calendar-picker-indicator {
     background: var(--flu-header-bg);
     font-weight: normal;
     padding: 8px 10px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
     text-align: center;
 }
 
@@ -785,12 +815,11 @@ input[list]::-webkit-calendar-picker-indicator {
     text-align: center;
 }
 
-/* Yellow header only for the 3 script panels */
 .info-panel .flu-header {
     background: var(--info-flu-header-bg);
     font-weight: normal;
     padding: 8px 10px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
     text-align: center;
 }
 
@@ -829,7 +858,7 @@ ul.symptoms-col li{
 
 .c3-panel {
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 0;
     overflow: hidden;
     margin-top: 12px;
     box-shadow: var(--shadow);
@@ -842,7 +871,7 @@ ul.symptoms-col li{
     background: var(--success-bar-bg);
     border: 1px solid var(--success-bar-border);
     color: var(--success-bar-text);
-    box-shadow: var(--shadow);
+    box-shadow: none;
     font-weight: 600;
 }
 
@@ -858,7 +887,7 @@ ul.symptoms-col li{
     padding: 8px 10px;
     position: relative;
     padding-left: 32px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
     text-align: center;
     display: block;
 }
@@ -912,12 +941,11 @@ ul.symptoms-col li{
     max-height: 30vh;
 }
 
-/* My Shift – breaks hidden by default */
 #shift-panel #shift-breaks {
     display: none;
 }
 
-/* When panel has .breaks-visible, show them as a row */
+/* when panel has .breaks-visible, show them as a row */
 #shift-panel.breaks-visible #shift-breaks {
     display: flex;
     gap: 12px;
@@ -1068,7 +1096,7 @@ ul.symptoms-col li{
     color: var(--chip-text);
     width: 100%; /* expand full width */
     text-align: center; /* center the text */
-    transition: transform .08s ease, background-color .2s ease, box-shadow .2s ease;
+    transition: transform .08s ease, background-color .16s ease, border-color .16s ease, box-shadow .16s ease;
 }
 
 .scripts-row {
@@ -1106,6 +1134,8 @@ ul.symptoms-col li{
 
 .script-chip:hover {
     transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 26%, var(--border-subtle));
+    box-shadow: 0 3px 10px rgba(31, 45, 61, .07);
 }
 
 .script-chip.copy-flash,
@@ -1158,7 +1188,7 @@ ul.symptoms-col li{
     height: 22px;
     border: 1px solid var(--border);
     border-radius: 6px;
-    background: linear-gradient(transparent, transparent), var(--copy-btn-bg);
+    background: var(--copy-btn-bg);
     cursor: pointer;
 }
 
@@ -1193,8 +1223,3 @@ html[data-theme="dark"] #page-csd .script-chip,
 html[data-theme="dark"] #page-mentor .script-chip {
     color: var(--chip-on-dark-text) !important;
 }
-
-
-
-
-
