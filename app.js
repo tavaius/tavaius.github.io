@@ -1,4 +1,7 @@
-﻿/* ============================================================
+/* app.js — Assessment Assistant
+   everything the index.html buttons actually do lives here. */
+
+/* ============================================================
    THEME (Light / Dark)
    ============================================================ */
 const THEME_STORAGE_KEY = 'aa-theme';
@@ -23,7 +26,7 @@ document.querySelectorAll('.theme-btn').forEach(btn => {
 });
 
 /* ============================================================
-   HELPER — defined first so they're available everywhere
+   HELPERS — defined here so nothing below trips over a function not defined error.
    ============================================================ */
 
 /* ---------- Clipboard helpers ---------- */
@@ -38,6 +41,8 @@ function copyToClipboard(text, onSuccess) {
 }
 
 /* ---------- Clipboard fallback ---------- */
+// spawn an invisible textarea, dump the text in, select it, copy, remove it.
+// weird way to do it but it's the only thing guaranteed to work everywhere
 function fallbackCopy(text) {
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -61,13 +66,13 @@ function showSuccessBar() {
     }, 10000);
 }
 
-let csdExtension = null; // only set for CSD duty
+let csdExtension = null;
 
 function promptExtension() {
     while (true) {
         const raw = prompt('Enter your 5-digit extension:');
 
-        if (raw === null) return null; // user hit Cancel
+        if (raw === null) return null;
 
         const trimmed = raw.trim();
 
@@ -81,10 +86,12 @@ function promptExtension() {
             continue;
         }
 
-        return trimmed; // valid
+        return trimmed;
     }
 }
 
+// whatever duty you're currently on. drives the sidebar pill, which tab is
+// locked, and which templates show up.
 let csdMode = 'call-taker';
 let coachEnabled = false;
 
@@ -164,9 +171,6 @@ document.querySelector('.script-chip-csd[data-mode="ops"]')?.addEventListener('c
 });
 
 /* ---------- Task panels: openExclusive ---------- */
-
-
-/* ---------- Task panels: openExclusive ---------- */
 const allPanels = document.querySelectorAll('.val-panel');
 function openExclusive(panel) {
     allPanels.forEach(p => {
@@ -183,12 +187,13 @@ function openExclusive(panel) {
 const editor = document.getElementById('editor');
 const countEl = document.getElementById('count');
 
+// strip tags, count what's left. not perfect but good enough for now. nobody's marking it.
 function wordCount(html) {
     return (html.replace(/<[^>]*>/g, ' ').match(/\b\w+\b/g) || []).length;
 }
 function save() {
     if (!editor) return;
-    localStorage.setItem('seclcleric_note_html', editor.innerHTML);
+    localStorage.setItem('seclcleric_note_html', editor.innerHTML); 
     if (countEl) countEl.textContent = wordCount(editor.innerHTML) + ' words';
 }
 function load() {
@@ -214,6 +219,9 @@ document.getElementById('link-upper')?.addEventListener('click', () => {
     save();
 });
 
+// ctrl+s "saves" — really it just calls the same save() the input event
+// already triggers. workaround for people (me) who mash it out of muscle
+// memory. doesn't hurt anyone so i say it stays.
 document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
@@ -221,6 +229,7 @@ document.addEventListener('keydown', e => {
     }
 });
 
+// force plaintext paste.
 editor.addEventListener('paste', (e) => {
     e.preventDefault();
     const plain = (e.clipboardData || window.clipboardData).getData('text/plain');
@@ -309,28 +318,28 @@ if (labTrigger && labPanel) {
     });
 }
 
-/* Copy log */
 labCopy?.addEventListener('click', () => {
     const text = labLog?.value ?? '';
     if (!text.trim()) return;
     copyToClipboard(text, () => showSuccessBar());
 });
 
-/* ---------- Lab Results: fields ---------- */
+/* ---------- Lab Results ---------- */
 const labHospital = document.getElementById('lab-hospital');
 const labPhone = document.getElementById('lab-phone');
-const labBleep = document.getElementById('lab-bleep');
-const labExt = document.getElementById('lab-ext');
+
+// the ids and the on screen labels don't match each other here
+const labBleep = document.getElementById('lab-bleep'); // to be fixed...
+const labExt = document.getElementById('lab-ext'); // to be fixed...
 
 const labResult = document.getElementById('lab-result');
 const labValue = document.getElementById('lab-value');
 const labAdd = document.getElementById('lab-add');
 
-const labTable = document.getElementById('lab-table');
 const labTbody = document.getElementById('lab-tbody');
 const labGenerate = document.getElementById('lab-generate');
 
-/* Enable Add when both result + value present */
+/* enable add when both result + value present */
 function updateLabAddState() {
     const ok = (labResult?.value.trim().length ?? 0) > 0 && (labValue?.value.trim().length ?? 0) > 0;
     if (labAdd) labAdd.disabled = !ok;
@@ -338,7 +347,7 @@ function updateLabAddState() {
 labResult?.addEventListener('input', updateLabAddState);
 labValue?.addEventListener('input', updateLabAddState);
 
-/* Add a result row */
+/* add a result row — builds the <tr> by hand instead of innerHTML */
 labAdd?.addEventListener('click', () => {
     const res = labResult.value.trim();
     const val = labValue.value.trim();
@@ -382,7 +391,7 @@ labAdd?.addEventListener('click', () => {
     updateLabGenerateState();
 });
 
-/* Enable Generate when: hospital + phone present AND at least one row */
+/* enable Generate when: hospital + phone present AND at least one row */
 function updateLabGenerateState() {
     const hasRows = !!labTbody && labTbody.children.length > 0;
     const hasHospital = (labHospital?.value.trim().length ?? 0) > 0;
@@ -392,8 +401,7 @@ function updateLabGenerateState() {
 [labHospital, labPhone, labBleep, labExt].forEach(el => el?.addEventListener('input', updateLabGenerateState));
 
 /* Generate log line:
-   <HOSPITAL> - #<PHONE>[, EXT: <EXT>][, BLEEP: <BLEEP>] - RESULT: VALUE, RESULT: VALUE
-*/
+   <HOSPITAL> - #<PHONE>[, EXT: <EXT>][, BLEEP: <BLEEP>] - RESULT: VALUE, RESULT: VALUE etc*/
 labGenerate?.addEventListener('click', () => {
     const hospital = labHospital?.value.trim();
     const phone = labPhone?.value.trim();
@@ -423,11 +431,11 @@ labGenerate?.addEventListener('click', () => {
     }
 });
 
-/* Init states */
+/* init states */
 updateLabAddState();
 updateLabGenerateState();
 
-/* mentor tab */
+/* mentor tab — locked unless coach mode is on, same pattern as the CSD tab lock below */
 const mentorTabBtn = document.querySelector('.tab-btn[data-tab="mentor"]');
 
 function setMentorTabLocked(locked) {
@@ -454,7 +462,8 @@ document.getElementById('mentor-reset')?.addEventListener('click', () => {
 });
 
 /* ============================================================
-   COLD & FLU SYMPTOMS (starts expanded)
+   COLD & FLU SYMPTOMS (starts expanded — its the most glanced at
+   panel on the page so hiding it by default would be actively unhelpful)
    ============================================================ */
 const fluToggle = document.getElementById('flu-toggle');
 const fluRow = document.getElementById('flu-body');
@@ -488,12 +497,10 @@ if (llTrigger && llPanel) {
     });
 }
 
-/* ---------- LanguageLine inputs ---------- */
 const llId = document.getElementById('ll-id');
 const llLang = document.getElementById('ll-lang');
 const llGenerate = document.getElementById('ll-generate');
 
-/* Enable Generate if both boxes filled */
 function updateLlGenerateState() {
     const hasId = (llId?.value.trim().length ?? 0) > 0;
     const hasLang = (llLang?.value.trim().length ?? 0) > 0;
@@ -501,7 +508,6 @@ function updateLlGenerateState() {
 }
 [llId, llLang].forEach(el => el?.addEventListener('input', updateLlGenerateState));
 
-/* Generate log */
 llGenerate?.addEventListener('click', () => {
     const id = llId.value.trim();
     const lang = llLang.value.trim();
@@ -514,7 +520,6 @@ llGenerate?.addEventListener('click', () => {
     }
 });
 
-/* Copy (copy -> toast -> clear + wipe inputs) */
 llCopy?.addEventListener('click', () => {
     const text = llLog?.value ?? '';
     if (!text.trim()) return;
@@ -527,7 +532,7 @@ llCopy?.addEventListener('click', () => {
     });
 });
 
-/* Init */
+/* init */
 updateLlGenerateState();
 
 /* ============================================================
@@ -540,6 +545,7 @@ function setCsdTabLocked(locked) {
     csdTabBtn.setAttribute('aria-disabled', locked ? 'true' : 'false');
     csdTabBtn.classList.toggle('locked', locked);
 }
+
 // CSD tab: unlocked for OPS always; for CSD only when extension is set
 function updateCsdTabState() {
     const unlocked = csdMode === 'ops' || (csdMode === 'csd' && !!csdExtension);
@@ -567,7 +573,7 @@ function runCopyFlash(chip) {
     chip.addEventListener('animationend', handler);
 }
 
-/* ---------- Quick Scripts: click-to-copy with flash (generic) ---------- */
+/* ---------- quick scripts: click to copy with flash ---------- */
 document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-chip-csd)').forEach(chip => {
     chip.addEventListener('click', () => {
         const text = chip.getAttribute('data-copy') || chip.innerText;
@@ -575,7 +581,8 @@ document.querySelectorAll('.script-chip:not(.script-chip-special):not(.script-ch
     });
 });
 
-/* ---------- CSD Templates: copy with extension insertion ---------- */
+/* ---------- CSD templates: copy with extension insertion ---------- */
+// Every CSD template starts with "CSD <your extension> ->" for the sake of case notes
 function getCsdTemplateText(templateId) {
     if (csdMode === 'csd' && !csdExtension) {
         alert('No extension set. Please select CSD Duties first.');
@@ -615,7 +622,7 @@ document.querySelectorAll('.script-chip-csd[data-template]').forEach(chip => {
     chip.addEventListener('click', () => copyCsdTemplate(chip, templateId));
 });
 
-/* ---------- Special: CHASING 111 asks for DAS ref, then copies ---------- */
+/* ---------- special: CHASING 111 asks for DAS ref, then copies ---------- */
 const chipChase111 = document.getElementById('chip-chase-111');
 chipChase111?.addEventListener('click', () => {
     const ref = window.prompt('Please enter the Digital Admin Slip reference number.');
@@ -627,7 +634,7 @@ PT CALLING TO CHASE CALLBACK, DAS RAISED (${ref.trim()})`.toUpperCase();
     copyToClipboard(text, () => runCopyFlash(chipChase111));
 });
 
-/* ---------- Special: CALL ENDED, DISCONNECTED ---------- */
+/* ---------- special: CALL ENDED, DISCONNECTED ---------- */
 const chipCallDisc = document.getElementById('chip-call-ended-disc');
 chipCallDisc?.addEventListener('click', () => {
     const voicemail = window.confirm('Were you able to leave a voicemail containing worsening care advice?\n\nOK: Yes\nCancel: No');
@@ -639,7 +646,7 @@ CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
     copyToClipboard(text, () => runCopyFlash(chipCallDisc));
 });
 
-/* ---------- Special: CALL ENDED, SILENT ---------- */
+/* ---------- special: CALL ENDED, SILENT ---------- */
 const chipCallSilent = document.getElementById('chip-call-ended-silent');
 chipCallSilent?.addEventListener('click', () => {
     const voicemail = window.confirm('Were you able to leave a voicemail containing worsening care advice?\n\nOK: Yes\nCancel: No');
@@ -651,7 +658,7 @@ CALLED BACK PATIENT (3X), NO RESPONSE.\n${vmText}`.toUpperCase();
     copyToClipboard(text, () => runCopyFlash(chipCallSilent));
 });
 
-/* ---------- Special: DATIX asks for ref, then copies ---------- */
+/* ---------- special: DATIX asks for ref, then copies ---------- */
 const chipDatix = document.getElementById('chip-datix');
 chipDatix?.addEventListener('click', () => {
     const ref = window.prompt('Please enter the DATIX reference number.');
@@ -662,7 +669,7 @@ chipDatix?.addEventListener('click', () => {
     copyToClipboard(text, () => runCopyFlash(chipDatix));
 });
 
-/* ---------- Special: SAFEGUARDING asks for ref, then copies ---------- */
+/* ---------- special: SAFEGUARDING asks for ref, then copies ---------- */
 const chipSafeguarding = document.getElementById('chip-safeguarding');
 chipSafeguarding?.addEventListener('click', () => {
     const ref = window.prompt('Please enter the DAS reference number.');
@@ -675,6 +682,10 @@ chipSafeguarding?.addEventListener('click', () => {
 
 /* ============================================================
    SHIFT AUTOFILL
+   reads whatever you copied off the WFM homepage and yanks the shift
+   start/finish + break times out of it with regex. WFM changes its
+   report layout every so often with zero warning, so if this suddenly
+   stops working, it's not you, it's them - go check parseWfmCurrentShift.
    ============================================================ */
 const shiftAutoFillButton = document.getElementById('shift-autofill');
 shiftAutoFillButton?.addEventListener('click', autoFillShift);
@@ -684,7 +695,7 @@ async function autoFillShift() {
     if (navigator.clipboard?.readText) {
         try {
             text = await navigator.clipboard.readText();
-        } catch (e) {}
+        } catch (e) {} // clipboard permission denied, browser being weird, whatever - fall through to the prompt
     }
     if (!text) {
         text = window.prompt(
@@ -711,6 +722,7 @@ async function autoFillShift() {
     if (lunchInput) lunchInput.value = data.lunch || '';
 }
 
+// regex soup ahead - hold onto yer hats mateys!
 function parseWfmCurrentShift(raw) {
     const lines = raw
         .replace(/\r/g, '\n')
@@ -722,7 +734,6 @@ function parseWfmCurrentShift(raw) {
     const shiftRangeRe = /^(\d{1,2}:\d{2}(?::\d{2})?)\s*-\s*(\d{1,2}:\d{2}(?::\d{2})?)$/;
     const breakRe = /^(Rest|Lunch|Break|Meal)\s*:\s*(\d{1,2}:\d{2}(?::\d{2})?)\s*-\s*(\d{1,2}:\d{2}(?::\d{2})?)\s*\(\s*\d+\s*m\s*\)$/i;
 
-    // Find the first date line that is immediately followed by a shift time range.
     let dateIdx = -1;
     for (let i = 0; i < lines.length - 1; i++) {
         if (dateRe.test(lines[i]) && shiftRangeRe.test(lines[i + 1])) {
@@ -742,11 +753,10 @@ function parseWfmCurrentShift(raw) {
     for (let i = dateIdx + 2; i < lines.length; i++) {
         const line = lines[i];
 
-        // Stop once we reach the next shift's date block
         if (dateRe.test(line) && shiftRangeRe.test(lines[i + 1] || '')) break;
 
         const breakMatch = line.match(breakRe);
-        if (!breakMatch) continue; // e.g. the employee name line - skip it
+        if (!breakMatch) continue;
 
         const type = breakMatch[1].toLowerCase();
         const start = toHHMM(breakMatch[2]);
@@ -767,7 +777,13 @@ function toHHMM(timeText) {
     return m[1].padStart(2, '0') + m[2];
 }
 
-/* mentor table rotate */
+/* ============================================================
+   MENTOR TABLE ROTATE
+   see note on index.html about this. this requires the mentor to
+   stop being lazy and add their own notes - this is a skeleton
+   report, it should be modified depending on how the shift went,
+   customised towards the mentee etc etc.
+   ============================================================ */
 
 const menteeRef = "The mentee";
 
@@ -841,6 +857,7 @@ const mentorMessages = {
 const menteeNameInput = document.getElementById('mentee-name');
 const menteeExtInput = document.getElementById('mentee-ext');
 
+// to be fixed/altered, problems getting mentee's name.
 function getMenteeRef() {
     const name = menteeNameInput?.value.trim();
     const ext = menteeExtInput?.value.trim();
@@ -872,8 +889,8 @@ document.querySelectorAll('.rotate-row').forEach(row => {
 });
 
 function updateMentorOutput() {
-  const menteeRef = getMenteeRef();
-   
+  const menteeRef = getMenteeRef(); // see the note above getMenteeRef — grabbed, currently unused below
+
   const output = document.getElementById('rotate-output');
   if (!output) return;
 
@@ -908,7 +925,9 @@ menteeNameInput?.addEventListener('input', updateMentorOutput);
 menteeExtInput?.addEventListener('input', updateMentorOutput);
 
 /* ============================================================
-   WFM LINK THINGY
+   WFM LINK THING
+   builds today's "My Breaks" deep link with today's date baked in, so
+   it's one click instead of picking the date in WFM's UI every shift.
    ============================================================ */
 
 function setWfmLink() {
@@ -921,6 +940,10 @@ function setWfmLink() {
     const dd = String(today.getDate()).padStart(2, '0');
     const dateStr = `${yyyy}-${mm}-${dd}`;
 
+    // employeeId is hardcoded to my own GRS number - this is a personal tool AS FOR NOW.
+    // running off my machine, not multi user deployment YET so it's fine.
+    // if this ever gets rolled out wider, this line is the first thing
+    // that needs to become an input field instead of using my own deets.
     link.href = `https://wfm.secamb.nhs.uk/agent-breaks/breaks-by-person?employeeId=33186719&startDate=${dateStr}&endDate=${dateStr}`;
 }
 
@@ -928,6 +951,11 @@ document.addEventListener('DOMContentLoaded', setWfmLink);
 
 /* ============================================================
    REPEAT PRESCRIPTIONS PANEL
+   because what trainee knows how to spell hydrochlorothiazide
+   trims down on repeatedly asking patients to come again on
+   dodgy phone lines, i.e. if it started with 'Levo' the auto-fill
+   will act as a nudge for the HA as to what was likely said.
+   can always double check with patient for airtight reassurance.
    ============================================================ */
 const rpTrigger = document.getElementById('rp-trigger');
 const rpPanel = document.getElementById('rp-panel');
@@ -935,14 +963,13 @@ const rpPanel = document.getElementById('rp-panel');
 const rpInput = document.getElementById('rp-input');
 const rpAdd = document.getElementById('rp-add');
 
-const rpTable = document.getElementById('rp-table');
 const rpTbody = document.getElementById('rp-tbody');
 
 const rpGenerate = document.getElementById('rp-generate');
 const rpLog = document.getElementById('rp-log');
 const rpCopy = document.getElementById('rp-copy');
 
-/* Toggle panel */
+/* tggle panel */
 if (rpTrigger && rpPanel) {
     rpTrigger.addEventListener('click', () => {
         const isOpen = rpPanel.classList.contains('show');
@@ -955,13 +982,13 @@ if (rpTrigger && rpPanel) {
     });
 }
 
-/* Enable Add when input has text */
+/* enable add when input has text */
 rpInput?.addEventListener('input', () => {
     const hasText = rpInput.value.trim().length > 0;
     if (rpAdd) rpAdd.disabled = !hasText;
 });
 
-/* Add medication row */
+/* add medication row */
 rpAdd?.addEventListener('click', () => {
     const text = rpInput.value.trim();
     if (!text) return;
@@ -999,13 +1026,13 @@ rpAdd?.addEventListener('click', () => {
     updateRpGenerateState();
 });
 
-/* Enable Generate only when there is at least one row */
+/* enable generate only when there is at least one row */
 function updateRpGenerateState() {
     const hasRows = !!rpTbody && rpTbody.children.length > 0;
     if (rpGenerate) rpGenerate.disabled = !hasRows;
 }
 
-/* Build log from table rows */
+/* build log from table rows */
 rpGenerate?.addEventListener('click', () => {
     const meds = [...(rpTbody?.children || [])]
         .map(tr => tr.querySelector('td')?.textContent?.trim())
@@ -1020,7 +1047,7 @@ rpGenerate?.addEventListener('click', () => {
     }
 });
 
-/* Copy log (copy -> toast -> clear) */
+/* copy log (copy -> toast -> clear) */
 rpCopy?.addEventListener('click', () => {
     const text = rpLog?.value ?? '';
     if (!text.trim()) return;
@@ -1034,11 +1061,12 @@ rpCopy?.addEventListener('click', () => {
     });
 });
 
-/* Init */
+/* init */
 updateRpGenerateState();
 
 /* ============================================================
    TABS
+   swaps the visible .page and updates which sidebar button looks active.
    ============================================================ */
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.page');
@@ -1050,6 +1078,7 @@ function setActiveTab(tabName) {
     pages.forEach(p => p.classList.remove('active'));
     document.getElementById(`page-${tabName}`)?.classList.add('active');
 }
+
 tabs.forEach(btn => btn.addEventListener('click', () => {
     const isCsdTab = btn.dataset.tab === 'csd';
     const csdLocked = csdTabBtn?.dataset.locked === 'true';
@@ -1070,6 +1099,10 @@ tabs.forEach(btn => btn.addEventListener('click', () => {
 
 /* ============================================================
    SHIFT LOCK LOGIC
+   two stage lock; so lock the start/finish times first, THEN the break
+   fields appear and can be locked in turn. splitting it this way stops
+   people fat fingering a break time after they've already scheduled
+   the notification for it further down.
    ============================================================ */
 const shiftStart = document.getElementById('shift-start');
 const shiftEnd = document.getElementById('shift-end');
@@ -1085,18 +1118,18 @@ shiftLock?.addEventListener('click', () => {
         return;
     }
 
-    // Make shift times unchangeable
+    // make shift times unchangeable
     if (shiftStart) shiftStart.readOnly = true;
     if (shiftEnd) shiftEnd.readOnly = true;
 
-    // Show break fields
+    // show break fields
     if (shiftBreaks) {
         shiftBreaks.style.display = 'flex';
         updateBreakLockState();
     }
 });
 
-/* Breaks Lock enable/disable + lock behaviour */
+/* breaks lock enable/disable + lock behaviour FYI */
 const br1 = document.getElementById('break-1');
 const br2 = document.getElementById('break-2');
 const br3 = document.getElementById('break-3');
@@ -1116,6 +1149,9 @@ function updateBreakLockState() {
 
 /* ============================================================
    NOTIFICATIONS & SCHEDULING
+   once you lock in your breaks, this quietly sets a timer for each one
+   and fires a system notification when it starts. service worker version
+   is preferred - allows it even if the tab loses focus.
    ============================================================ */
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
@@ -1136,18 +1172,18 @@ async function fireNotification(title, body) {
         if (reg && Notification.permission === 'granted') {
             await reg.showNotification(title, {
                 body,
-                requireInteraction: true, // stays until dismissed
+                requireInteraction: true, // a break reminder that vanishes in 3 seconds helps nobody
                 tag: title,
                 renotify: true
             });
             return true;
         }
-    } catch (e) { /* fall through */ }
+    } catch (e) { /* plan b */ }
     if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(title, { body });
         return true;
     }
-    return false;
+    return false; // permission never granted. nothing more we can do.
 }
 
 function parseHHMMToDate(hhmm) {
@@ -1156,19 +1192,20 @@ function parseHHMMToDate(hhmm) {
     const h = parseInt(hhmm.slice(0, 2), 10);
     const m = parseInt(hhmm.slice(2), 10);
     const t = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0, 0);
-    if (t <= now) t.setDate(t.getDate() + 1);  // schedule for tomorrow if already passed
+    if (t <= now) t.setDate(t.getDate() + 1);  // already passed today - assume they mean tomorrow, not "immediately"
     return t;
 }
 
+// setTimeout with a delay measured in hours. fine for a single shift's worth of breaks
 function scheduleBreak(inputEl, label) {
     const when = parseHHMMToDate(inputEl.value.trim());
     if (!when) return;
     const delay = when.getTime() - Date.now();
 
     window.setTimeout(async () => {
-        // visually dim the box (75% transparent)
+        // dim the box so you can see at a glance which breaks you have already kicked off
         inputEl.classList.add('break-dim');
-        // fire the system toast
+        // toast time :D
         await fireNotification(`${label} has started`, `${label} started at ${inputEl.value}.`);
     }, delay);
 }
@@ -1184,7 +1221,7 @@ shiftLock2?.addEventListener('click', async () => {
     // request permission (must be user-initiated so gotta do click)
     await ensureNotifyPermission();
 
-    // schedule the toasts
+    // schedule the toasts mmmmm
     if (br1) scheduleBreak(br1, 'Break 1');
     if (br2) scheduleBreak(br2, 'Break 2');
     if (br3) scheduleBreak(br3, 'Break 3');
@@ -1196,11 +1233,8 @@ if (shiftPanel) {
     shiftPanel.classList.add('breaks-visible');
     updateBreakLockState();
 }
+
 /* ============================================================
-   INIT STATES — run after everything is defined
+   INIT STATES
    ============================================================ */
 load();
-
-
-
-
