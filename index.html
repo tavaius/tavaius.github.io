@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8" />
@@ -7,8 +7,16 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico">
 </head>
+<!--
+    Tay's Assessment Assistant :D
+    Call-handling helper for SECAmb's 111 HAs.
+
+    entirely all local DOM + clipboard stuff driven from app.js.
+-->
 <body>
     <div class="app">
+        <!-- left-hand nav. data-tab on each button has to match the id of a
+             .page section below (page-notepad, page-tasks, etc)-->
         <aside class="sidebar" role="navigation" aria-label="Primary">
             <nav class="tabs">
                 <button class="tab-btn active" data-tab="notepad" aria-pressed="true" aria-controls="page-notepad">
@@ -65,6 +73,7 @@
             </div>
         </header>
         <main>
+            <!-- home tab - the actual note-taking area.-->
             <section id="page-notepad" class="page active">
                 <div class="editor-wrap">
                     <div id="editor" contenteditable="true" spellcheck="true">
@@ -79,23 +88,27 @@
                         </div>
                     </div>
                 </div>
+                <!-- shortcuts to the tools, documents and forms we're in and out of all shift -->
                 <div class="links-panel">
                     <table class="links-table">
                         <tr>
                             <td colspan="8" class="header-cell">To approve Datix and Safeguarding requests, contact the supervisor line on <b>81007</b><br>If a patient requires translation services, contact LanguageLine on <b>020 3901 6154</b></td>
                         </tr>
-                        <tr>
+                        <tr> 
                             <td><a href="https://wfm.secamb.nhs.uk/" target="_blank" class="link-btn">WFM</a></td>
                             <td><a href="https://servicedesk.secamb.nhs.uk/MSMselfservice/AutoGen.aspx?page=242" target="_blank" class="link-btn">DAS</a></td>
                             <td><a href="https://secamb.gateway.prod-uk.datixcloudiq.co.uk/capture/?form_id=5" target="_blank" class="link-btn">DTX</a></td>
                             <td><a href="https://secamb.gateway.prod-uk.datixcloudiq.co.uk/capture/?form_id=2&module=SFG" target="_blank" class="link-btn">SFG</a></td>
-                            <td><a href="https://secamb.sharepoint.com/sites/KMS111/Shared%20Documents/General/KMS%20111%20Call%20Handling%20Local%20Procedure%20V4A%20Live.pdf" target="_blank" class="link-btn">KMS</a></td>
+                            <td><a href="https://secamb-my.sharepoint.com/:p:/r/personal/tavaius_wisbey_secamb_nhs_uk/_layouts/15/Doc.aspx?sourcedoc=%7BA3F860B2-93FF-41B7-8957-FC7B995E2150%7D&file=New%20CHP%2030%20Aug%202026.pptx&action=edit&mobileredirect=true" target="_blank" class="link-btn">KMS</a></td>
                             <td><a href="https://respond.secamb.nhs.uk/wallboard/frmCallStats.aspx?list=5%2C7&sizeh=25px&sizec=80px&flash=false&hideg=true&date=false" target="_blank" class="link-btn">STATS</a></td>
                             <td><a href="https://respond.secamb.nhs.uk/wallboard/frmAgentMap.aspx?grp=11&dark=true&layout=54" target="_blank" class="link-btn">MAP</a></td>
                             <td><a href="https://wfm.secamb.nhs.uk/agent-management" target="_blank" class="link-btn">AM</a></td>
-                        </tr>
+							<!-- ***NEEDS NEW KMS LINKS*** -->
+						</tr>
                     </table>
                 </div>
+                <!-- Cold & flu symptom checklist - collapsible because it takes up
+                     a fair chunk of screen and nobody needs it open every call. -->
                 <div class="flu-panel">
                     <table class="flu-table">
                         <tr>
@@ -128,6 +141,7 @@
                         </tr>
                     </table>
                 </div>
+                <!-- C3 ambulance disposition script, open to scrutiny -->
                 <div class="c3-panel">
                     <table class="c3-table">
                         <tr>
@@ -179,7 +193,7 @@
                     </table>
                 </div>
 
-                <!-- Clinician Callbacks (Op508v2) -->
+                <!-- Clinician Callbacks script (Op508v2) -->
                 <div class="info-panel" style="margin-top:12px;">
                     <table class="flu-table">
                         <tr>
@@ -196,7 +210,8 @@
                     </table>
                 </div>
 
-                <!-- Amber DoS Options -->
+                <!-- Amber DoS options - (SERVICE) is a placeholder, the HA should
+                     swap it out for whatever the Directory of Services suggested. -->
                 <div class="info-panel" style="margin-top:12px;">
                     <table class="flu-table">
                         <tr>
@@ -213,6 +228,14 @@
                     </table>
                 </div>
             </section>
+            <!-- My Shift tab. "Auto-Fill" hands off to app.js, which screen scrapes
+                 the pasted WFM report text for start/finish and break times - it's
+                 a bit fragile since WFM changes its report layout every so often,
+                 but the manual fields below are the fallback if it ever fucks up. -->
+			<!-- i'm unsure why this hasn't been used in WFM already given the fact
+				 it uses notification toasts to alert management if a call handler
+				 is late from their break. you'd think the call handler themselves
+				 should be the first person to know if they're late or not, no? -->
             <section id="page-shift" class="page">
                 <div id="shift-panel" class="shift-panel" aria-hidden="false">
                     <div class="shift-header">
@@ -274,13 +297,19 @@
                     </div>
                 </div>
             </section>
+            <!-- mentoring tab - gated behind the Coach toggle in the sidebar.
+                 each rotate row cycles through good/needs-work/not-covered on click
+                 (see app.js) and feeds the summary into the textarea below, so you
+                 walk away from a listen-in with debrief notes already half written.
+				 ONLY A LAZY MENTOR would leave it as the template messages however,
+				 these are meant as a framework/template for the mentor to change and
+				 personalise for their mentee. -->
             <section id="page-mentor" class="page">
                 <div class="mentor-fields">
                   <label>
                     <span class="label">Mentee</span>
                     <input id="mentee-name" type="text" class="desc-input">
                   </label>
-                    
                   <label>
                     <span class="label">Extension</span>
                     <input id="mentee-ext" type="text" class="desc-input">
@@ -337,14 +366,16 @@
                         <tr class="rotate-row" data-state="none">
                             <td>Manages all risks appropriately to reach an appropriate outcome</td>
                         </tr>
-                        </table>
-                        <textarea id="rotate-output" class="rotate-output" readonly>What went well?
+                    </table>
+                    <textarea id="rotate-output" class="rotate-output" readonly>What went well?
 
 What could have gone better?
 
 Aims for tomorrow:</textarea>
                 </div>
-            </section> 
+            </section>
+            <!-- templates (call taker) tab - each trigger button below opens its
+                 matching .val-panel (lab results / repeat prescriptions / LanguageLine). -->
             <section id="page-tasks" class="page">
                 <div class="cad-wrap">
                     <div class="cad-grid">
@@ -385,10 +416,10 @@ Aims for tomorrow:</textarea>
                             </div>
                         </div>
 
-                        <!-- Divider -->
+                        <!-- div -->
                         <hr style="margin:12px 0; border:none; border-top:1px solid var(--border,#444);" />
 
-                        <!-- Result + Value inputs, Add + Generate inline -->
+                        <!-- result + value inputs, add + generate inline -->
                         <div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:10px;">
                             <div style="flex:1;">
                                 <span class="label">Result</span>
@@ -402,7 +433,7 @@ Aims for tomorrow:</textarea>
                             <button id="lab-generate" class="confirm-btn" type="button" disabled>Generate</button>
                         </div>
 
-                        <!-- Results table -->
+                        <!-- results table -->
                         <div style="overflow:auto; max-height:180px; border:1px solid var(--border, #333); border-radius:8px;">
                             <table id="lab-table" style="width:100%; border-collapse:collapse;">
                                 <thead>
@@ -446,9 +477,11 @@ Aims for tomorrow:</textarea>
                         </div>
                     </div>
 
-                    <!-- Repeat Prescriptions Panel -->
+                    <!-- repeat prescriptions panel -->
+					<!-- not every medication known to man of course but this -->
+					<!-- contains most of the ones our usual callers are on. -->
                     <div id="rp-panel" class="val-panel" aria-hidden="true">
-                        <!-- Input row -->
+                        <!-- input row -->
                         <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                             <input id="rp-input" class="desc-input" type="text" placeholder=""
                                    aria-label="Repeat Prescription Input" list="rp-meds" />
@@ -500,7 +533,7 @@ Aims for tomorrow:</textarea>
                                 <option value="Edoxaban"></option>
                                 <option value="Sertraline"></option>
                                 <option value="Prednisolone"></option>
-                                <option value="Clopidogrel"></option>
+                                <option value="Clopidogrel"></option> <!-- 'CLOP-IH-DUH-GRILL' not 'CLOPPY-DOG-RILL' :) -->
                                 <option value="Metoprolol"></option>
                                 <option value="Spironolactone"></option>
                                 <option value="Salbutamol"></option>
@@ -517,7 +550,7 @@ Aims for tomorrow:</textarea>
                             </datalist>
                         </div>
 
-                        <!-- Medications table/list -->
+                        <!-- medications table/list -->
                         <div style="overflow:auto; max-height:180px; border:1px solid var(--border, #333); border-radius:8px;">
                             <table id="rp-table" style="width:100%; border-collapse:collapse;">
                                 <thead>
@@ -531,14 +564,14 @@ Aims for tomorrow:</textarea>
                             </table>
                         </div>
 
-                        <!-- Log area -->
+                        <!-- log area -->
                         <div class="ops-log-wrap" style="margin-top:12px;">
                             <textarea id="rp-log" class="ops-log" readonly rows="4" aria-label="Repeat Prescriptions Log"></textarea>
                             <button id="rp-copy" class="ops-copy" type="button" title="Copy all"></button>
                         </div>
                     </div>
                 </div><br>
-                <!-- Quick Scripts -->
+                <!-- quick scripts - as it says on the can. -->
                 <div class="scripts-row">
                     <button id="chip-chase-111" class="script-chip script-chip-chase script-chip-special" type="button">
                         CHASING 111, NO NEW/WORSENING
@@ -553,7 +586,6 @@ CALLING TO CHASE AMBULANCE - ADVISED TO CALL 999.">
                     <button id="chip-safeguarding" class="script-chip script-chip-chase script-chip-special" type="button">
                         DAS RAISED
                     </button>
-
                     <button id="chip-datix" class="script-chip script-chip-chase script-chip-special" type="button">
                         DATIX RAISED
                     </button>
@@ -586,12 +618,12 @@ CALLER/PATIENT TO CALL BACK LATER.">
                         CALL ENDED, CALLER DISCONNECTED.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
-
                     <button id="chip-call-ended-silent" class="script-chip script-chip-magenta script-chip-special" type="button">
                         CALL ENDED, LINE SILENT/UNRESPONSIVE.<br>
                         CALLED BACK PATIENT (3x), NO RESPONSE.
                     </button>
                 </div>
+                <!-- coach-only scripts, still hidden unless the coach toggle is on -->
                 <div id="coach-scripts-section" class="coach-scripts hidden">
                     <p class="scripts-section-label">⎯⎯⎯⎯⎯ Coaches Templates ⎯⎯⎯⎯⎯</p>
                     <button id="chip-opened-for-mentoring" class="script-chip script-chip-chase" type="button"
@@ -618,6 +650,7 @@ Do you need help or are you okay at the moment?">
                     </div>
                 </div>
             </section>
+            <!-- CSD/OPS templates tab with CSD/OPS related templates. -->
             <section id="page-csd" class="page">
                 <div id="ops-inline-support-panel" class="ops-inline-support hidden">
                     <button class="script-chip script-chip-chase" type="button"
@@ -652,40 +685,41 @@ Do you need help or are you okay at the moment?">
                     </div>
                 </div>
                 <div class="flu-panel flu-csd-callback">
-                <table class="flu-table">
-                    <tr>
-                        <td class="flu-header">
-                            1st Callback Attempt Script
-                            <span class="arrow" data-flu-toggle>[hide]</span>
-                        </td>
-                    </tr>
-                    <tr class="flu-body flu-center" data-flu-body>
-                        <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
-                        This is the first failed contact, and as such we will call you back momentarily to continue.</i></td>
-                    </tr>
-                </table>
-            </div>
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                1st Callback Attempt Script
+                                <span class="arrow" data-flu-toggle>[hide]</span>
+                            </td>
+                        </tr>
+                        <tr class="flu-body flu-center" data-flu-body>
+                            <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
+                            This is the first failed contact, and as such we will call you back momentarily to continue.</i></td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="flu-panel flu-csd-callback">
-                <table class="flu-table">
-                    <tr>
-                        <td class="flu-header">
-                            2nd Callback Attempt Script
-                            <span class="arrow" data-flu-toggle>[hide]</span>
-                        </td>
-                    </tr>
-                    <tr class="flu-body flu-center" data-flu-body>
-                        <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
-                        This is the second failed contact, and as such we will now be closing this case as we cannot
-                        reach you. If at any point there are any new symptoms, any of your conditions get worse, changes,
-                        or you wish to reopen this case, please call us back on 111. Thank you.</i></td>
-                    </tr>
-                </table>
-            </div>
+                    <table class="flu-table">
+                        <tr>
+                            <td class="flu-header">
+                                2nd Callback Attempt Script
+                                <span class="arrow" data-flu-toggle>[hide]</span>
+                            </td>
+                        </tr>
+                        <tr class="flu-body flu-center" data-flu-body>
+                            <td><i>This is the NHS 111 Service calling regarding your <b>online assessment/previous call...</b>
+                            This is the second failed contact, and as such we will now be closing this case as we cannot
+                            reach you. If at any point there are any new symptoms, any of your conditions get worse, changes,
+                            or you wish to reopen this case, please call us back on 111. Thank you.</i></td>
+                        </tr>
+                    </table>
+                </div>
             </section>
+            <!-- just the about/credits page, nothing fancy -->
             <section id="page-info" class="page">
                 <div class="info-header">
                     <div class="info-title">Assessment Assistant</div>
-                    <div class="info-author">⎯⎯⎯ Designed for the South East Coast Ambulance Service ⎯⎯⎯<br>⎯⎯⎯ Developed by Tavaius Wisbey - Internal use only ⎯⎯⎯</div>
+                    <div class="info-author">⎯⎯⎯ Designed for the South East Coast Ambulance Service ⎯⎯⎯<br>⎯⎯⎯ Developed by Tavaius Wisbey - Internal use only ⎯⎯⎯</div> <!-- yours truely B^) -->
                 </div>
             </section>
         </main>
