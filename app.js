@@ -1080,6 +1080,13 @@ function setActiveTab(tabName) {
 }
 
 tabs.forEach(btn => btn.addEventListener('click', () => {
+    // decided I want to keep dispatch seperated from call handling to reduce so many
+    // buttons etc on the call handler's assistant page.
+    if (btn.dataset.tab === 'dispatch') {
+        window.open('https://tavaius.github.io/dispatch', '_blank', 'noopener');
+        return;
+    }
+   
     const isCsdTab = btn.dataset.tab === 'csd';
     const csdLocked = csdTabBtn?.dataset.locked === 'true';
     if (isCsdTab && csdLocked) {
