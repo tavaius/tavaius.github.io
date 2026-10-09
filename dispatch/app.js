@@ -40,7 +40,7 @@ function buildNote() {
 
     return 'Reviewed outstanding unassigned incident. I have verified no available resources, '
         + 'having checked neighbouring dispatch desks and resource availability. '
-        + 'Considering escalation to a SRD/DM. Currently holding:\n'
+        + 'Considering escalation to a SRD/DM. Holding:\n'
         + held.map(l => l + '\n').join('')
         + `${oda} ODA. CSP Level ${values.csp}.`;
 }
