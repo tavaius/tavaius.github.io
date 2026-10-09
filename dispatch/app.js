@@ -58,6 +58,7 @@ function setReel(reel, next, dir) {
 
     values[id] = next;
     win.setAttribute('aria-valuenow', next);
+    win.classList.toggle('lit', next >= 1);
     reel.querySelector('[data-step="1"]').disabled = next >= max;
     reel.querySelector('[data-step="-1"]').disabled = next <= min;
 
