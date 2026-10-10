@@ -42,7 +42,7 @@ function buildNote() {
         + 'having checked neighbouring dispatch desks and resource availability. '
         + 'Considering escalation to a SRD/DM. Holding:\n'
         + held.map(l => l + '\n').join('')
-        + `within the ${oda} ODA. Currently in CSP Level ${values.csp}.`;
+        + `${oda} ODA, CSP level ${values.csp}.`;
 }
 
 function renderNote() {
