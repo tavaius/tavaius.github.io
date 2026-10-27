@@ -36,7 +36,8 @@
         openTabs: [],        // record ids, in open order
         seen: new Set(),     // records the user has opened
         search: null,        // { type, text, criteria, results, when, showAll }
-        msg: null            // { kind, title, text }
+        msg: null,           // { kind, title, text }
+        editing: null        // record panel currently in edit mode ('ident', 'desc', 'details')
     };
 
     // Session lives in sessionStorage so a refresh keeps you signed in, but
@@ -47,6 +48,22 @@
         clear() { try { sessionStorage.removeItem('rms-session'); } catch (_) { } }
     };
 
+    // Edits are kept in this browser's localStorage, so each viewer has their
+    // own copy of the training data. "Reset training data" wipes it.
+    const DB_KEY = 'rms-db-v1';
+    const PERSIST = ['people', 'objects', 'locations', 'events', 'tasks'];
+    const db = {
+        load() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(DB_KEY));
+                if (saved) PERSIST.forEach((k) => { if (Array.isArray(saved[k])) D[k] = saved[k]; });
+            } catch (_) { }
+        },
+        save() { try { localStorage.setItem(DB_KEY, JSON.stringify(Object.fromEntries(PERSIST.map((k) => [k, D[k]])))); } catch (_) { toast('Could not save - browser storage is unavailable'); } },
+        reset() { try { localStorage.removeItem(DB_KEY); } catch (_) { } location.reload(); }
+    };
+    db.load();
+
     // ---------- record lookup ----------
     const TYPE_ICON = { person: 'person', object: 'cube', location: 'pin', event: 'bolt' };
     const allRecords = () => [
@@ -56,6 +73,8 @@
         ...D.events.map((r) => ({ ...r, kind: 'event' }))
     ];
     const findRecord = (id) => allRecords().find((r) => r.id === id);
+    // the stored object itself (findRecord returns a copy), for editing
+    const rawRecord = (id) => ['people', 'objects', 'locations', 'events'].map((k) => D[k].find((r) => r.id === id)).find(Boolean);
     const displayName = (r) => r.kind === 'person' ? `${r.first} ${r.last}` : r.name;
     const ageFrom = (dob) => {
         const [d, m, y] = dob.split('/').map(Number);
@@ -109,7 +128,7 @@
     // ======================================================
     const MENU = [
         { id: 'dashboard', label: 'Dashboard', icon: 'dash', href: '#/dashboard' },
-        { id: 'search', label: 'Search', icon: 'search', href: '#/results' },
+        { id: 'search', label: 'Search', icon: 'search', href: '#/results', sub: [['Search results', '#/results'], ['Create person record', '#/new']] },
         { id: 'shared', label: 'Shared Searches', icon: 'share', href: '#/shared', sub: ["You've shared", 'Shared with you', 'Shared search history', 'Group shares'] },
         { id: 'saved', label: 'Saved Searches', icon: 'star', href: '#/saved' },
         { id: 'alerts', label: 'Alerts', icon: 'alert', href: '#/alerts', sub: ['Create alerts', 'Manage alerts'] },
@@ -128,7 +147,7 @@
                 ${icon(m.icon)}<span class="rail__label">${esc(m.label)}</span>
                 ${m.sub ? `<span class="rail__label" style="margin-left:auto">${icon('chev-down')}</span>` : ''}
             </button>
-            ${m.sub ? `<div class="rail__sub ${m.id === activeId ? 'show' : ''}">${m.sub.map((s) => `<button data-go="${m.href}">${esc(s)}</button>`).join('')}</div>` : ''}
+            ${m.sub ? `<div class="rail__sub ${m.id === activeId ? 'show' : ''}">${m.sub.map((s) => Array.isArray(s) ? `<button data-go="${s[1]}">${esc(s[0])}</button>` : `<button data-go="${m.href}">${esc(s)}</button>`).join('')}</div>` : ''}
         `).join('');
     }
 
@@ -159,6 +178,17 @@
         if (!e.target.closest('#user-menu')) $('#user-menu').classList.add('hidden');
         // re-rendered wizard buttons are detached by now, so ignore those
         if (e.target.isConnected && !e.target.closest('#quick-search')) closeAdvanced();
+    });
+
+    // ---------- Theme ----------
+    function applyTheme(t) {
+        document.documentElement.dataset.theme = t;
+        try { localStorage.setItem('rms-theme', t); } catch (_) { }
+        $('#theme-btn-label').textContent = t === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+    $('#theme-btn').addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+    $('#reset-btn').addEventListener('click', () => {
+        if (confirm('Reset all training data? Your edits, notes and new records in this browser will be lost.')) db.reset();
     });
 
     $('#notif-btn').addEventListener('click', () => { navigate('#/alerts'); });
@@ -305,6 +335,7 @@
     function openRecord(id) {
         if (!state.openTabs.includes(id)) state.openTabs.push(id);
         state.seen.add(id);
+        state.editing = null;
         navigate('#/record/' + id);
     }
 
@@ -324,7 +355,7 @@
             const r = findRecord(id);
             if (!r) return '';
             return `<button class="rtab ${id === activeId ? 'active' : ''}" data-go="#/record/${id}">
-                <small>${esc(r.source)}</small><span class="n">${esc(r.name)}</span>
+                <small>${esc(r.source)}</small><span class="n">${esc(r.name || 'New record')}</span>
                 <span class="x" data-close-tab="${id}" title="Close">${icon('close')}</span></button>`;
         }).join('');
         let summary;
@@ -351,7 +382,7 @@
     function panel(title, body, opts = {}) {
         const ic = opts.icon ? `<span class="tl-icon ${opts.iconBg || ''}">${icon(opts.icon)}</span>` : '';
         const tools = opts.tools !== false ? `<div class="panel__tools">
-            ${opts.add ? `<button title="Add" data-act="add">${icon('plus')}</button>` : `<button title="Link" data-act="link">${icon('link')}</button><button title="Expand" data-act="expand">${icon('expand')}</button>`}
+            ${opts.edit ? `<button title="Edit" data-edit="${opts.edit}">${icon('edit')}</button>` : opts.add ? '' : `<button title="Link" data-act="link">${icon('link')}</button><button title="Expand" data-act="expand">${icon('expand')}</button>`}
             <button title="Collapse" data-act="collapse">${icon('chev-up', 'chev')}</button></div>` : '';
         return `<section class="panel ${opts.cls || ''}">
             <div class="panel__head">${ic}<span>${esc(title)}</span>${tools}</div>
@@ -429,7 +460,7 @@
     // ---------- Results ----------
     function ringHtml(p) {
         const r = 24, c = 2 * Math.PI * r;
-        return `<div class="ring" title="Match probability"><svg width="56" height="56"><circle cx="28" cy="28" r="${r}" fill="none" stroke="#e8ecf0" stroke-width="3"/>
+        return `<div class="ring" title="Match probability"><svg width="56" height="56"><circle cx="28" cy="28" r="${r}" fill="none" style="stroke:var(--line-soft)" stroke-width="3"/>
             <circle cx="28" cy="28" r="${r}" fill="none" stroke="#1e7fd0" stroke-width="3" stroke-dasharray="${(p / 100) * c} ${c}"/></svg>
             <span>${p}<sup>%</sup></span></div>`;
     }
@@ -491,15 +522,62 @@
                     : `<div class="empty">No records to show. ${s.results.length ? 'Clear some filters.' : 'Try a different search.'}</div>`}
                 </div></div>`;
         }
-        return `${tabsHtml(null)}<h1 class="page-title">Search results</h1>${body}`;
+        return `${tabsHtml(null)}<h1 class="page-title page-title--row">Search results <button class="btn btn--primary btn--sm" data-go="#/new">${icon('plus')} Create person record</button></h1>${body}`;
     }
 
     // ---------- Record ----------
     const SECTIONS = [
-        ['summary', 'Summary', 'report'], ['alerts', 'Alerts', 'alert'], ['firearms', 'Firearms Certificates', 'shield'],
+        ['summary', 'Summary', 'report'], ['alerts', 'Alerts and Markers', 'alert'], ['notes', 'Notes', 'edit'], ['firearms', 'Firearms Certificates', 'shield'],
         ['history', 'Record History', 'clock'], ['family', 'Family', 'user'], ['associates', 'Associates', 'share'],
         ['intel', 'Intel', 'report'], ['investigation', 'Investigation', 'search'], ['prosecutions', 'Prosecutions', 'report'], ['custody', 'Custody', 'folder']
     ];
+
+    // Editable field sets. `path` is where the value lives on the record;
+    // 'description.x' writes into the nested description object.
+    const FIELDS = {
+        ident: [
+            { k: 'first', label: 'First name' }, { k: 'last', label: 'Surname' },
+            { k: 'dob', label: 'Date of birth', ph: 'dd/mm/yyyy' }, { k: 'birthplace', label: 'Birthplace' },
+            { k: 'sex', label: 'Sex', options: ['Male', 'Female', 'Unknown'] }, { k: 'ethnicity', label: 'Ethnicity' },
+            { k: 'source', label: 'Source', options: ['PNC', 'Intel', 'Investigation', 'Custody', 'Prosecution'] },
+            { k: 'pncId', label: 'PNC id' }, { k: 'croId', label: 'CRO id' }, { k: 'alias', label: 'Alias' },
+            { k: 'address', label: 'Address', multi: true }
+        ],
+        desc: [
+            { k: 'description.hair', label: 'Hair' }, { k: 'description.build', label: 'Build' },
+            { k: 'description.eyes', label: 'Eye colour' }, { k: 'description.height', label: 'Height' },
+            { k: 'description.marks', label: 'Marks and scars', multi: true }
+        ]
+    };
+    const MARKER_GROUPS = [['alerts', 'Alerts', 'tag--red'], ['warnings', 'Warning signals', 'tag--amber'], ['markers', 'Information markers', 'tag--sky']];
+
+    const getPath = (r, path) => path.split('.').reduce((o, k) => (o ? o[k] : undefined), r);
+    function setPath(r, path, v) {
+        const keys = path.split('.');
+        const last = keys.pop();
+        const obj = keys.reduce((o, k) => (o[k] = o[k] || {}), r);
+        obj[last] = v;
+    }
+
+    function editForm(key, fields, r) {
+        const inputs = fields.map((f) => {
+            let v = getPath(r, f.k);
+            if (Array.isArray(v)) v = v.join('\n');
+            const control = f.options
+                ? `<select class="select" data-f="${f.k}">${f.options.map((o) => `<option ${o === v ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`
+                : f.multi ? `<textarea class="input" rows="3" data-f="${f.k}">${esc(v)}</textarea>`
+                    : `<input class="input" data-f="${f.k}" value="${esc(v)}" placeholder="${esc(f.ph || '')}">`;
+            return `<label class="form-row"><span>${esc(f.label)}</span>${control}</label>`;
+        }).join('');
+        return `<form class="edit-form" data-save="${key}">${inputs}
+            <div class="form-actions"><button type="button" class="btn btn--sm" data-cancel-edit>Cancel</button><button class="btn btn--primary btn--sm">Save changes</button></div></form>`;
+    }
+
+    // record changes go into Record History as an audit trail
+    function audit(r, type, detail) {
+        r.history = r.history || [];
+        r.history.unshift({ date: nowStamp().date, type, detail: `${detail} - ${state.user.name}` });
+    }
 
     function viewRecord(id, section = 'summary') {
         const r = findRecord(id);
@@ -508,32 +586,42 @@
         state.seen.add(id);
 
         if (r.kind !== 'person') {
-            const rows = Object.entries(r).filter(([k]) => !['id', 'kind', 'prob'].includes(k)).map(([k, v]) => [k[0].toUpperCase() + k.slice(1), v]);
+            const fields = Object.keys(r).filter((k) => !['id', 'kind', 'prob', 'history'].includes(k)).map((k) => ({ k, label: k[0].toUpperCase() + k.slice(1) }));
+            const body = state.editing === 'details' ? editForm('details', fields, r) : kvTable(fields.map((f) => [f.label, r[f.k]]), 'kv--lg');
             return `${tabsHtml(id)}<div class="rec-head"><h1>${esc(r.name)}</h1><span class="tag tag--ink">${esc(r.source)}</span><span class="tag tag--blue">${esc(r.kind)}</span></div>
-                <div style="max-width:640px">${panel('Details', kvTable(rows, 'kv--lg'), { add: true })}</div>`;
+                <div style="max-width:640px">${panel('Details', body, { edit: 'details' })}</div>`;
         }
 
-        const tags = (list, cls) => list.map((t) => `<span class="tag ${cls}">${esc(t)}</span>`).join('');
+        const tags = (list, cls) => (list || []).map((t) => `<span class="tag ${cls}">${esc(t)}</span>`).join('');
+        const age = /^\d{2}\/\d{2}\/\d{4}$/.test(r.dob || '') ? `<span class="age">(${ageFrom(r.dob)} years old)</span>` : '';
         const head = `<div class="rec-head">
-            <h1>${esc(displayName(r))}</h1><span class="age">(${ageFrom(r.dob)} years old)</span>
+            <h1>${esc(displayName(r).trim() || 'New record')}</h1>${age}
             <span class="tag tag--ink">${esc(r.source)}</span>${r.alias ? `<span class="tag tag--sky">Alias: ${esc(r.alias)}</span>` : ''}
-            ${tags(r.alerts, 'tag--red')}${tags(r.warnings, 'tag--amber')}${tags(r.markers, 'tag--sky')}
+            ${MARKER_GROUPS.map(([k, , cls]) => tags(r[k], cls)).join('')}
             <span style="margin-left:auto;display:flex;gap:6px"><button class="btn btn--sm" data-act="print">Print</button><button class="btn btn--sm" data-act="share">${icon('share')} Share</button></span></div>`;
 
         const nav = `<nav class="rec-nav">${SECTIONS.map(([k, label, ic]) => {
-            const badge = k === 'alerts' && r.alerts.length ? `<span class="badge">${r.alerts.length}</span>` : '';
+            const n = k === 'alerts' ? (r.alerts || []).length : k === 'notes' ? (r.notes || []).length : 0;
+            const badge = n ? `<span class="badge ${k === 'notes' ? 'badge--blue' : ''}">${n}</span>` : '';
             return `<button class="${k === section ? 'active' : ''}" data-go="#/record/${id}/${k}">${icon(ic)}${esc(label)} ${badge}${icon('chev-right', 'chev-r')}</button>`;
         }).join('')}</nav>`;
 
         return `${tabsHtml(id)}${head}<div class="rec-layout">${nav}${recordSection(r, section)}</div>`;
     }
 
-    function linkedPeople(ids) {
-        if (!ids.length) return `<div class="empty">None recorded.</div>`;
-        return `<table class="kv kv--lg"><tbody>${ids.map((pid) => {
+    function linkedPeople(r, rel) {
+        const ids = r[rel] || [];
+        const rows = ids.map((pid) => {
             const p = findRecord(pid);
-            return p ? `<tr><th><a href="#" data-open="${p.id}">${esc(displayName(p))}</a></th><td>${esc(p.dob)} - ${esc(p.source)} ${esc(p.pncId)}</td></tr>` : '';
-        }).join('')}</tbody></table>`;
+            return p ? `<tr><th><a href="#" data-open="${p.id}">${esc(displayName(p))}</a></th><td>${esc(p.dob)} - ${esc(p.source)} ${esc(p.pncId)}</td>
+                <td class="row-act"><button class="icon-btn" title="Remove link" data-unlink="${rel}|${p.id}">${icon('x')}</button></td></tr>` : '';
+        }).join('');
+        const options = D.people.filter((p) => p.id !== r.id && !ids.includes(p.id) && (p.first || p.last))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((p) => `<option value="${p.id}">${esc(p.name)} (${esc(p.dob)})</option>`).join('');
+        return `${rows ? `<table class="kv kv--lg"><tbody>${rows}</tbody></table>` : `<div class="empty">None recorded.</div>`}
+            <form class="inline-form" data-link="${rel}"><select class="select" name="person"><option value="">Link a person...</option>${options}</select>
+            <button class="btn btn--primary btn--sm">${icon('link')} Link</button></form>`;
     }
 
     function recordSection(r, section) {
@@ -541,28 +629,144 @@
         const wrap = (inner) => `<div class="rec-col-wide">${inner}</div>`;
         switch (section) {
             case 'summary': {
-                const ident = kvTable([['Date of birth', r.dob], ['Birthplace', r.birthplace], ['Sex', r.sex], ['Ethnicity', r.ethnicity], ['PNC id', r.pncId], ['CRO id', r.croId], ['Address', (r.address || []).join('\n')]], 'kv--lg');
-                const desc = kvTable([['Hair', d.hair], ['Build', d.build], ['Eye colour', d.eyes], ['Height', d.height], ['Marks and scars', d.marks]], 'kv--lg');
+                const ident = state.editing === 'ident' ? editForm('ident', FIELDS.ident, r)
+                    : kvTable([['Date of birth', r.dob], ['Birthplace', r.birthplace], ['Sex', r.sex], ['Ethnicity', r.ethnicity], ['PNC id', r.pncId], ['CRO id', r.croId], ['Address', (r.address || []).join('\n')]], 'kv--lg');
+                const desc = state.editing === 'desc' ? editForm('desc', FIELDS.desc, r)
+                    : kvTable([['Hair', d.hair], ['Build', d.build], ['Eye colour', d.eyes], ['Height', d.height], ['Marks and scars', d.marks]], 'kv--lg');
                 const sil = `<svg viewBox="0 0 100 110"><use href="#i-silhouette"/></svg>`;
                 const images = `<div class="panel__sub" style="font-weight:400;color:var(--muted)">${icon('info')} Placeholder images - no photographs held in training data</div>
                     <div class="mugs">${['Front', 'Profile'].map((v) => `<div class="mug"><div class="ph">${sil}</div><dl><dt>Type</dt><dd>Custody - ${v}</dd><dt>Date</dt><dd>${esc(r.dob)}</dd></dl></div>`).join('')}</div>`;
-                const warn = r.warnings.length ? kvTable(r.warnings.map((w) => [w, 'Recorded on PNC - check before approach'])) : `<div class="empty">No warning signals recorded.</div>`;
-                return `<div>${panel('Identification', ident, { add: true })}${panel('Description', desc, { add: true })}</div>
-                    <div>${panel('Images', images, { add: true })}${panel('Warning Signals', warn, { add: true })}</div>`;
+                const warn = (r.warnings || []).length ? kvTable(r.warnings.map((w) => [w, 'Recorded - check before approach'])) : `<div class="empty">No warning signals recorded.</div>`;
+                return `<div>${panel('Identification', ident, { edit: 'ident' })}${panel('Description', desc, { edit: 'desc' })}</div>
+                    <div>${panel('Images', images, { add: true })}${panel('Warning Signals', warn + `<div style="margin-top:8px"><a href="#/record/${r.id}/alerts">Manage alerts and markers ${icon('chev-right')}</a></div>`, { add: true })}</div>`;
             }
-            case 'alerts':
-                return wrap(panel('Alerts', r.alerts.length ? kvTable(r.alerts.map((a) => [a, 'Active'])) : `<div class="empty">No active alerts.</div>`, { add: true }));
-            case 'history':
-                return wrap(panel('Record History', r.history.length
-                    ? `<table class="simple-table"><thead><tr><th>Date</th><th>Type</th><th>Detail</th></tr></thead><tbody>${r.history.map((h) => `<tr><td>${esc(h.date)}</td><td>${esc(h.type)}</td><td>${esc(h.detail)}</td></tr>`).join('')}</tbody></table>`
-                    : `<div class="empty">No history recorded.</div>`, { add: true }));
-            case 'family': return wrap(panel('Family', linkedPeople(r.family), { add: true }));
-            case 'associates': return wrap(panel('Associates', linkedPeople(r.associates), { add: true }));
+            case 'alerts': {
+                const groups = MARKER_GROUPS.map(([k, label, cls]) => `<div class="marker-group"><h4>${esc(label)}</h4>
+                    ${(r[k] || []).length ? (r[k]).map((t, i) => `<span class="tag ${cls} tag--removable">${esc(t)}<button title="Remove" data-del-marker="${k}|${i}">${icon('x')}</button></span>`).join(' ') : '<span class="muted">None</span>'}</div>`).join('');
+                const form = `<form class="inline-form" data-add-marker><select class="select" name="group">${MARKER_GROUPS.map(([k, label]) => `<option value="${k}">${esc(label)}</option>`).join('')}</select>
+                    <input class="input" name="text" placeholder="e.g. Violent, Weapons, Drugs" required><button class="btn btn--primary btn--sm">${icon('plus')} Add</button></form>`;
+                return wrap(panel('Alerts and Markers', groups + form, { add: true }));
+            }
+            case 'notes': {
+                const notes = (r.notes || []).map((n, i) => `<div class="note"><div class="note__meta">${esc(n.by)} - ${esc(n.at)}<button class="icon-btn" title="Delete note" data-del-note="${i}">${icon('x')}</button></div><div>${esc(n.text).replace(/\n/g, '<br>')}</div></div>`).join('');
+                const form = `<form class="note-form" data-add-note><textarea class="input" name="text" rows="3" placeholder="Add a note to this record..." required></textarea>
+                    <div class="form-actions"><button class="btn btn--primary btn--sm">${icon('plus')} Add note</button></div></form>`;
+                return wrap(panel('Notes', form + (notes || `<div class="empty">No notes yet.</div>`), { add: true }));
+            }
+            case 'history': {
+                const rows = (r.history || []).map((h, i) => `<tr><td>${esc(h.date)}</td><td>${esc(h.type)}</td><td>${esc(h.detail)}</td>
+                    <td class="row-act"><button class="icon-btn" title="Delete entry" data-del-hist="${i}">${icon('x')}</button></td></tr>`).join('');
+                const form = `<form class="inline-form" data-add-hist><input class="input" name="date" placeholder="dd/mm/yyyy" value="${nowStamp().date}" style="max-width:120px">
+                    <select class="select" name="type" style="max-width:150px">${['Arrest', 'Charge', 'Conviction', 'Caution', 'Custody', 'Stop', 'Intel', 'Other'].map((t) => `<option>${t}</option>`).join('')}</select>
+                    <input class="input" name="detail" placeholder="Detail" required><button class="btn btn--primary btn--sm">${icon('plus')} Add</button></form>`;
+                return wrap(panel('Record History', (rows
+                    ? `<table class="simple-table"><thead><tr><th>Date</th><th>Type</th><th>Detail</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
+                    : `<div class="empty">No history recorded.</div>`) + form, { add: true }));
+            }
+            case 'family': return wrap(panel('Family', linkedPeople(r, 'family'), { add: true }));
+            case 'associates': return wrap(panel('Associates', linkedPeople(r, 'associates'), { add: true }));
             default: {
                 const label = SECTIONS.find(([k]) => k === section)?.[1] || section;
                 return wrap(panel(label, `<div class="empty">No ${esc(label.toLowerCase())} held for this nominal in the training data.</div>`, { add: true }));
             }
         }
+    }
+
+    // New blank person; opens straight into the identification edit form.
+    function createPerson() {
+        const n = D.people.filter((p) => p.id.startsWith('N')).length + 1;
+        let id = 'N' + n;
+        while (rawRecord(id)) id = 'N' + Math.floor(Math.random() * 1e6);
+        D.people.unshift({
+            id, source: 'PNC', name: '', first: '', last: '', dob: '', sex: 'Unknown', ethnicity: '', birthplace: '',
+            pncId: '', croId: '', address: [], alerts: [], warnings: [], markers: [], description: {}, history: [], notes: [],
+            associates: [], family: [], prob: 100
+        });
+        audit(rawRecord(id), 'Created', 'Record created');
+        db.save();
+        state.openTabs.push(id);
+        state.editing = 'ident';
+        history.replaceState(null, '', '#/record/' + id);
+        route();
+    }
+
+    // ---------- Record edit handlers (delegated from #view) ----------
+    function currentRecord() {
+        const m = location.hash.match(/^#\/record\/([^/]+)/);
+        return m ? rawRecord(m[1]) : null;
+    }
+
+    function handleRecordSubmit(form) {
+        const r = currentRecord();
+        if (!r) return;
+        const val = (name) => (form.elements[name]?.value || '').trim();
+        if (form.dataset.save) {
+            const key = form.dataset.save;
+            $$('[data-f]', form).forEach((el) => {
+                const f = el.dataset.f;
+                let v = el.value.trim();
+                if (f === 'address') v = v.split('\n').map((x) => x.trim()).filter(Boolean);
+                setPath(r, f, v);
+            });
+            if (r.first !== undefined) r.name = [r.last, r.first].filter(Boolean).join(', ');
+            audit(r, 'Update', `${{ ident: 'Identification', desc: 'Description', details: 'Details' }[key]} updated`);
+            state.editing = null;
+            toast('Record saved');
+        } else if (form.hasAttribute('data-add-marker')) {
+            const g = val('group'), t = val('text');
+            if (!t) return;
+            r[g] = r[g] || [];
+            r[g].push(t);
+            audit(r, 'Update', `${MARKER_GROUPS.find(([k]) => k === g)[1]} added: ${t}`);
+        } else if (form.hasAttribute('data-add-note')) {
+            const t = val('text');
+            if (!t) return;
+            const st = nowStamp();
+            r.notes = r.notes || [];
+            r.notes.unshift({ text: t, by: state.user.name, at: `${st.date} ${st.time}` });
+        } else if (form.hasAttribute('data-add-hist')) {
+            if (!val('detail')) return;
+            r.history = r.history || [];
+            r.history.unshift({ date: val('date'), type: val('type'), detail: val('detail') });
+        } else if (form.dataset.link) {
+            const rel = form.dataset.link, other = rawRecord(val('person'));
+            if (!other) return;
+            // links go both ways
+            r[rel] = [...new Set([...(r[rel] || []), other.id])];
+            other[rel] = [...new Set([...(other[rel] || []), r.id])];
+            audit(r, 'Update', `${rel === 'family' ? 'Family member' : 'Associate'} linked: ${other.name}`);
+        } else return;
+        db.save();
+        route();
+    }
+
+    function handleRecordClick(t) {
+        const r = currentRecord();
+        if (!r) return false;
+        const hit = (attr) => t.closest(`[${attr}]`);
+        let el;
+        if ((el = hit('data-edit'))) { state.editing = el.dataset.edit; route(); return true; }
+        if (hit('data-cancel-edit')) { state.editing = null; route(); return true; }
+        if ((el = hit('data-del-marker'))) {
+            const [g, i] = el.dataset.delMarker.split('|');
+            const [removed] = r[g].splice(+i, 1);
+            audit(r, 'Update', `${MARKER_GROUPS.find(([k]) => k === g)[1]} removed: ${removed}`);
+        } else if ((el = hit('data-del-note'))) {
+            if (!confirm('Delete this note?')) return true;
+            r.notes.splice(+el.dataset.delNote, 1);
+        } else if ((el = hit('data-del-hist'))) {
+            if (!confirm('Delete this history entry?')) return true;
+            r.history.splice(+el.dataset.delHist, 1);
+        } else if ((el = hit('data-unlink'))) {
+            const [rel, pid] = el.dataset.unlink.split('|');
+            const other = rawRecord(pid);
+            r[rel] = (r[rel] || []).filter((x) => x !== pid);
+            if (other) other[rel] = (other[rel] || []).filter((x) => x !== r.id);
+            audit(r, 'Update', `Link removed: ${other ? other.name : pid}`);
+        } else return false;
+        db.save();
+        route();
+        return true;
     }
 
     // ---------- Simple list views ----------
@@ -598,6 +802,7 @@
             case 'dashboard': html = viewDashboard(); break;
             case 'results': html = viewResults(); active = 'search'; break;
             case 'record': html = viewRecord(a, b); active = 'search'; break;
+            case 'new': createPerson(); return;
             case 'tasks': html = viewTasks(); break;
             case 'alerts': html = viewAlerts(); break;
             case 'shared': html = viewShared(); break;
@@ -612,6 +817,7 @@
 
     // Delegated handlers for things inside #view
     $('#view').addEventListener('click', (e) => {
+        if (handleRecordClick(e.target)) { e.preventDefault(); return; }
         const closeX = e.target.closest('[data-close-tab]');
         if (closeX) { e.preventDefault(); e.stopPropagation(); closeTab(closeX.dataset.closeTab); return; }
         const op = e.target.closest('[data-open]');
@@ -646,11 +852,17 @@
         }
     });
 
+    $('#view').addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleRecordSubmit(e.target);
+    });
+
     $('#view').addEventListener('change', (e) => {
         const t = e.target;
         if (t.dataset.task) {
             const task = D.tasks.find((x) => x.id === t.dataset.task);
             task.done = t.checked;
+            db.save();
             toast(t.checked ? 'Task marked complete' : 'Task reopened');
             route();
         } else if (t.dataset.fk || t.dataset.fs) {
@@ -664,6 +876,7 @@
     // ======================================================
     // Boot
     // ======================================================
+    applyTheme(document.documentElement.dataset.theme || 'light');
     state.user = store.get();
     if (state.user) showApp(); else showLogin();
 })();

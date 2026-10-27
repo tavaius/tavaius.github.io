@@ -10,5 +10,10 @@ password signs in, nothing is stored or sent anywhere, and all data in `data.js`
 - `app.js`    - hash router and views: dashboard, search results, record, tasks, alerts, shared searches,
                 plus the 3-step advanced search
 
+Records are editable: identification and description forms, alerts/warnings/markers, notes,
+record history, and two-way family/associate links. "Create person record" adds a new nominal.
+Edits are saved in the browser (localStorage) and logged to Record History; "Reset training data"
+in the user menu restores the original data. Dark mode is in the user menu too.
+
 Search outcomes follow the user flow diagram: one result opens the record, a list shows results,
 more than 15 shows a warning with the first 15, none shows an info message.
